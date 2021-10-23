@@ -47,7 +47,7 @@ public class MyApplication extends Application {
    		VBox root = (VBox) loader.load();
    		Scene scene =  new Scene(root);
    		stage.setScene(scene);
-   		stage.setTitle("Can you gimme A+ thx");
+      stage.setTitle("can we have A+ for all of us " + "Can you gimme A+ thx! Love you!");
    		stage.show();
 	}
 
