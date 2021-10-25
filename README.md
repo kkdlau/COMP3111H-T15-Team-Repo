@@ -1,6 +1,6 @@
 # T-15
-#### 1. ...
-#### 2. Lau, Ka Kit Danny
+
+#### 1. Lau, Ka Kit Danny
 
 
 * General Information:
@@ -10,6 +10,18 @@
 | kkdlau     | kkdlau     | ` kkdlau/Task-A/Confirmed-COVID-19-Cases`     |
 
 * Assigned tasks: A1, A2  
+
+#### 2. Leung Wing Chung
+
+
+* General Information:
+
+| Email | Github | Dev Branch |
+| -------- | -------- | -------- |
+| wcleungaj     | RickyUST     | ` wcleungaj/Task-B/Confirmed-COVID-19-Cases`     |
+
+* Assigned tasks: B1, B2  
+* 
 
 #### 3. Toh, Magdalene Youjun  
 
