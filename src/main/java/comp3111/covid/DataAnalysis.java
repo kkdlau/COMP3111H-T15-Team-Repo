@@ -1,5 +1,8 @@
 package comp3111.covid;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.apache.commons.csv.*;
 import edu.duke.*;
 
@@ -105,5 +108,21 @@ public class DataAnalysis {
 			
 			return oReport;
 	 }
+	public static LocalDate getValidDate(String dataset, LocalDate date) {
+
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "M/d/uuuu" ) ;
+		LocalDate latest = null, earliest = null;
+
+		for (CSVRecord rec : getFileParser(dataset)) {
+			LocalDate readDate = LocalDate.parse(rec.get("date"),formatter);
+			if(latest==null && earliest==null) {latest = readDate; earliest = readDate;}
+			if(readDate.compareTo(latest)>0) {latest = readDate;}
+			if(readDate.compareTo(earliest)<0) {earliest = readDate;}
+		}
+
+		if(date==null || date.compareTo(latest)>0) {return latest;}
+		if(date.compareTo(earliest)<0) {return earliest;}
+		return date;
+	}
  
 }
