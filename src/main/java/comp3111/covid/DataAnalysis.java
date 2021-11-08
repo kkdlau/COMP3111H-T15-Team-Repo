@@ -119,7 +119,6 @@ public class DataAnalysis {
 			if(readDate.compareTo(latest)>0) {latest = readDate;}
 			if(readDate.compareTo(earliest)<0) {earliest = readDate;}
 		}
-
 		if(date==null || date.compareTo(latest)>0) {return latest;}
 		if(date.compareTo(earliest)<0) {return earliest;}
 		return date;
