@@ -2,7 +2,7 @@ package comp3111.covid;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
+import java.util.*;
 import org.apache.commons.csv.*;
 import edu.duke.*;
 
@@ -125,4 +125,28 @@ public class DataAnalysis {
 		return date;
 	}
  
+	public static Map<String, String> getAllLocationIso(String dataset) {
+		LinkedHashSet<String> uniqueLocations = new LinkedHashSet();
+		LinkedHashSet<String> uniqueIsoCodes = new LinkedHashSet();
+		for (CSVRecord rec : getFileParser(dataset)) {
+			uniqueLocations.add(rec.get("location"));
+			uniqueIsoCodes.add(rec.get("iso_code"));
+		}
+		List<String> uniqueLocList = new ArrayList<String>( uniqueLocations );
+		List<String> uniqueIsoCodeList = new ArrayList<String>( uniqueIsoCodes );
+		
+		if (uniqueLocList.size() != uniqueIsoCodeList.size()) {
+			System.out.println("Something wrong with dataset");
+		}
+		else {
+			System.out.println("Ok, same length");
+		}
+		Map<String, String> locIsoCodeMap = new HashMap<>();
+		for (int i = 0; i < uniqueLocations.size(); ++i) {
+			locIsoCodeMap.put(uniqueLocList.get(i), uniqueIsoCodeList.get(i));
+			//System.out.println(uniqueLocList.get(i) + "--");
+		}
+		System.out.println("Finished allocating to map");
+		return locIsoCodeMap;
+	}
 }
