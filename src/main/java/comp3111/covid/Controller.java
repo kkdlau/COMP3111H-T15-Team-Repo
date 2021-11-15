@@ -11,7 +11,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.cell.MapValueFactory;
 import java.util.*;
 import java.time.LocalDate;
 
@@ -125,6 +127,8 @@ public class Controller {
     @FXML
     void doRateOfVacTable(ActionEvent event) {
     	textAreaConsole.setText(""); // clear previous output
+    	rateOfVacTable.getItems().clear();
+    	
     	String iDataset = textfieldDataset.getText(); // assume dataset specified in Task Zero
     	
     	String iLocations = textAreaCountryNames.getText();
@@ -153,7 +157,12 @@ public class Controller {
     	textAreaConsole.setText(errorConsole);
     	rateOfVacTableLabel.setText("Rate of Vaccination against COVID-19 as of " + validDate[1]);
     	// pass valid inputs to VaccinationRate methods
-    	// get some output to populate TableView/TableColumns     	
+    	ObservableList tableData = VaccinationRate.generateVacTable(iDataset, checkLocOutput, validDate[1]);
+        vacTableColCountry.setCellValueFactory(new MapValueFactory<>("country"));
+        vacTableColFullyVac.setCellValueFactory(new MapValueFactory<>("fully_vaccinated"));
+        vacTableColRateOfVac.setCellValueFactory(new MapValueFactory<>("rate_of_vaccination"));
+    	
+        rateOfVacTable.getItems().addAll(tableData);   	
     }   
 }
 
