@@ -2,7 +2,7 @@ package comp3111.covid;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
+import java.util.*;
 import org.apache.commons.csv.*;
 import edu.duke.*;
 
@@ -124,5 +124,44 @@ public class DataAnalysis {
 		if(date.compareTo(earliest)<0) {return earliest;}
 		return date;
 	}
- 
+	// Modified from getValidDate - return earliest and latest date instead of input date 
+	public static List<LocalDate> getValidPeriod(String dataset) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/uuuu");
+		LocalDate earliest = null, latest = null;
+		for (CSVRecord rec : getFileParser(dataset)) {
+			
+			LocalDate readDate = LocalDate.parse(rec.get("date"), formatter);
+			if (earliest == null && latest == null) {latest = readDate; earliest = readDate;}
+			if (readDate.compareTo(earliest) < 0) {earliest = readDate;}
+			if (readDate.compareTo(latest) > 0) {latest = readDate;}
+		}
+		List<LocalDate> validPeriod = new ArrayList<>();
+		validPeriod.add(earliest);
+		validPeriod.add(latest);
+		return validPeriod;
+	}
+	public static Map<String, String> getAllLocationIso(String dataset) {
+		LinkedHashSet<String> uniqueLocations = new LinkedHashSet();
+		LinkedHashSet<String> uniqueIsoCodes = new LinkedHashSet();
+		for (CSVRecord rec : getFileParser(dataset)) {
+			uniqueLocations.add(rec.get("location"));
+			uniqueIsoCodes.add(rec.get("iso_code"));
+		}
+		List<String> uniqueLocList = new ArrayList<String>( uniqueLocations );
+		List<String> uniqueIsoCodeList = new ArrayList<String>( uniqueIsoCodes );
+		
+		if (uniqueLocList.size() != uniqueIsoCodeList.size()) {
+			System.out.println("Something wrong with dataset");
+		}
+		else {
+			System.out.println("Ok, same length");
+		}
+		Map<String, String> locIsoCodeMap = new HashMap<>();
+		for (int i = 0; i < uniqueLocations.size(); ++i) {
+			locIsoCodeMap.put(uniqueLocList.get(i), uniqueIsoCodeList.get(i));
+			//System.out.println(uniqueLocList.get(i) + "--");
+		}
+		System.out.println("Finished allocating to map");
+		return locIsoCodeMap;
+	}
 }
