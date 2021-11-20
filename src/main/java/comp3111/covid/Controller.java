@@ -107,7 +107,7 @@ public class Controller {
     private RadioButton dataDeathButton;
 
     @FXML
-    private TableView<?> dataTable;
+    private TableView<String> dataTable;
 
     @FXML
     private RadioButton dataVaccinButton;
@@ -216,7 +216,20 @@ public class Controller {
     }
 
     void generateTable(final UIDataModel data) {
+        dataTable.getItems().clear();
+        TableColumn<String, String> country = new TableColumn("country");
+        TableColumn<String, String> vaccinated = new TableColumn("fully_vaccinated");
+        TableColumn<String, String> rate = new TableColumn("rate_of_vaccination");
+        dataTable.getColumns().addAll(country, vaccinated, rate);
 
+        String[] validDate = CheckInput.checkValidDate(dataInstance.start, dataInstance.dataPath);
+
+        // todo: make it support any interest of data
+        String[] ISO = {"AFG"};
+        ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISO), validDate[1]);
+
+
+        dataTable.getItems().addAll(tableData);
     }
 
 

@@ -36,6 +36,16 @@ public class UIDataModel {
     public Map<String, String> ISORepresentation = null;
 
     public ObservableList<String> getAvailableCountries() {
+
         return availableCountries;
+    }
+
+    public String[] getISOList(String[] countries) {
+        ArrayList<String> iso = new ArrayList<>();
+        for (var c: countries) {
+            iso.add(ISORepresentation.get(c));
+        }
+
+        return (String[]) iso.toArray();
     }
 }
