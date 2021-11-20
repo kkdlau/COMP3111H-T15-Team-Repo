@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.collections.FXCollections;
@@ -49,6 +51,15 @@ public class Controller {
 
     @FXML
     private Tab tabReport2;
+    
+    @FXML
+    private Label labelTableTitle;
+    @FXML
+    private Label labelTabTitle;
+    @FXML
+    private MenuButton menuButtonSelectTable;
+    @FXML
+    private MenuButton menuButtonSelectCountry;
 
     @FXML
     private Tab tabReport3;
@@ -134,6 +145,30 @@ public class Controller {
     	String oReport = DataAnalysis.getRateOfVaccination(iDataset, iISO);
     	textAreaConsole.setText(oReport);
     }  
+    
+    public void initialize() {
+    	MenuItem menuItem1 = new MenuItem("Confirmed Cases");
+		MenuItem menuItem2 = new MenuItem("Confirmed Deaths");
+		MenuItem menuItem3 = new MenuItem("Rate of Vaccination");
+		menuButtonSelectTable.getItems().clear();
+		menuButtonSelectTable.getItems().addAll(menuItem1,menuItem2,menuItem3);
+		menuItem1.setOnAction(e->{selectTable(menuItem1.getText());});
+		menuItem2.setOnAction(e->{selectTable(menuItem2.getText());});
+		menuItem3.setOnAction(e->{selectTable(menuItem3.getText());});
+		menuButtonSelectCountry.getItems().clear();
+		Map<String, String> locIsoMap = DataAnalysis.getAllLocationIso("COVID_Dataset_v1.0.csv");
+		for(Map.Entry<String, String> entry : locIsoMap.entrySet()) {
+			MenuItem countryOption = new MenuItem(entry.getKey());
+			menuButtonSelectCountry.getItems().addAll(countryOption);
+			countryOption.setOnAction(e->{menuButtonSelectCountry.setText(countryOption.getText());});
+		}
+    }
+    
+    void selectTable(String type) {
+    	menuButtonSelectTable.setText(type);
+    	labelTabTitle.setText("Rate of "+type+" for COVID-19 by Country");
+    	labelTableTitle.setText("Rate of "+type+" against COVID-19 as of ...");
+    }
 
     /**
      * Table C 
