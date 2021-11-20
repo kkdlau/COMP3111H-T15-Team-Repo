@@ -16,8 +16,13 @@ import edu.duke.*;
 public class DataAnalysis {
  
 	public static CSVParser getFileParser(String dataset) {
-	     FileResource fr = new FileResource("dataset/" + dataset);
-	     return fr.getCSVParser(true);
+			try {
+				FileResource fr = new FileResource("dataset/" + dataset);
+
+				return fr.getCSVParser(true);
+			} catch (Exception e) {
+				return null;
+			}
 		}
 	
 

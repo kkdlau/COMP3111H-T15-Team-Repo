@@ -7,8 +7,13 @@ import java.util.Collections;
 import java.util.Iterator;
 
 public class UIDataModelUtils {
-    static public void updateAvailableCountries(UIDataModel data) {
-       data.ISORepresentation = DataAnalysis.getAllLocationIso("COVID_Dataset_v1.0.csv");
+    static public void setDataPath(UIDataModel data, String path) {
+        data.dataPath = path;
+        UIDataModelUtils.setAvailableCountries(data);
+    }
+
+    static public void setAvailableCountries(UIDataModel data) {
+       data.ISORepresentation = DataAnalysis.getAllLocationIso(data.dataPath);
         ObservableList<String> list = data.getAvailableCountries();
 
        if (data.ISORepresentation.isEmpty()) {
@@ -26,5 +31,9 @@ public class UIDataModelUtils {
 
            Collections.sort(list);
        }
+    }
+
+    private UIDataModelUtils() {
+
     }
 }

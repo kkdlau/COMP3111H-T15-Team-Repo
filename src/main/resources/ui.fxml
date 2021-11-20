@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -26,13 +27,14 @@
                     <AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="0.0">
                            <children>
                               <Label layoutX="14.0" layoutY="37.0" prefHeight="17.0" prefWidth="62.0" text="Dataset:" />
-                              <TextField fx:id="textfieldDataset" layoutX="76.0" layoutY="33.0" prefHeight="26.0" prefWidth="165.0" text="COVID_Dataset_v1.0.csv" />
+                              <TextField fx:id="textfieldDataset" layoutX="66.0" layoutY="33.0" prefHeight="26.0" prefWidth="165.0" text="COVID_Dataset_v1.0.csv" />
                               <Label layoutX="16.0" layoutY="65.0" text="Intrest of Data:" />
                               <RadioButton fx:id="dataCaseButton" layoutX="17.0" layoutY="90.0" mnemonicParsing="false" selected="true" text="Confirmed Cases" />
                               <RadioButton fx:id="dataDeathButton" layoutX="17.0" layoutY="116.0" mnemonicParsing="false" text="Confirmed Deaths" />
                               <RadioButton fx:id="dataVaccinButton" layoutX="17.0" layoutY="143.0" mnemonicParsing="false" text="Rate of Vaccination" />
                               <CheckBox fx:id="acumulativeCheckButton" layoutX="17.0" layoutY="199.0" mnemonicParsing="false" text="Acumulative data" />
                               <Label layoutX="14.0" layoutY="172.0" text="Data Control:" />
+                              <Button fx:id="generateButton" layoutX="218.0" layoutY="217.0" mnemonicParsing="false" text="Generate" />
                            </children>
                         </AnchorPane>
                   </content>
