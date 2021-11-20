@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="679.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+<VBox prefHeight="679.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="437.0" prefWidth="719.0">
       <children>
@@ -59,9 +66,37 @@
                     <content>
                         <AnchorPane>
                            <children>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="318.0" prefWidth="719.0">
+                            <AnchorPane layoutY="1.0" minHeight="0.0" minWidth="0.0" prefHeight="318.0" prefWidth="719.0">
                                  <children>
-                                    <TextArea layoutX="14.0" layoutY="14.0" prefHeight="292.0" prefWidth="694.0" text="Task C1: Generate data tables showing the rate of vaccination against COVID-19 by country&#10;&#10;Input&#10;•&#9;Specify the date of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data table with a proper title: &quot;Rate of Vaccination against COVID-19 as of [Date of Interest]&quot;&#10;•&#9;Present data in 3 columns with proper headings of &quot;Country&quot;, &quot;Fully Vaccinated&quot;, and &quot;Rate of Vaccination&quot;&#10;•&#9;Present data for the countries of interest in rows&#10;&#10;&#10;" wrapText="true" />
+                                    <DatePicker fx:id="oneDatePickerC1" editable="false" layoutX="93.0" layoutY="40.0" prefHeight="26.0" prefWidth="129.0" promptText="Date of Interest" />
+                                    <Label contentDisplay="CENTER" layoutX="190.0" layoutY="8.0" text="Rate of Vaccination for COVID-19 by Country">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="44.0" layoutY="43.0" text="Date">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="14.0" layoutY="75.0" prefHeight="20.0" prefWidth="75.0" text="Countries" textOverrun="CENTER_ELLIPSIS">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="buttonRateOfVacTable" layoutX="110.0" layoutY="274.0" mnemonicParsing="false" onAction="#doRateOfVacTable" text="Get Vaccination Rate" />
+                                    <TableView fx:id="rateOfVacTable" layoutX="301.0" layoutY="50.0" prefHeight="260.0" prefWidth="397.0">
+                                      <columns>
+                                        <TableColumn fx:id="vacTableColCountry" prefWidth="136.800048828125" text="Country" />
+                                        <TableColumn fx:id="vacTableColFullyVac" prefWidth="121.5999755859375" text="Fully Vaccinated" />
+                                        <TableColumn fx:id="vacTableColRateOfVac" prefWidth="132.800048828125" text="Rate of Vaccination" />
+                                      </columns>
+                                    </TableView>
+                                    <Label fx:id="rateOfVacTableLabel" layoutX="331.0" layoutY="34.0" prefHeight="18.0" prefWidth="334.0" text="Rate of Vaccination against COVID-19 as of ...">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font></Label>
+                                    <TextArea fx:id="textAreaCountryNamesC1" layoutX="93.0" layoutY="73.0" prefHeight="189.0" prefWidth="182.0" promptText="Input one country on each line" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -90,7 +125,38 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea layoutX="18.0" layoutY="7.0" prefHeight="298.0" prefWidth="682.0" text="Task C2: Generate data charts showing the cumulative rate of vaccination against COVID-19 by country&#10;&#10;Input&#10;•&#9;Specify the period of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data chart with a proper title: &quot;Cumulative Rate of Vaccination against COVID-19 &quot;&#10;•&#9;Label the x-axis and y-axis with proper scales&#10;•&#9;Present data in coloured cumulative curves labelled with corresponding countries&#10;&#10;" wrapText="true" />
+                              <Label layoutX="127.0" text="Cumulative Rate of Vaccination Against COVID-19 by Country">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="startDatePickerC2" editable="false" layoutX="101.0" layoutY="40.0" prefHeight="26.0" prefWidth="117.0" promptText="Start Date" />
+                              <Label layoutX="18.0" layoutY="43.0" text="Period from">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="18.0" layoutY="127.0" text="Countries">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="75.0" layoutY="75.0" text="to">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="endDatePickerC2" editable="false" layoutX="101.0" layoutY="73.0" prefHeight="26.0" prefWidth="117.0" promptText="End Date" />
+                              <TextArea fx:id="textAreaCountryNamesC2" layoutX="87.0" layoutY="108.0" prefHeight="182.0" prefWidth="162.0" promptText="Input one country on a line" />
+                              <Button fx:id="buttonRateOfVacChart" layoutX="94.0" layoutY="294.0" mnemonicParsing="false" onAction="#doRateOfVacChart" prefHeight="26.0" prefWidth="147.0" text="Get Vaccination Rate" />
+                              <LineChart fx:id="rateOfVacChart" createSymbols="false" layoutX="259.0" layoutY="18.0" prefHeight="306.0" prefWidth="445.0" title="Cumulative Rate of Vaccination against COVID-19">
+                                <xAxis>
+                                  <CategoryAxis animated="false" side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis animated="false" label="Rate (%)" minorTickVisible="false" side="LEFT" tickMarkVisible="false" />
+                                </yAxis>
+                              </LineChart>
                            </children>
                         </AnchorPane>
                     </content>
