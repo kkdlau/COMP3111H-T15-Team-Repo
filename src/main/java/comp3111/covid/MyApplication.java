@@ -1,6 +1,7 @@
 package comp3111.covid;
 
 import javafx.application.Application;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
@@ -44,7 +45,7 @@ public class MyApplication extends Application {
 	public void start(Stage stage) throws Exception {
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource(UI_FILE));
-   		VBox root = (VBox) loader.load();
+   		HBox root = (HBox) loader.load();
    		Scene scene =  new Scene(root);
    		stage.setScene(scene);
       stage.setTitle("can we have A+ for all of us " + "Can you gimme A+ thx! Love you!");
