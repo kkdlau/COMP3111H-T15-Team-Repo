@@ -31,21 +31,24 @@ class VaccinationRate {
 	 * ObservableList data = FXCollections.observableList(list);
 	 * return data 
 	 */
-	public static ObservableList generateVacTable(String iDataset, List<String> iLocations, String iStrDate) {
+	public static ObservableList generateVacTable(String iDataset, List<String> iISOStrings, String iStrDate) {
 		
 		LocalDate iDate = LocalDate.parse(iStrDate, inputFormatter);
 		
 		ObservableList <Map<String, Object>> data = 
 				FXCollections.<Map<String, Object>>observableArrayList();
 		
-		for (String loc : iLocations) {
+		for (String iso : iISOStrings) {
 			long fullyVaccinated = 0;
 			float rate = 0.0f;
 			int found = 0;
+			String loc = "";
 			Map<String, Object> datum = new HashMap<>();
-			datum.put("country", loc);
+			//datum.put("country", loc);
 			for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {
-				if (rec.get("location").equals(loc)) {
+				if (rec.get("iso_code").equals(iso)) {
+					loc = rec.get("location");
+					datum.put("country", loc);
 					found = 1;
 					LocalDate readDate = LocalDate.parse(rec.get("date"), datasetFormatter);
 					if (readDate.isEqual(iDate)) {

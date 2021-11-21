@@ -108,7 +108,7 @@ public class Controller {
     private RadioButton dataDeathButton;
 
     @FXML
-    private TableView<String> dataTable;
+    private TableView dataTable;
 
     @FXML
     private RadioButton dataVaccinButton;
@@ -224,11 +224,13 @@ public class Controller {
     void generateTable(final UIDataModel data) {
         dataTable.getItems().clear();
         dataTable.getColumns().clear();
-        TableColumn<String, String> country = new TableColumn("country");
-        TableColumn<String, String> vaccinated = new TableColumn("fully_vaccinated");
-        TableColumn<String, String> rate = new TableColumn("rate_of_vaccination");
+        TableColumn<Map, String> country = new TableColumn("Country");
+        TableColumn<Map, String> vaccinated = new TableColumn("Fully Vaccinated");
+        TableColumn<Map, String> rate = new TableColumn("Rate of Vaccination");
         dataTable.getColumns().addAll(country, vaccinated, rate);
-
+        // dataTable.getColumns.add(country);
+        // dataTable.getColumns.add(vaccinated);
+        // dataTable.getColumns.add(rate);
         String[] validDate = CheckInput.checkValidDate(dataInstance.start, dataInstance.dataPath);
         System.out.println(validDate[0]);
 
@@ -243,7 +245,9 @@ public class Controller {
         System.out.println(validDate[1]);
 
         ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISOStrings), validDate[1]);
-
+        country.setCellValueFactory(new MapValueFactory<>("country"));
+        vaccinated.setCellValueFactory(new MapValueFactory<>("fully_vaccinated"));
+        rate.setCellValueFactory(new MapValueFactory<>("rate_of_vaccination"));
 
         dataTable.getItems().addAll(tableData);
     }
