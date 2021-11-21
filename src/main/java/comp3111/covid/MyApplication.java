@@ -48,7 +48,7 @@ public class MyApplication extends Application {
    		HBox root = (HBox) loader.load();
    		Scene scene =  new Scene(root);
    		stage.setScene(scene);
-      stage.setTitle("can we have A+ for all of us " + "Can you gimme A+ thx! Love you!");
+      	stage.setTitle("COMP3111H - COVID Data Visualization");
    		stage.show();
 	}
 

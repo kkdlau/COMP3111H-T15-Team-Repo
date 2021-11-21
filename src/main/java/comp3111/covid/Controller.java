@@ -127,6 +127,9 @@ public class Controller {
     @FXML
     private Button generateButton;
 
+    @FXML
+    private TitledPane dataRangeTile;
+
 
     ToggleGroup ratioButtonGroups = new ToggleGroup();
 
@@ -151,6 +154,7 @@ public class Controller {
             System.out.println("textfield changed from " + oldValue + " to " + newValue);
                 UIDataModelUtils.setDataPath(dataInstance, newValue);
         });
+        UIDataModelUtils.setDataPath(dataInstance, textfieldDataset.getText());
 
         dataCaseButton.setToggleGroup(ratioButtonGroups);
         dataDeathButton.setToggleGroup(ratioButtonGroups);
@@ -163,7 +167,6 @@ public class Controller {
 
         startDatePicker.valueProperty().addListener((ob, oldV, newV) -> {
             dataInstance.start = newV;
-            System.out.println("new day");
         });
 
         endDatePicker.valueProperty().addListener((ob, oldV, newV) -> {
@@ -173,6 +176,14 @@ public class Controller {
         generateButton.setOnAction((e) -> {
             this.generateTable(dataInstance);
         });
+
+        acumulativeCheckButton.setOnAction(e -> {
+            dataInstance.acumulativeData = acumulativeCheckButton.isSelected();
+            updateDataRangeTile(!dataInstance.acumulativeData);
+        });
+
+        updateDataRangeTile(!dataInstance.acumulativeData);
+
     }
 
     public void updateUIDataModel() {
@@ -205,6 +216,7 @@ public class Controller {
 
     void generateTable(final UIDataModel data) {
         dataTable.getItems().clear();
+        dataTable.getColumns().clear();
         TableColumn<String, String> country = new TableColumn("country");
         TableColumn<String, String> vaccinated = new TableColumn("fully_vaccinated");
         TableColumn<String, String> rate = new TableColumn("rate_of_vaccination");
@@ -215,15 +227,32 @@ public class Controller {
 
         // todo: make it support any interest of data
         ObservableList<String> selectedCountries = countryListView.getSelectionModel().getSelectedItems();
-
         Object[] ISO = dataInstance.getISOList(selectedCountries);
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+
+        // for debugging purpose
+        System.out.println(dataInstance.dataPath);
+        System.out.println(Arrays.toString(ISOStrings));
         System.out.println(validDate[1]);
 
         ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISOStrings), validDate[1]);
 
 
         dataTable.getItems().addAll(tableData);
+    }
+
+    void updateDataRangeTile(Boolean isTask1) {
+        if (isTask1) {
+            dataRangeTile.setText("Date");
+            startDateLabel.setText("Date: ");
+            endDataLabel.setVisible(false);
+            endDatePicker.setVisible(false);
+        } else {
+            dataRangeTile.setText("Date Range");
+            startDateLabel.setText("Start date: ");
+            endDataLabel.setVisible(true);
+            endDatePicker.setVisible(true);
+        }
     }
 
 
