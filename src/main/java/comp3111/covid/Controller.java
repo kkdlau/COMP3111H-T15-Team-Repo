@@ -163,6 +163,7 @@ public class Controller {
 
         startDatePicker.valueProperty().addListener((ob, oldV, newV) -> {
             dataInstance.start = newV;
+            System.out.println("new day");
         });
 
         endDatePicker.valueProperty().addListener((ob, oldV, newV) -> {
@@ -202,19 +203,6 @@ public class Controller {
             return InterestedData.RateOfVaccination;
     }
 
-
-    /**
-     *  Task Zero
-     *  To be triggered by the "Confirmed Cases" button on the Task Zero Tab
-     *
-     */
-    @FXML
-    void doConfirmedCases(ActionEvent event) {
-    	String iDataset = textfieldDataset.getText();
-    	String iISO = textfieldISO.getText();
-    	String oReport = DataAnalysis.getConfirmedCases(iDataset, iISO);
-    }
-
     void generateTable(final UIDataModel data) {
         dataTable.getItems().clear();
         TableColumn<String, String> country = new TableColumn("country");
@@ -223,12 +211,14 @@ public class Controller {
         dataTable.getColumns().addAll(country, vaccinated, rate);
 
         String[] validDate = CheckInput.checkValidDate(dataInstance.start, dataInstance.dataPath);
+        System.out.println(validDate[0]);
 
         // todo: make it support any interest of data
         ObservableList<String> selectedCountries = countryListView.getSelectionModel().getSelectedItems();
 
         Object[] ISO = dataInstance.getISOList(selectedCountries);
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+        System.out.println(validDate[1]);
 
         ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISOStrings), validDate[1]);
 
