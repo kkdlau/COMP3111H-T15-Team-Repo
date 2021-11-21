@@ -78,9 +78,11 @@ public class CheckInputTester {
     @Test
     public void checkLocationValidation_InvalidInput_noISOcode() {
     	CheckInput.checkValidLocations(null,dataset);
+    	CheckInput.checkValidLocations("",dataset);
     }
     @Test
     public void checkLocationValidation_InvalidInput_wrongISOcode() {
     	CheckInput.checkValidLocations("Wakanda",dataset);
+    	CheckInput.checkValidLocations("@f3qtojqpojmh",dataset);
     }
 }
