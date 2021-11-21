@@ -7,6 +7,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.collections.ObservableList;
@@ -111,7 +112,7 @@ public class Controller {
     private RadioButton dataDeathButton;
 
     @FXML
-    private TableView<String> dataTable;
+    private TableView dataTable;
 
     @FXML
     private RadioButton dataVaccinButton;
@@ -234,13 +235,29 @@ public class Controller {
     }
 
     void generateTable(final UIDataModel data) {
+    	System.out.println(dataInstance.focusedData);
+    	String col1Title = "", col2Title = ""; 
+    	switch(getFocusedData()) {
+    	case ConfirmedCases:
+    		col1Title = "Total Cases";
+    		col2Title = "Total Cases (per 1M)";
+    		break;
+    	case ConfirmedDeaths:
+    		col1Title = "Total Deaths";
+    		col2Title = "Total Deaths (per 1M)";
+    		break;
+    	case RateOfVaccination:
+    		col1Title = "Fully Vaccinated";
+    		col2Title = "Rate of Vaccination";
+    		break;
+    	}
+    	
         dataTable.getItems().clear();
         dataTable.getColumns().clear();
-        TableColumn<String, String> country = new TableColumn("country");
-        TableColumn<String, String> vaccinated = new TableColumn("fully_vaccinated");
-        TableColumn<String, String> rate = new TableColumn("rate_of_vaccination");
-        dataTable.getColumns().addAll(country, vaccinated, rate);
-
+        TableColumn<Map, String> country = new TableColumn("Country");
+        TableColumn<Map, String> col1 = new TableColumn(col1Title);
+        TableColumn<Map, String> col2 = new TableColumn(col2Title);
+        dataTable.getColumns().addAll(country, col1, col2);
         String[] validDate = CheckInput.checkValidDate(dataInstance.start, dataInstance.dataPath);
         System.out.println(validDate[0]);
 
@@ -249,15 +266,25 @@ public class Controller {
         Object[] ISO = dataInstance.getISOList(selectedCountries);
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
 
+        if (ISOStrings.length == 0) {
+            Alert error = new Alert(AlertType.ERROR);
+            error.setContentText("Please select at least one country");
+            error.show();
+            return;
+        }
         // for debugging purpose
         System.out.println(dataInstance.dataPath);
         System.out.println(Arrays.toString(ISOStrings));
         System.out.println(validDate[1]);
 
-        ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISOStrings), validDate[1]);
-
+        ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISOStrings), 
+        															validDate[1], getFocusedData());
+        country.setCellValueFactory(new MapValueFactory<>("country"));
+        col1.setCellValueFactory(new MapValueFactory<>("col1data"));
+        col2.setCellValueFactory(new MapValueFactory<>("col2data"));
 
         dataTable.getItems().addAll(tableData);
+        selectTable(getFocusedData().toString());
     }
 
     void generateChart(final UIDataModel data) {
@@ -272,20 +299,29 @@ public class Controller {
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
 
         if (ISOStrings.length == 0) {
-            // todo: show "no countries are selected"
+        	Alert error = new Alert(AlertType.ERROR);
+            error.setContentText("Please select at least one country");
+            error.show();
             return;
         }
 
         LocalDate iStartDate = data.start, iEndDate = data.end;
         List<String> checkPeriodInput = CheckInput.checkValidPeriod(iStartDate, iEndDate, iDataset);
         if (checkPeriodInput.size() == 1) {
-            // todo: show "invalid date period is selected"
+        	Alert error = new Alert(AlertType.ERROR);
+        	error.setContentText("Please select a valid date period");
+        	error.show();
             return;
         }
+        if (!checkPeriodInput.get(checkPeriodInput.size()-1).isEmpty()) {
+        	Alert info = new Alert(AlertType.INFORMATION);
+        	info.setContentText(checkPeriodInput.get(checkPeriodInput.size()-1));
+        	info.show();
+        }
         checkPeriodInput.remove(checkPeriodInput.size() - 1);
-        if (checkPeriodInput.get(0).equals(checkPeriodInput.get(1))) rateOfVacChart.setCreateSymbols(true);
+        if (checkPeriodInput.get(0).equals(checkPeriodInput.get(1))) chart.setCreateSymbols(true);
         else chart.setCreateSymbols(false);
-        ObservableList<XYChart.Series<String, Float>> allData = VaccinationRate.generateVacChart(Arrays.asList(ISOStrings), checkPeriodInput, iDataset);
+        ObservableList<XYChart.Series<String, Float>> allData = VaccinationRate.generateVacChart(iDataset, Arrays.asList(ISOStrings), checkPeriodInput, getFocusedData());
         chart.setData(allData);
     }
 
@@ -318,6 +354,7 @@ public class Controller {
      * Table C
      * To be triggered by "Get Vaccination Rate" button on the Table C tab.
      */
+    /**
     @FXML
     void doRateOfVacTable(ActionEvent event) {
         rateOfVacTable.getItems().clear();
@@ -358,7 +395,8 @@ public class Controller {
 
         rateOfVacTable.getItems().addAll(tableData);
     }
-
+    **/
+/**
     @FXML
     void doRateOfVacChart(ActionEvent event) {
 //    	textAreaConsole.setText(""); // clear previous output
@@ -393,5 +431,6 @@ public class Controller {
 //    	textAreaConsole.setText(errorConsole);
 
     }
+**/
 }
 
