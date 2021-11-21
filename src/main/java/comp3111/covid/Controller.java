@@ -222,15 +222,29 @@ public class Controller {
     }
 
     void generateTable(final UIDataModel data) {
+    	System.out.println(dataInstance.focusedData);
+    	String col1Title = "", col2Title = ""; 
+    	switch(getFocusedData()) {
+    	case ConfirmedCases:
+    		col1Title = "Total Cases";
+    		col2Title = "Total Cases (per 1M)";
+    		break;
+    	case ConfirmedDeaths:
+    		col1Title = "Total Deaths";
+    		col2Title = "Total Deaths (per 1M)";
+    		break;
+    	case RateOfVaccination:
+    		col1Title = "Fully Vaccinated";
+    		col2Title = "Rate of Vaccination";
+    		break;
+    	}
+    	
         dataTable.getItems().clear();
         dataTable.getColumns().clear();
         TableColumn<Map, String> country = new TableColumn("Country");
-        TableColumn<Map, String> vaccinated = new TableColumn("Fully Vaccinated");
-        TableColumn<Map, String> rate = new TableColumn("Rate of Vaccination");
-        dataTable.getColumns().addAll(country, vaccinated, rate);
-        // dataTable.getColumns.add(country);
-        // dataTable.getColumns.add(vaccinated);
-        // dataTable.getColumns.add(rate);
+        TableColumn<Map, String> col1 = new TableColumn(col1Title);
+        TableColumn<Map, String> col2 = new TableColumn(col2Title);
+        dataTable.getColumns().addAll(country, col1, col2);
         String[] validDate = CheckInput.checkValidDate(dataInstance.start, dataInstance.dataPath);
         System.out.println(validDate[0]);
 
@@ -244,10 +258,11 @@ public class Controller {
         System.out.println(Arrays.toString(ISOStrings));
         System.out.println(validDate[1]);
 
-        ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISOStrings), validDate[1]);
+        ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISOStrings), 
+        															validDate[1], getFocusedData());
         country.setCellValueFactory(new MapValueFactory<>("country"));
-        vaccinated.setCellValueFactory(new MapValueFactory<>("fully_vaccinated"));
-        rate.setCellValueFactory(new MapValueFactory<>("rate_of_vaccination"));
+        col1.setCellValueFactory(new MapValueFactory<>("col1data"));
+        col2.setCellValueFactory(new MapValueFactory<>("col2data"));
 
         dataTable.getItems().addAll(tableData);
     }
@@ -310,6 +325,7 @@ public class Controller {
      * Table C
      * To be triggered by "Get Vaccination Rate" button on the Table C tab.
      */
+    /**
     @FXML
     void doRateOfVacTable(ActionEvent event) {
         rateOfVacTable.getItems().clear();
@@ -350,7 +366,8 @@ public class Controller {
 
         rateOfVacTable.getItems().addAll(tableData);
     }
-
+    **/
+/**
     @FXML
     void doRateOfVacChart(ActionEvent event) {
 //    	textAreaConsole.setText(""); // clear previous output
@@ -385,5 +402,6 @@ public class Controller {
 //    	textAreaConsole.setText(errorConsole);
 
     }
+**/
 }
 
