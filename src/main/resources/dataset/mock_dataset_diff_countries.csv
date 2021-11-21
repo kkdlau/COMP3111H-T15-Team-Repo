@@ -1,0 +1,11 @@
+iso_code,continent,location,date,total_cases,new_cases,new_cases_smoothed,total_deaths,new_deaths,new_deaths_smoothed,total_cases_per_million,new_cases_per_million,new_cases_smoothed_per_million,total_deaths_per_million,new_deaths_per_million,new_deaths_smoothed_per_million,reproduction_rate,icu_patients,icu_patients_per_million,hosp_patients,hosp_patients_per_million,weekly_icu_admissions,weekly_icu_admissions_per_million,weekly_hosp_admissions,weekly_hosp_admissions_per_million,new_tests,total_tests,total_tests_per_thousand,new_tests_per_thousand,new_tests_smoothed,new_tests_smoothed_per_thousand,positive_rate,tests_per_case,tests_units,total_vaccinations,people_vaccinated,people_fully_vaccinated,new_vaccinations,new_vaccinations_smoothed,total_vaccinations_per_hundred,people_vaccinated_per_hundred,people_fully_vaccinated_per_hundred,new_vaccinations_smoothed_per_million,stringency_index,population,population_density,median_age,aged_65_older,aged_70_older,gdp_per_capita,extreme_poverty,cardiovasc_death_rate,diabetes_prevalence,female_smokers,male_smokers,handwashing_facilities,hospital_beds_per_thousand,life_expectancy,human_development_index,excess_mortality
+KUL,South,Kuala Lumpur,24/11/2021,54,21,68,4,4,4,4,4,3,3,3,83,,6,,,,3,,,9,,,69,,,9,91,9,5,2,6,8,,,,9,,8,5,,6,,8,6,9,,9,6,8,6,88,88,99,6,26
+SEL,South,Selangor,25/11/2021,65,5,89,23,23,23,23,23,52,52,52,,,,,,,,,,,,,,,,,,,,,,,,,,,,,5,,,,,,,,,,,,,,,,
+PER,West,Perak,26/11/2021,76,-11,110,42,42,42,42,42,6,6,6,,,,,,,,,,,,,,,,,,,,,,,,,,,,,5,,,,,,,,,,,,,,,,
+KED,North,Kedah,27/11/2021,87,-27,131,61,61,61,61,61,6,6,6,,4,,,,,,,,,,,,,,,,,,,,,,,,,,,5,,,,,,,,,,,,,,,,
+IPO,North,Ipoh,28/11/2021,98,-43,152,80,80,80,80,80,57,57,57,,,,,,,58,,,,,,,,,,,,,,,,,,,,,,5,,,,,,,,,,,,,,,,
+KEL,East,Kelantan,29/11/2021,109,-59,173,99,99,99,99,99,58,58,58,58,58,58,,5,,,,,65,,8,,,6,,,,,,,,25,,,,,,5,,,,,,,,,,,,,,,,
+TER,East,Terengganu,30/11/2021,120,-75,194,118,118,118,118,118,2,2,2,2,2,2,,,,,,,,,,,,,,,,,,5,,,,,,,,5,,,,,,,,,,,,,,,,
+SAB,East,Sabah,1/12/2021,131,-91,215,137,137,137,137,137,6,6,6,6,6,6,,,,,,88,,,5,58,52,,,,7,,6,,,,,,,,,5,,,,,,,,,,,,,,,,
+SAR,East,Sarawak,2/12/2021,142,-107,236,156,156,156,156,156,6,6,6,6,6,6,,,,,,,,,,,,,,,,5,,,,,,,,,,5,,,,,,,,,,,,,,,,
+MEL,South,Melaka,3/12/2021,153,-123,257,175,175,175,175,175,7,7,7,7,7,7,,,,,,8,,3,,,,,,,,5,,,,,,,,,,5,,,,,,,,,,,,,,,,
