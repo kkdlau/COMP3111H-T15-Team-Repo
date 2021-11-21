@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.collections.ObservableList;
@@ -253,6 +254,12 @@ public class Controller {
         Object[] ISO = dataInstance.getISOList(selectedCountries);
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
 
+        if (ISOStrings.length == 0) {
+            Alert error = new Alert(AlertType.ERROR);
+            error.setContentText("Please select at least one country");
+            error.show();
+            return;
+        }
         // for debugging purpose
         System.out.println(dataInstance.dataPath);
         System.out.println(Arrays.toString(ISOStrings));
@@ -265,6 +272,7 @@ public class Controller {
         col2.setCellValueFactory(new MapValueFactory<>("col2data"));
 
         dataTable.getItems().addAll(tableData);
+        selectTable(getFocusedData().toString());
     }
 
     void generateChart(final UIDataModel data) {
@@ -279,20 +287,29 @@ public class Controller {
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
 
         if (ISOStrings.length == 0) {
-            // todo: show "no countries are selected"
+        	Alert error = new Alert(AlertType.ERROR);
+            error.setContentText("Please select at least one country");
+            error.show();
             return;
         }
 
         LocalDate iStartDate = data.start, iEndDate = data.end;
         List<String> checkPeriodInput = CheckInput.checkValidPeriod(iStartDate, iEndDate, iDataset);
         if (checkPeriodInput.size() == 1) {
-            // todo: show "invalid date period is selected"
+        	Alert error = new Alert(AlertType.ERROR);
+        	error.setContentText("Please select a valid date period");
+        	error.show();
             return;
         }
+        if (!checkPeriodInput.get(checkPeriodInput.size()-1).isEmpty()) {
+        	Alert info = new Alert(AlertType.INFORMATION);
+        	info.setContentText(checkPeriodInput.get(checkPeriodInput.size()-1));
+        	info.show();
+        }
         checkPeriodInput.remove(checkPeriodInput.size() - 1);
-        if (checkPeriodInput.get(0).equals(checkPeriodInput.get(1))) rateOfVacChart.setCreateSymbols(true);
+        if (checkPeriodInput.get(0).equals(checkPeriodInput.get(1))) chart.setCreateSymbols(true);
         else chart.setCreateSymbols(false);
-        ObservableList<XYChart.Series<String, Float>> allData = VaccinationRate.generateVacChart(Arrays.asList(ISOStrings), checkPeriodInput, iDataset);
+        ObservableList<XYChart.Series<String, Float>> allData = VaccinationRate.generateVacChart(iDataset, Arrays.asList(ISOStrings), checkPeriodInput, getFocusedData());
         chart.setData(allData);
     }
 

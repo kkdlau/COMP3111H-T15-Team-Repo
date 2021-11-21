@@ -112,24 +112,34 @@ class VaccinationRate {
 	 * Input: List<String> iLocations, List<String> iPeriod, String iDataset
 	 * Output: people_fully_vaccinated_per_hundred
 	 */
-	public static ObservableList generateVacChart(List<String> iLocations, List<String> iPeriod, String iDataset) {
+	public static ObservableList generateVacChart(String iDataset, List<String> iISOStrings, List<String> iPeriod, InterestedData focusedData) {
+		String dataTarget = "";
+		switch (focusedData) {
+		case ConfirmedCases:
+			dataTarget = "total_cases_per_million"; break;
+		case ConfirmedDeaths:
+			dataTarget = "total_deaths_per_million"; break;
+		case RateOfVaccination:
+			dataTarget = "people_fully_vaccinated_per_hundred"; break;
+		}
 		LocalDate startDate = LocalDate.parse(iPeriod.get(0), inputFormatter);
 		LocalDate endDate = LocalDate.parse(iPeriod.get(1), inputFormatter);
 		ObservableList<XYChart.Series<String, Float>> allData = 
 				FXCollections.<XYChart.Series<String, Float>>observableArrayList();
 		
-		for (String loc : iLocations) {
+		for (String iso : iISOStrings) {
 			XYChart.Series<String, Float> data = new XYChart.Series();
-			data.setName(loc);
+			String loc = "";
 			float rate = 0.0f; 
 			int found = 0;
 			LocalDate readDate = null;
 			LocalDate temp = null;
 			for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {
-				if (rec.get("location").equals(loc)) {
+				if (rec.get("iso_code").equals(iso)) {
 					readDate = LocalDate.parse(rec.get("date"), datasetFormatter);
 					if (found == 0) {
 						found = 1;
+						loc = rec.get("location");
 						if (startDate.isBefore(readDate)) {
 							temp = startDate;
 							rate = 0.0f; 
@@ -139,7 +149,7 @@ class VaccinationRate {
 							}
 						}
 					}
-					String s1 = rec.get("people_fully_vaccinated_per_hundred");
+					String s1 = rec.get(dataTarget);
 					if (!s1.isEmpty()) rate = Float.parseFloat(s1);
 					if (!readDate.isBefore(startDate) && !readDate.isAfter(endDate)) {
 						data.getData().add(new XYChart.Data(readDate.toString(), rate));
@@ -148,10 +158,11 @@ class VaccinationRate {
 				else if (found == 1) break;
 			}
 			temp = LocalDate.now();
-			while (!readDate.isAfter(endDate) && !readDate.isAfter(temp)) { // for dates behind period in dataset 
+			while (readDate != null && !readDate.isAfter(endDate) && !readDate.isAfter(temp)) { // for dates behind period in dataset 
 				if (!readDate.isBefore(startDate)) data.getData().add(new XYChart.Data(readDate.toString(), rate));
 				readDate = readDate.plusDays(1);
 			}
+			data.setName(loc);
 			allData.add(data);
 		}
 		return allData;
