@@ -19,6 +19,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <HBox prefHeight="687.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
    <children>
@@ -108,6 +109,7 @@
                   </Tab>
               </tabs>
             </TabPane>
+            <Label text=" To select more than a country, press CTRL/SHIFT." />
             <TitledPane fx:id="countryFilter" animated="false" text="Country filter">
                <content>
                   <ListView fx:id="countryListView" prefHeight="200.0" prefWidth="200.0" />
@@ -129,15 +131,20 @@
       </VBox>
       <StackPane prefHeight="150.0" prefWidth="455.0">
          <children>
-            <LineChart fx:id="chart">
+            <LineChart>
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <CategoryAxis label="x-axis" side="BOTTOM" />
               </xAxis>
               <yAxis>
-                <NumberAxis side="LEFT" />
+                <NumberAxis label="y-axis" side="LEFT" />
               </yAxis>
             </LineChart>
-            <TableView fx:id="dataTable" prefHeight="200.0" prefWidth="200.0" />
+            <TableView fx:id="dataTable" disable="true" prefHeight="200.0" prefWidth="200.0" />
+            <Label fx:id="title" text="title" StackPane.alignment="TOP_CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
          </children>
       </StackPane>
    </children>

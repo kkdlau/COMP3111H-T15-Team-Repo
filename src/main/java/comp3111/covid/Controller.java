@@ -2,6 +2,9 @@ package comp3111.covid;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.chart.LineChart;
@@ -133,6 +136,15 @@ public class Controller {
 
     @FXML
     private LineChart chart;
+
+    @FXML
+    private NumberAxis chartXAxis;
+
+    @FXML
+    private CategoryAxis chartYAxis;
+
+    @FXML
+    private Label title;
 
 
     ToggleGroup ratioButtonGroups = new ToggleGroup();
