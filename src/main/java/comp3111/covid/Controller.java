@@ -130,6 +130,9 @@ public class Controller {
     @FXML
     private TitledPane dataRangeTile;
 
+    @FXML
+    private LineChart<?, ?> chart;
+
 
     ToggleGroup ratioButtonGroups = new ToggleGroup();
 
@@ -179,10 +182,10 @@ public class Controller {
 
         acumulativeCheckButton.setOnAction(e -> {
             dataInstance.acumulativeData = acumulativeCheckButton.isSelected();
-            updateDataRangeTile(!dataInstance.acumulativeData);
+            showTaskUI(!dataInstance.acumulativeData);
         });
 
-        updateDataRangeTile(!dataInstance.acumulativeData);
+        showTaskUI(!dataInstance.acumulativeData);
 
     }
 
@@ -241,17 +244,21 @@ public class Controller {
         dataTable.getItems().addAll(tableData);
     }
 
-    void updateDataRangeTile(Boolean isTask1) {
+    void showTaskUI(Boolean isTask1) {
         if (isTask1) {
             dataRangeTile.setText("Date");
             startDateLabel.setText("Date: ");
             endDataLabel.setVisible(false);
             endDatePicker.setVisible(false);
+            chart.setVisible(false);
+            dataTable.setVisible(true);
         } else {
             dataRangeTile.setText("Date Range");
             startDateLabel.setText("Start date: ");
             endDataLabel.setVisible(true);
             endDatePicker.setVisible(true);
+            chart.setVisible(true);
+            dataTable.setVisible(false);
         }
     }
 
