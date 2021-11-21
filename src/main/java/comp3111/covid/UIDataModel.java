@@ -40,12 +40,12 @@ public class UIDataModel {
         return availableCountries;
     }
 
-    public String[] getISOList(String[] countries) {
+    public Object[] getISOList(ObservableList<String> countries) {
         ArrayList<String> iso = new ArrayList<>();
         for (var c: countries) {
             iso.add(ISORepresentation.get(c));
         }
 
-        return (String[]) iso.toArray();
+        return iso.toArray();
     }
 }

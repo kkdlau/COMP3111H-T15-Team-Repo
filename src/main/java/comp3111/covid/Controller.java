@@ -225,8 +225,12 @@ public class Controller {
         String[] validDate = CheckInput.checkValidDate(dataInstance.start, dataInstance.dataPath);
 
         // todo: make it support any interest of data
-        String[] ISO = {"AFG"};
-        ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISO), validDate[1]);
+        ObservableList<String> selectedCountries = countryListView.getSelectionModel().getSelectedItems();
+
+        Object[] ISO = dataInstance.getISOList(selectedCountries);
+        String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+
+        ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISOStrings), validDate[1]);
 
 
         dataTable.getItems().addAll(tableData);
