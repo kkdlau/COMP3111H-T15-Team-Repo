@@ -48,4 +48,15 @@ public class UIDataModel {
 
         return iso.toArray();
     }
+
+    @Override
+    public String toString() {
+        return "UIDataModel{" +
+                ", focusedData=" + focusedData +
+                ", dataPath='" + dataPath + '\'' +
+                ", acumulativeData=" + acumulativeData +
+                ", start=" + start +
+                ", end=" + end +
+                '}';
+    }
 }
