@@ -129,23 +129,27 @@
             </TitledPane>
          </children>
       </VBox>
-      <StackPane prefHeight="150.0" prefWidth="455.0">
+      <VBox prefHeight="687.0" prefWidth="457.0">
          <children>
-            <LineChart>
-              <xAxis>
-                <CategoryAxis label="x-axis" side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis label="y-axis" side="LEFT" />
-              </yAxis>
-            </LineChart>
-            <TableView fx:id="dataTable" disable="true" prefHeight="200.0" prefWidth="200.0" />
-            <Label fx:id="title" text="title" StackPane.alignment="TOP_CENTER">
+            <Label fx:id="title" alignment="CENTER" prefHeight="23.0" prefWidth="471.0" text="title" textAlignment="CENTER">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
+            <StackPane fx:id="stack" prefHeight="680.0" prefWidth="456.0">
+               <children>
+                  <LineChart fx:id="chart">
+                    <xAxis>
+                      <CategoryAxis fx:id="chartYAxis" label="x-axis" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="chartXAxis" label="y-axis" side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+                  <TableView fx:id="dataTable" disable="true" prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </StackPane>
          </children>
-      </StackPane>
+      </VBox>
    </children>
 </HBox>

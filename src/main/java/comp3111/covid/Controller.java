@@ -11,6 +11,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.collections.ObservableList;
+import javafx.scene.layout.StackPane;
 
 import java.util.*;
 import java.time.LocalDate;
@@ -23,58 +24,10 @@ import java.time.format.FormatStyle;
 public class Controller {
 
     @FXML
-    private Tab tabTaskZero;
-
-    @FXML
-    private TextField textfieldISO;
-
-    @FXML
-    private Button buttonConfirmedDeaths;
-
-    @FXML
     private TextField textfieldDataset;
 
     @FXML
-    private Button buttonRateOfVaccination;
-
-    @FXML
-    private Button buttonConfirmedCases;
-
-    @FXML
-    private Tab tabReport1;
-
-    @FXML
-    private Tab tabReport2;
-
-    @FXML
-    private Label labelTableTitle;
-    @FXML
-    private Label labelTabTitle;
-    @FXML
-    private MenuButton menuButtonSelectTable;
-    @FXML
-    private MenuButton menuButtonSelectCountry;
-
-    @FXML
     private Tab tabReport3;
-
-    @FXML
-    private DatePicker oneDatePickerC1;
-    @FXML
-    private Button buttonRateOfVacTable;
-    @FXML
-    private Label rateOfVacTableLabel;
-    @FXML
-    private TextArea textAreaCountryNamesC1;
-    @FXML
-    private TableView rateOfVacTable;
-    @FXML
-    private TableColumn vacTableColCountry;
-    @FXML
-    private TableColumn vacTableColFullyVac;
-    @FXML
-    private TableColumn vacTableColRateOfVac;
-
 
     @FXML
     private Tab tabApp1;
@@ -84,23 +37,9 @@ public class Controller {
 
     @FXML
     private Tab tabApp3;
-    @FXML
-    private DatePicker startDatePickerC2;
-    @FXML
-    private DatePicker endDatePickerC2;
-    @FXML
-    private TextArea textAreaCountryNamesC2;
-    @FXML
-    private Button buttonRateOfVacChart;
-    @FXML
-    private LineChart rateOfVacChart;
-
 
     @FXML
     private CheckBox acumulativeCheckButton;
-
-    @FXML
-    private TitledPane countryFilter;
 
     @FXML
     private ListView<String> countryListView;
@@ -145,7 +84,7 @@ public class Controller {
     private CategoryAxis chartYAxis;
 
     @FXML
-    private Label title;
+    private StackPane stack;
 
 
     ToggleGroup ratioButtonGroups = new ToggleGroup();
@@ -157,6 +96,8 @@ public class Controller {
         // default data for data pickers
         startDatePicker.setValue(LocalDate.now());
         endDatePicker.setValue(LocalDate.now());
+        stack.getChildren().remove(chart);
+        stack.getChildren().remove(dataTable);
 
         this.updateUIDataModel();
 
@@ -284,7 +225,6 @@ public class Controller {
         col2.setCellValueFactory(new MapValueFactory<>("col2data"));
 
         dataTable.getItems().addAll(tableData);
-        selectTable(getFocusedData().toString());
     }
 
     void generateChart(final UIDataModel data) {
@@ -331,24 +271,18 @@ public class Controller {
             startDateLabel.setText("Date: ");
             endDataLabel.setVisible(false);
             endDatePicker.setVisible(false);
-            chart.setVisible(false);
-            dataTable.setVisible(true);
+            stack.getChildren().remove(chart);
+            stack.getChildren().add(dataTable);
         } else {
             dataRangeTile.setText("Date Range");
             startDateLabel.setText("Start date: ");
             endDataLabel.setVisible(true);
             endDatePicker.setVisible(true);
-            chart.setVisible(true);
-            dataTable.setVisible(false);
+            stack.getChildren().remove(dataTable);
+            stack.getChildren().add(chart);
         }
     }
 
-
-    void selectTable(String type) {
-        menuButtonSelectTable.setText(type);
-        labelTabTitle.setText("Rate of " + type + " for COVID-19 by Country");
-        labelTableTitle.setText("Rate of " + type + " against COVID-19 as of ...");
-    }
 
     /**
      * Table C
