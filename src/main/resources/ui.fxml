@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
@@ -20,8 +21,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<HBox prefHeight="687.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+<HBox prefHeight="687.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
@@ -44,6 +46,20 @@
                         </AnchorPane>
                   </content>
                 </Tab>
+                  <Tab onSelectionChanged="#runReportC" text="Report C">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Text layoutX="18.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This report studies the existence of vaccine inequity that hinders a speedy return to normalcy from COVID-19. Then, the importance of vaccines is observed to gauge the importance of tackling vaccine inequity." wrappingWidth="262.3999999999999" />
+                              <Label layoutX="90.0" layoutY="14.0" text="Problem Statement">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
                   <Tab fx:id="tabReport1" text="Table A">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
@@ -129,9 +145,9 @@
             </TitledPane>
          </children>
       </VBox>
-      <StackPane prefHeight="150.0" prefWidth="455.0">
+      <StackPane prefHeight="687.0" prefWidth="507.0">
          <children>
-            <LineChart>
+            <LineChart fx:id="chart">
               <xAxis>
                 <CategoryAxis label="x-axis" side="BOTTOM" />
               </xAxis>
@@ -145,6 +161,56 @@
                   <Font size="18.0" />
                </font>
             </Label>
+            <ScrollPane fx:id="reportC" prefHeight="200.0" prefWidth="200.0">
+               <content>
+                  <AnchorPane prefHeight="727.0" prefWidth="506.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="38.0" prefWidth="506.0" text="Vaccine Inequity - and does it matter?">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Text layoutX="14.0" layoutY="44.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="As COVID-19 swept the world in 2020 and 2021, lives were lost and economies closed. When vaccines were produced in late 2020, we thought that they were the answers to normality. Yet, now at the end of 2021, there still seems to be no end to this ravaging pandemic. It is not that the vaccines are useless, but the lack of VACCINE EQUITY causes a stark disparity in vaccine rollouts across the world. " textAlignment="JUSTIFY" wrappingWidth="466.9368591308594" />
+                        <Text layoutX="28.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Click the button on the right to compare vaccine rollouts across countries with different economic situations" textAlignment="JUSTIFY" wrappingWidth="222.13677978515625">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                        <LineChart layoutX="13.0" layoutY="169.0" prefHeight="209.0" prefWidth="457.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                        <Button layoutX="292.0" layoutY="126.0" mnemonicParsing="false" text="Generate comparison" />
+                        <Text layoutX="14.0" layoutY="426.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="One cause of vaccine inequity is the lack of financial resources. The average cost of a COVID-19 vaccine ranges between HKD 15 and HKD 300. Not all countries have sufficient healthcare budgets to cover this cost for their population. This situation is reflected by the long delay in the start of vaccinations for countries in the first quartile compared to the fourth quartile. Even as some countries start their booster doses, other countries struggle to cover everyone with the first dose. " textAlignment="JUSTIFY" wrappingWidth="466.1368103027344" />
+                        <Text layoutX="30.0" layoutY="602.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose ONE country and a period of interest from the filter on the left. Then, click the button below to view the efficacy of vaccines in the country." textAlignment="JUSTIFY" wrappingWidth="122.93670654296875">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                        <Button layoutX="46.0" layoutY="719.0" mnemonicParsing="false" text="Generate chart" />
+                        <LineChart layoutX="170.0" layoutY="591.0" prefHeight="222.0" prefWidth="309.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                        <Text layoutX="13.0" layoutY="534.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Should we care about vaccine equity? It seems that the vaccines are ineffective in stopping people from contracting the virus. If so, then it might not be necessary to take action against this inequity. " textAlignment="JUSTIFY" wrappingWidth="467.736044883728" />
+                        <Text layoutX="191.0" layoutY="394.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Figure 1. FIGURE TITLE" />
+                        <Text layoutX="145.0" layoutY="867.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CONCLUSION" textAlignment="CENTER" wrappingWidth="225.0000000000001">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
          </children>
       </StackPane>
    </children>

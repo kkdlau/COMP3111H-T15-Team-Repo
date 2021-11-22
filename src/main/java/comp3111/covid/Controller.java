@@ -1,6 +1,7 @@
 package comp3111.covid;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.chart.CategoryAxis;
@@ -147,6 +148,8 @@ public class Controller {
     @FXML
     private Label title;
 
+    @FXML
+    private ScrollPane reportC;
 
     ToggleGroup ratioButtonGroups = new ToggleGroup();
 
@@ -333,6 +336,7 @@ public class Controller {
             endDatePicker.setVisible(false);
             chart.setVisible(false);
             dataTable.setVisible(true);
+            reportC.setVisible(false);
         } else {
             dataRangeTile.setText("Date Range");
             startDateLabel.setText("Start date: ");
@@ -340,6 +344,7 @@ public class Controller {
             endDatePicker.setVisible(true);
             chart.setVisible(true);
             dataTable.setVisible(false);
+            reportC.setVisible(false);
         }
     }
 
@@ -349,88 +354,18 @@ public class Controller {
         labelTabTitle.setText("Rate of " + type + " for COVID-19 by Country");
         labelTableTitle.setText("Rate of " + type + " against COVID-19 as of ...");
     }
-
-    /**
-     * Table C
-     * To be triggered by "Get Vaccination Rate" button on the Table C tab.
-     */
-    /**
-    @FXML
-    void doRateOfVacTable(ActionEvent event) {
-        rateOfVacTable.getItems().clear();
-
-        String iDataset = textfieldDataset.getText(); // assume dataset specified in Task Zero
-
-        String iLocations = textAreaCountryNamesC1.getText();
-        if (iLocations.isEmpty()) {
-//    		textAreaConsole.setText("Please input at least one country of interest!\n");
-            return;
-        }
-        String errorConsole = "";
-
-        LocalDate iDate = oneDatePickerC1.getValue();
-
-        // parse valid IsoCodes from location
-        List<String> checkLocOutput = CheckInput.checkValidLocations(iLocations, iDataset);
-        errorConsole += checkLocOutput.get(checkLocOutput.size() - 1);
-        if (checkLocOutput.size() == 1) {
-            // todo: show error
-            return;
-        }
-        checkLocOutput.remove(checkLocOutput.size() - 1); // valid IsoCodes
-
-        String[] validDate = CheckInput.checkValidDate(iDate, iDataset);
-        errorConsole += validDate[0];
-
-//    	textAreaConsole.setText(errorConsole);
-        DateTimeFormatter tempformatter = DateTimeFormatter.ofPattern("uuuu-M-d");
-        LocalDate temp = LocalDate.parse(validDate[1], tempformatter);
-        String labelDate = temp.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
-        rateOfVacTableLabel.setText("Rate of Vaccination against COVID-19 as of " + labelDate);
-        // pass valid inputs to VaccinationRate methods
-        ObservableList tableData = VaccinationRate.generateVacTable(iDataset, checkLocOutput, validDate[1]);
-        vacTableColCountry.setCellValueFactory(new MapValueFactory<>("country"));
-        vacTableColFullyVac.setCellValueFactory(new MapValueFactory<>("fully_vaccinated"));
-        vacTableColRateOfVac.setCellValueFactory(new MapValueFactory<>("rate_of_vaccination"));
-
-        rateOfVacTable.getItems().addAll(tableData);
+    
+    void showReportUI(InterestedData type) { // switch the UI of StackPane
+    	switch(type) {
+    	case RateOfVaccination:
+    		dataRangeTile.setText("Date"); 
+            startDateLabel.setText("Date: ");
+            endDataLabel.setVisible(false);
+            endDatePicker.setVisible(false);
+            chart.setVisible(false);
+            dataTable.setVisible(false);
+            reportC.setVisible(true);
+    	}
     }
-    **/
-/**
-    @FXML
-    void doRateOfVacChart(ActionEvent event) {
-//    	textAreaConsole.setText(""); // clear previous output
-        rateOfVacChart.getData().clear();
-        String iDataset = textfieldDataset.getText(); // assume dataset specified in Task Zero
-        String iLocations = textAreaCountryNamesC2.getText();
-        if (iLocations.isEmpty()) {
-//    		textAreaConsole.setText("Please input at least one country of interest!\n");
-            return;
-        }
-        String errorConsole = "";
-        List<String> checkLocInput = CheckInput.checkValidLocations(iLocations, iDataset);
-        errorConsole += checkLocInput.get(checkLocInput.size() - 1);
-        if (checkLocInput.size() == 1) {
-//    		textAreaConsole.setText(errorConsole);
-            return;
-        }
-        checkLocInput.remove(checkLocInput.size() - 1); // valid IsoCodes
-
-        LocalDate iStartDate = startDatePickerC2.getValue(), iEndDate = endDatePickerC2.getValue();
-        List<String> checkPeriodInput = CheckInput.checkValidPeriod(iStartDate, iEndDate, iDataset);
-        errorConsole += checkPeriodInput.get(checkPeriodInput.size() - 1);
-        if (checkPeriodInput.size() == 1) {
-//    		textAreaConsole.setText(errorConsole);
-            return;
-        }
-        checkPeriodInput.remove(checkPeriodInput.size() - 1);
-        if (checkPeriodInput.get(0).equals(checkPeriodInput.get(1))) rateOfVacChart.setCreateSymbols(true);
-        else rateOfVacChart.setCreateSymbols(false);
-        ObservableList<XYChart.Series<String, Float>> allData = VaccinationRate.generateVacChart(checkLocInput, checkPeriodInput, iDataset);
-        rateOfVacChart.setData(allData);
-//    	textAreaConsole.setText(errorConsole);
-
-    }
-**/
 }
 

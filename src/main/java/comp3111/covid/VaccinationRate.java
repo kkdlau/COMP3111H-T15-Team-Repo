@@ -89,8 +89,7 @@ class VaccinationRate {
 					if (!s2.equals(""))
 						rate = Float.parseFloat(s2);
 					**/
-				}
-				else if (found == 1) { // date not in range 
+				} else if (found == 1) { // date not in range 
 					datum.put("col1data", "No records");
 					datum.put("col2data", "No records");
 					data.add(datum);
@@ -154,8 +153,7 @@ class VaccinationRate {
 					if (!readDate.isBefore(startDate) && !readDate.isAfter(endDate)) {
 						data.getData().add(new XYChart.Data(readDate.toString(), rate));
 					}
-				} 
-				else if (found == 1) break;
+				} else if (found == 1) break;
 			}
 			temp = LocalDate.now();
 			while (readDate != null && !readDate.isAfter(endDate) && !readDate.isAfter(temp)) { // for dates behind period in dataset 
