@@ -12,6 +12,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -46,20 +47,6 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab onSelectionChanged="#runReportC" text="Report C">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <Text layoutX="18.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This report studies the existence of vaccine inequity that hinders a speedy return to normalcy from COVID-19. Then, the importance of vaccines is observed to gauge the importance of tackling vaccine inequity." wrappingWidth="262.3999999999999" />
-                              <Label layoutX="90.0" layoutY="14.0" text="Problem Statement">
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </Tab>
                   <Tab fx:id="tabReport1" text="Table A">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
@@ -123,6 +110,20 @@
                         </AnchorPane>
                     </content>
                   </Tab>
+                  <Tab fx:id="tabReportC" text="Report C">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Text layoutX="18.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This report studies the existence of vaccine inequity that hinders a speedy return to normalcy from COVID-19. Then, the importance of vaccines is observed to gauge the importance of tackling vaccine inequity." wrappingWidth="262.3999999999999" />
+                              <Label layoutX="90.0" layoutY="14.0" text="Problem Statement">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
               </tabs>
             </TabPane>
             <Label text=" To select more than a country, press CTRL/SHIFT." />
@@ -137,33 +138,36 @@
                      <children>
                         <Label fx:id="startDateLabel" layoutX="14.0" layoutY="28.0" text="Start date: " />
                         <Label fx:id="endDataLabel" layoutX="16.0" layoutY="69.0" text="End date: " />
-                        <DatePicker fx:id="startDatePicker" layoutX="95.0" layoutY="24.0" />
-                        <DatePicker fx:id="endDatePicker" layoutX="95.0" layoutY="65.0" />
+                        <DatePicker fx:id="startDatePicker" editable="false" layoutX="95.0" layoutY="24.0" />
+                        <DatePicker fx:id="endDatePicker" editable="false" layoutX="95.0" layoutY="65.0" />
                      </children>
                   </AnchorPane>
               </content>
             </TitledPane>
          </children>
       </VBox>
-      <StackPane prefHeight="687.0" prefWidth="507.0">
+      <VBox prefHeight="687.0" prefWidth="507.0">
          <children>
-            <LineChart fx:id="chart">
-              <xAxis>
-                <CategoryAxis label="x-axis" side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis label="y-axis" side="LEFT" />
-              </yAxis>
-            </LineChart>
-            <TableView fx:id="dataTable" disable="true" prefHeight="200.0" prefWidth="200.0" />
-            <Label fx:id="title" text="title" StackPane.alignment="TOP_CENTER">
+            <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="493.0" text="title" textAlignment="CENTER">
+
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <ScrollPane fx:id="reportC" prefHeight="200.0" prefWidth="200.0">
-               <content>
-                  <AnchorPane prefHeight="727.0" prefWidth="506.0">
+            <StackPane fx:id="stack" prefHeight="680.0" prefWidth="456.0">
+               <children>
+                  <LineChart fx:id="chart">
+                    <xAxis>
+                      <CategoryAxis fx:id="chartYAxis" animated="false" label="x-axis" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="chartXAxis" animated="false" label="y-axis" side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+                  <TableView fx:id="dataTable" disable="true" prefHeight="200.0" prefWidth="200.0" />
+                  <ScrollPane fx:id="reportC" prefHeight="200.0" prefWidth="200.0">
+               		<content>
+                  	<AnchorPane prefHeight="872.0" prefWidth="466.0">
                      <children>
                         <Label alignment="CENTER" prefHeight="38.0" prefWidth="506.0" text="Vaccine Inequity - and does it matter?">
                            <font>
@@ -176,23 +180,23 @@
                               <Font name="System Italic" size="12.0" />
                            </font>
                         </Text>
-                        <LineChart layoutX="13.0" layoutY="169.0" prefHeight="209.0" prefWidth="457.0">
+                        <LineChart fx:id="chartReportC1" createSymbols="false" layoutX="13.0" layoutY="169.0" legendSide="RIGHT" prefHeight="366.0" prefWidth="470.0">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" />
+                            <CategoryAxis animated="false" label="Date" side="BOTTOM" tickLabelGap="10.0" tickMarkVisible="false" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis side="LEFT" />
+                            <NumberAxis animated="false" label="Average # Vaccine Doses per 100 People" minorTickVisible="false" side="LEFT" />
                           </yAxis>
                         </LineChart>
-                        <Button layoutX="292.0" layoutY="126.0" mnemonicParsing="false" text="Generate comparison" />
-                        <Text layoutX="14.0" layoutY="426.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="One cause of vaccine inequity is the lack of financial resources. The average cost of a COVID-19 vaccine ranges between HKD 15 and HKD 300. Not all countries have sufficient healthcare budgets to cover this cost for their population. This situation is reflected by the long delay in the start of vaccinations for countries in the first quartile compared to the fourth quartile. Even as some countries start their booster doses, other countries struggle to cover everyone with the first dose. " textAlignment="JUSTIFY" wrappingWidth="466.1368103027344" />
-                        <Text layoutX="30.0" layoutY="602.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose ONE country and a period of interest from the filter on the left. Then, click the button below to view the efficacy of vaccines in the country." textAlignment="JUSTIFY" wrappingWidth="122.93670654296875">
+                        <Button fx:id="buttonReportC1" layoutX="292.0" layoutY="126.0" mnemonicParsing="false" text="Generate comparison" />
+                        <Text layoutX="20.0" layoutY="782.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="One cause of vaccine inequity is the lack of financial resources. The average cost of a COVID-19 vaccine ranges between HKD 15 and HKD 300. Not all countries have sufficient healthcare budgets to cover this cost for their population. This situation is reflected by the long delay in the start of vaccinations for countries in the first quartile compared to the fourth quartile. Even as some countries start their booster doses, other countries struggle to cover everyone with the first dose. " textAlignment="JUSTIFY" wrappingWidth="466.1368103027344" />
+                        <Text layoutX="36.0" layoutY="958.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose ONE country and a period of interest from the filter on the left. Then, click the button below to view the efficacy of vaccines in the country." textAlignment="JUSTIFY" wrappingWidth="122.93670654296875">
                            <font>
                               <Font name="System Italic" size="12.0" />
                            </font>
                         </Text>
-                        <Button layoutX="46.0" layoutY="719.0" mnemonicParsing="false" text="Generate chart" />
-                        <LineChart layoutX="170.0" layoutY="591.0" prefHeight="222.0" prefWidth="309.0">
+                        <Button fx:id="buttonReportC2" layoutX="52.0" layoutY="1075.0" mnemonicParsing="false" text="Generate chart" />
+                        <LineChart fx:id="chartReportC2" layoutX="176.0" layoutY="947.0" prefHeight="222.0" prefWidth="309.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
@@ -200,18 +204,27 @@
                             <NumberAxis side="LEFT" />
                           </yAxis>
                         </LineChart>
-                        <Text layoutX="13.0" layoutY="534.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Should we care about vaccine equity? It seems that the vaccines are ineffective in stopping people from contracting the virus. If so, then it might not be necessary to take action against this inequity. " textAlignment="JUSTIFY" wrappingWidth="467.736044883728" />
-                        <Text layoutX="191.0" layoutY="394.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Figure 1. FIGURE TITLE" />
-                        <Text layoutX="145.0" layoutY="867.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CONCLUSION" textAlignment="CENTER" wrappingWidth="225.0000000000001">
+                        <Text layoutX="19.0" layoutY="890.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Should we care about vaccine equity? It seems that the vaccines are ineffective in stopping people from contracting the virus. If so, then it might not be necessary to take action against this inequity. " textAlignment="JUSTIFY" wrappingWidth="467.736044883728" />
+                        <Text layoutX="153.0" layoutY="551.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Figure 1. FIGURE TITLE - Empty at first" />
+                        <Text layoutX="151.0" layoutY="1223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CONCLUSION" textAlignment="CENTER" wrappingWidth="225.0000000000001">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Text>
+                              <TableView fx:id="tableReportC1" layoutX="27.0" layoutY="566.0" prefHeight="149.0" prefWidth="446.0">
+                                <columns>
+                                  <TableColumn prefWidth="75.0" text="C1" />
+                                  <TableColumn prefWidth="75.0" text="C2" />
+                                </columns>
+                              </TableView>
+                              <Label layoutX="167.0" layoutY="729.0" text="Table 1. TABLE TITLE -  Empty at first" />
                      </children>
                   </AnchorPane>
                </content>
             </ScrollPane>
+               </children>
+            </StackPane>
          </children>
-      </StackPane>
+      </VBox>
    </children>
 </HBox>
