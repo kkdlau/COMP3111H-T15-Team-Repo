@@ -16,17 +16,6 @@ class TableChartTask {
 	/** Method 1: Generate Data for Table in Task 1
 	 * Input: List<String> Country, String iDate
 	 * Output: Something that can be put into Table View 
-	 * 
-	 * in csv "people_fully_vaccinated" and "people_fully_vaccinated_per_hundred"
-	 * once find the correct country, need to keep the latest value seen
-	 * because some countries have many empty vaccination records 
-	 * 
-	 * List list = new ArrayList();
-	 * list.add(new TableRow("Country", "Fully Vaccinated", "Rate of Vaccination"));
-	 * ...
-	 * 
-	 * ObservableList data = FXCollections.observableList(list);
-	 * return data 
 	 */
 	public static ObservableList generateTable(String iDataset, List<String> iISOStrings, String iStrDate, InterestedData focusedData) {
 		String col1target = "", col2target = "";
@@ -77,15 +66,6 @@ class TableChartTask {
 						data.add(datum);
 						break;
 					}
-					/**
-					if (readDate.isAfter(iDate)) break;
-					String s1 = rec.get("people_fully_vaccinated");
-					String s2 = rec.get("people_fully_vaccinated_per_hundred");
-					if (!s1.equals(""))
-						fullyVaccinated = Long.parseLong(s1);
-					if (!s2.equals(""))
-						rate = Float.parseFloat(s2);
-					**/
 				} else if (found == 1) { // date not in range 
 					datum.put("col1data", "No records");
 					datum.put("col2data", "No records");
@@ -93,13 +73,6 @@ class TableChartTask {
 					break;
 				}
 			}
-			/**
-			Map<String, Object> datum = new HashMap<>();
-			datum.put("country", loc);
-			datum.put("fully_vaccinated", fullyVaccinated);
-			datum.put("rate_of_vaccination", rate);
-			data.add(datum);
-			**/
 		}
 		return data;
 	}

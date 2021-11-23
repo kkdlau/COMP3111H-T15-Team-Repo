@@ -23,11 +23,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox prefHeight="687.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+<HBox fx:id="rootUI" prefHeight="687.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <TabPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="1.79769313E308">
+            <TabPane fx:id="tabGroup" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="1.79769313E308">
               <tabs>
                 <Tab fx:id="tabTaskZero" text="Task 1">
                   <content>
@@ -46,7 +46,7 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab fx:id="tabReportC" text="Report C">
+                  <Tab fx:id="c3Tab" text="Report C">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -62,7 +62,7 @@
                   </Tab>
               </tabs>
             </TabPane>
-            <Label text=" To select more than a country, press CTRL/SHIFT." />
+            <Label fx:id="countryInstruction" text=" To select more than a country, press CTRL/SHIFT." />
             <TitledPane fx:id="countryFilter" animated="false" text="Country filter">
                <content>
                   <ListView fx:id="countryListView" prefHeight="200.0" prefWidth="200.0" />
@@ -82,7 +82,7 @@
             </TitledPane>
          </children>
       </VBox>
-      <VBox prefHeight="687.0" prefWidth="507.0">
+      <VBox fx:id="rightUI" prefHeight="687.0" prefWidth="507.0">
          <children>
             <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="493.0" text="title" textAlignment="CENTER">
 
@@ -129,9 +129,9 @@
                               <TableView fx:id="tableReportC1" layoutX="24.0" layoutY="554.0" prefHeight="149.0" prefWidth="446.0" />
                               <Label layoutX="144.0" layoutY="714.0" text="Table 1. TABLE TITLE -  Empty at first" />
                         <Text layoutX="21.0" layoutY="750.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="One cause of vaccine inequity is the lack of financial resources. The average cost of a COVID-19 vaccine ranges between HKD 15 and HKD 300. Not all countries have sufficient healthcare budgets to cover this cost for their population. This situation is reflected by the long delay in the start of vaccinations for countries in the first quartile compared to the fourth quartile. Even as some countries start their booster doses, other countries struggle to cover everyone with the first dose. " textAlignment="JUSTIFY" wrappingWidth="466.1368103027344" />
-                              <ScatterChart fx:id="chartReportC2" layoutX="18.0" layoutY="857.0" prefHeight="378.0" prefWidth="475.0">
+                              <ScatterChart fx:id="chartReportC2" layoutX="18.0" layoutY="857.0" legendSide="RIGHT" prefHeight="378.0" prefWidth="475.0">
                                 <xAxis>
-                                  <CategoryAxis side="BOTTOM" />
+                                  <NumberAxis side="BOTTOM" />
                                 </xAxis>
                                 <yAxis>
                                   <NumberAxis side="LEFT" />
@@ -143,7 +143,7 @@
                            </font>
                         </Text>
                         <Button fx:id="buttonReportC3" layoutX="33.0" layoutY="1480.0" mnemonicParsing="false" text="Generate chart" />
-                        <LineChart fx:id="chartReportC3" layoutX="157.0" layoutY="1352.0" prefHeight="222.0" prefWidth="309.0">
+                        <LineChart fx:id="chartReportC3" createSymbols="false" layoutX="157.0" layoutY="1352.0" prefHeight="222.0" prefWidth="309.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
