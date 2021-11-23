@@ -12,6 +12,7 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.ScatterChart;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.StackPane;
 
@@ -90,15 +91,17 @@ public class Controller {
     @FXML
     private StackPane stack;
 
-    // Report C stuff
+    // Report C
     @FXML
     private Tab tabReportC;
     @FXML
     private ScrollPane reportC;
     @FXML
-    private Button buttonReportC1, buttonReportC2;
+    private Button buttonReportC1, buttonReportC3;
     @FXML
-    private LineChart chartReportC1, chartReportC2;
+    private LineChart chartReportC1, chartReportC3;
+    @FXML
+    private ScatterChart chartReportC2;
     @FXML
     private TableView tableReportC1;
 
@@ -160,31 +163,24 @@ public class Controller {
 
         showTaskUI(!dataInstance.acumulativeData);
         
-        EventHandler<Event> ReportC = new EventHandler<Event>() {
-        	public void handle (Event e) {
-        		if (tabReportC.isSelected()) {
-        			showReportUI(InterestedData.RateOfVaccination);
-        		}
+        tabReportC.setOnSelectionChanged(e -> {
+        	if (tabReportC.isSelected()) {
+        		showReportUI(InterestedData.RateOfVaccination);
         	}
-        };
-        tabReportC.setOnSelectionChanged(ReportC);
+        });
 
-        EventHandler<Event> Task1 = new EventHandler<Event>() {
-        	public void handle (Event e) {
-        		if (tabTaskZero.isSelected()) {
-        			System.out.println("Task 1 selected again");
-        			//initialize();
-        			showTaskUI(!dataInstance.acumulativeData);
-        		}
+        tabTaskZero.setOnSelectionChanged(e -> {
+        	if (tabTaskZero.isSelected()) {
+        		showTaskUI(!dataInstance.acumulativeData);
         	}
-        };
-        tabTaskZero.setOnSelectionChanged(Task1);
+        });
         
         buttonReportC1.setOnAction((e) -> {
         	this.generateChartC1(dataInstance);
-        });
-        buttonReportC2.setOnAction((e) -> {
         	this.generateChartC2(dataInstance);
+        });
+        buttonReportC3.setOnAction((e) -> {
+        	this.generateChartC3(dataInstance);
         });
         
     }
@@ -260,7 +256,7 @@ public class Controller {
         System.out.println(Arrays.toString(ISOStrings));
         System.out.println(validDate[1]);
 
-        ObservableList tableData = VaccinationRate.generateTable(dataInstance.dataPath, Arrays.asList(ISOStrings), 
+        ObservableList tableData = TableChartTask.generateTable(dataInstance.dataPath, Arrays.asList(ISOStrings), 
         															validDate[1], getFocusedData());
         country.setCellValueFactory(new MapValueFactory<>("country"));
         col1.setCellValueFactory(new MapValueFactory<>("col1data"));
@@ -303,7 +299,7 @@ public class Controller {
         checkPeriodInput.remove(checkPeriodInput.size() - 1);
         if (checkPeriodInput.get(0).equals(checkPeriodInput.get(1))) chart.setCreateSymbols(true);
         else chart.setCreateSymbols(false);
-        ObservableList<XYChart.Series<String, Float>> allData = VaccinationRate.generateChart(iDataset, Arrays.asList(ISOStrings), checkPeriodInput, getFocusedData());
+        ObservableList<XYChart.Series<String, Float>> allData = TableChartTask.generateChart(iDataset, Arrays.asList(ISOStrings), checkPeriodInput, getFocusedData());
         chart.setData(allData);
     }
 
@@ -313,34 +309,30 @@ public class Controller {
             startDateLabel.setText("Date: ");
             endDataLabel.setVisible(false);
             endDatePicker.setVisible(false);
-            reportC.setVisible(false);
             stack.getChildren().remove(chart);
             stack.getChildren().add(dataTable);
-            //chart.setVisible(false);
-            //dataTable.setVisible(true);
+            stack.getChildren().remove(reportC);
         } else {
             dataRangeTile.setText("Date Range");
             startDateLabel.setText("Start date: ");
             endDataLabel.setVisible(true);
             endDatePicker.setVisible(true);
-            reportC.setVisible(false);
             stack.getChildren().remove(dataTable);
             stack.getChildren().add(chart);
-            //chart.setVisible(true);
-            //dataTable.setVisible(false);
+            stack.getChildren().remove(reportC);
         }
     }
     
     void showReportUI(InterestedData type) { // switch the UI of StackPane
     	switch(type) {
     	case RateOfVaccination:
-    		dataRangeTile.setText("Date"); 
-            startDateLabel.setText("Date: ");
-            endDataLabel.setVisible(false);
-            endDatePicker.setVisible(false);
-            chart.setVisible(false); // 
-            dataTable.setVisible(false);
-            reportC.setVisible(true);
+    		dataRangeTile.setText("Date Range"); 
+            startDateLabel.setText("Start date: ");
+            endDataLabel.setVisible(true);
+            endDatePicker.setVisible(true);
+            stack.getChildren().remove(dataTable);
+            stack.getChildren().remove(chart);
+            stack.getChildren().add(reportC);
     	}
     }
     /**
@@ -353,7 +345,7 @@ public class Controller {
     	tableReportC1.getItems().clear();
     	tableReportC1.getColumns().clear();
     	String iDataset = data.dataPath;
-    	ObservableList<XYChart.Series<String, Float>> chartData = VaccinationRate.generateChartC1(iDataset);
+    	ObservableList<XYChart.Series<String, Float>> chartData = ReportTask.generateChartC1(iDataset);
     	chartReportC1.setData(chartData);
     	// generate table of countries in different quartiles 
     	TableColumn<Map, String> q1 = new TableColumn("Quartile 1");
@@ -361,7 +353,7 @@ public class Controller {
     	TableColumn<Map, String> q3 = new TableColumn("Quartile 3");
     	TableColumn<Map, String> q4 = new TableColumn("Quartile 4");
     	tableReportC1.getColumns().addAll(q1, q2, q3, q4);
-    	ObservableList tableData = VaccinationRate.generateTableC1();
+    	ObservableList tableData = ReportTask.generateTableC1();
     	q1.setCellValueFactory(new MapValueFactory<>("q1"));
     	q2.setCellValueFactory(new MapValueFactory<>("q2"));
     	q3.setCellValueFactory(new MapValueFactory<>("q3"));
@@ -369,6 +361,11 @@ public class Controller {
     	tableReportC1.getItems().addAll(tableData);
     }
     void generateChartC2(final UIDataModel data) {
+    	// no need to check input, just use the dataset 
+    	chartReportC2.getData().clear();
+    	
+    }
+    void generateChartC3(final UIDataModel data) {
     	
     }
 }
