@@ -14,7 +14,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Menu;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.collections.FXCollections;
@@ -156,26 +155,11 @@ public class Controller {
 		menuItem1.setOnAction(e->{selectTable(menuItem1.getText());});
 		menuItem2.setOnAction(e->{selectTable(menuItem2.getText());});
 		menuItem3.setOnAction(e->{selectTable(menuItem3.getText());});
-		
 		menuButtonSelectCountry.getItems().clear();
 		Map<String, String> locIsoMap = DataAnalysis.getAllLocationIso("COVID_Dataset_v1.0.csv");
-		
 		for(Map.Entry<String, String> entry : locIsoMap.entrySet()) {
 			MenuItem countryOption = new MenuItem(entry.getKey());
-			// To Do: find the continent
-			String continent = Character.toString(entry.getKey().charAt(0)); 
-			Menu continentOption = null;
-			
-			for(MenuItem menu : menuButtonSelectCountry.getItems()) {
-				if(menu.getText().equals(continent)) {continentOption = (Menu) menu;}
-			}
-			
-			if(continentOption==null) {
-				continentOption = new Menu(continent);
-				menuButtonSelectCountry.getItems().addAll(continentOption);
-			}
-			
-			continentOption.getItems().addAll(countryOption);
+			menuButtonSelectCountry.getItems().addAll(countryOption);
 			countryOption.setOnAction(e->{menuButtonSelectCountry.setText(countryOption.getText());});
 		}
     }
