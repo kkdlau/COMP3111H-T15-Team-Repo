@@ -231,10 +231,7 @@ class VaccinationRate {
 		// first quartile 
 		XYChart.Series<String, Float> q1data = new XYChart.Series();
 		int numLoc = locByGDP.get("q1").size();
-		System.out.println("Num Countries " + numLoc);
 		for (Map.Entry<LocalDate, Float> mapElement : q1.entrySet()) {
-			//System.out.println(mapElement.getKey().toString());
-			//System.out.println(mapElement.getValue());
 			prev = (mapElement.getValue() / numLoc > prev)? mapElement.getValue() / numLoc : prev;
             q1data.getData().add(new XYChart.Data(mapElement.getKey().toString(), prev));
         }
@@ -245,10 +242,8 @@ class VaccinationRate {
 		XYChart.Series<String, Float> q2data = new XYChart.Series();
 		numLoc = locByGDP.get("q2").size();
 		for (Map.Entry<LocalDate, Float> mapElement : q2.entrySet()) {
-			//System.out.println(mapElement.getKey().toString());
 			prev = (mapElement.getValue() / numLoc >= prev)? mapElement.getValue() / numLoc : prev;
             q2data.getData().add(new XYChart.Data(mapElement.getKey().toString(), prev));
-            //System.out.println(prev);
         }
 		q2data.setName("Second quartile");
 		
@@ -257,7 +252,6 @@ class VaccinationRate {
 		XYChart.Series<String, Float> q3data = new XYChart.Series();
 		numLoc = locByGDP.get("q3").size();
 		for (Map.Entry<LocalDate, Float> mapElement : q3.entrySet()) {
-			System.out.println(mapElement.getKey().toString());
 			prev = (mapElement.getValue() / numLoc > prev)? mapElement.getValue() / numLoc : prev;
             q3data.getData().add(new XYChart.Data(mapElement.getKey().toString(), prev));
         }
@@ -277,4 +271,33 @@ class VaccinationRate {
 		return allData;
 	}
 	
+	public static ObservableList generateTableC1() {
+		String[] quartiles = new String[] {"q1", "q2", "q3", "q4"};
+		try {
+			ObservableList<Map<String, String>> tableData = FXCollections.<Map<String, String>>observableArrayList();
+			boolean add = true; int index = 0;
+			Map<String, String[]> temp = new HashMap<>();
+			for (String q : quartiles) {
+				String[] locs = new String[locByGDP.get(q).size()];
+				locByGDP.get(q).toArray(locs);
+				temp.put(q, locs);
+			}
+			// 4 lists of different length 
+			while (add) {
+				Map<String, String> datum = new HashMap<>();
+				add = false;
+				for (String q : quartiles) {
+					if (index < locByGDP.get(q).size()) {
+						datum.put(q, temp.get(q)[index]); add = true;
+					}
+				}
+				index += 1;
+				if (add) tableData.add(datum);
+			}
+			return tableData;
+		} catch (Exception e){
+			System.out.println(e);
+			return null;
+		}
+	}
 }	

@@ -12,7 +12,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -211,12 +210,7 @@
                               <Font size="18.0" />
                            </font>
                         </Text>
-                              <TableView fx:id="tableReportC1" layoutX="27.0" layoutY="566.0" prefHeight="149.0" prefWidth="446.0">
-                                <columns>
-                                  <TableColumn prefWidth="75.0" text="C1" />
-                                  <TableColumn prefWidth="75.0" text="C2" />
-                                </columns>
-                              </TableView>
+                              <TableView fx:id="tableReportC1" layoutX="27.0" layoutY="566.0" prefHeight="149.0" prefWidth="446.0" />
                               <Label layoutX="167.0" layoutY="729.0" text="Table 1. TABLE TITLE -  Empty at first" />
                      </children>
                   </AnchorPane>

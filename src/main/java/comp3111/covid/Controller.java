@@ -172,7 +172,9 @@ public class Controller {
         EventHandler<Event> Task1 = new EventHandler<Event>() {
         	public void handle (Event e) {
         		if (tabTaskZero.isSelected()) {
-        			reportC.setVisible(false);
+        			System.out.println("Task 1 selected again");
+        			//initialize();
+        			showTaskUI(!dataInstance.acumulativeData);
         		}
         	}
         };
@@ -314,6 +316,8 @@ public class Controller {
             reportC.setVisible(false);
             stack.getChildren().remove(chart);
             stack.getChildren().add(dataTable);
+            //chart.setVisible(false);
+            //dataTable.setVisible(true);
         } else {
             dataRangeTile.setText("Date Range");
             startDateLabel.setText("Start date: ");
@@ -322,6 +326,8 @@ public class Controller {
             reportC.setVisible(false);
             stack.getChildren().remove(dataTable);
             stack.getChildren().add(chart);
+            //chart.setVisible(true);
+            //dataTable.setVisible(false);
         }
     }
     
@@ -332,7 +338,7 @@ public class Controller {
             startDateLabel.setText("Date: ");
             endDataLabel.setVisible(false);
             endDatePicker.setVisible(false);
-            chart.setVisible(false);
+            chart.setVisible(false); // 
             dataTable.setVisible(false);
             reportC.setVisible(true);
     	}
@@ -344,10 +350,23 @@ public class Controller {
     void generateChartC1(final UIDataModel data) {
     	// no need to check input, just use the dataset
     	chartReportC1.getData().clear();
+    	tableReportC1.getItems().clear();
+    	tableReportC1.getColumns().clear();
     	String iDataset = data.dataPath;
     	ObservableList<XYChart.Series<String, Float>> chartData = VaccinationRate.generateChartC1(iDataset);
     	chartReportC1.setData(chartData);
     	// generate table of countries in different quartiles 
+    	TableColumn<Map, String> q1 = new TableColumn("Quartile 1");
+    	TableColumn<Map, String> q2 = new TableColumn("Quartile 2");
+    	TableColumn<Map, String> q3 = new TableColumn("Quartile 3");
+    	TableColumn<Map, String> q4 = new TableColumn("Quartile 4");
+    	tableReportC1.getColumns().addAll(q1, q2, q3, q4);
+    	ObservableList tableData = VaccinationRate.generateTableC1();
+    	q1.setCellValueFactory(new MapValueFactory<>("q1"));
+    	q2.setCellValueFactory(new MapValueFactory<>("q2"));
+    	q3.setCellValueFactory(new MapValueFactory<>("q3"));
+    	q4.setCellValueFactory(new MapValueFactory<>("q4"));
+    	tableReportC1.getItems().addAll(tableData);
     }
     void generateChartC2(final UIDataModel data) {
     	
