@@ -25,9 +25,9 @@
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <TabPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="1.79769313E308">
+            <TabPane fx:id="tabGroup" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="1.79769313E308">
               <tabs>
-                <Tab fx:id="tabTaskZero" text="Task 1">
+                <Tab fx:id="tabTask12" text="Task 1">
                   <content>
                     <AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="0.0">
                            <children>
@@ -44,7 +44,17 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab fx:id="c3Tab" text="Task C3">
+                  <Tab fx:id="a3Tab" text="Task A3">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
+                           <children>
+                              <Label layoutX="79.0" layoutY="44.0" />
+                              <TextArea layoutX="14.0" layoutY="12.0" prefHeight="222.0" prefWidth="273.0" text="Task Description:&#10;" wrapText="true" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="b3Tab" text="Task B3">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
                            <children>
@@ -53,6 +63,16 @@
                            </children>
                         </AnchorPane>
                     </content>
+                  </Tab>
+                  <Tab fx:id="c3Tab1" text="Task C3">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
+                           <children>
+                              <Label layoutX="79.0" layoutY="44.0" />
+                              <TextArea layoutX="14.0" layoutY="12.0" prefHeight="296.0" prefWidth="698.0" text="Task A1: Generate data tables showing the number of confirmed COVID-19 cases by country&#10;&#10;Input&#10;•&#9;Specify the date of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data table with a proper title: &quot;Number of Confirmed COVID-19 Cases as of [Date of Interest]&quot;&#10;•&#9;Present data in 3 columns with proper headings of &quot;Country&quot;, &quot;Total Cases&quot;, and &quot;Total Cases (per 1M)&quot;&#10;•&#9;Present data for the countries of interest in rows&#10;&#10;" wrapText="true" />
+                           </children>
+                        </AnchorPane>
+                     </content>
                   </Tab>
               </tabs>
             </TabPane>
@@ -68,8 +88,8 @@
                      <children>
                         <Label fx:id="startDateLabel" layoutX="14.0" layoutY="28.0" text="Start date: " />
                         <Label fx:id="endDataLabel" layoutX="16.0" layoutY="69.0" text="End date: " />
-                        <DatePicker fx:id="startDatePicker" layoutX="95.0" layoutY="24.0" />
-                        <DatePicker fx:id="endDatePicker" layoutX="95.0" layoutY="65.0" />
+                        <DatePicker fx:id="startDatePicker" editable="false" layoutX="95.0" layoutY="24.0" />
+                        <DatePicker fx:id="endDatePicker" editable="false" layoutX="95.0" layoutY="65.0" />
                      </children>
                   </AnchorPane>
               </content>
