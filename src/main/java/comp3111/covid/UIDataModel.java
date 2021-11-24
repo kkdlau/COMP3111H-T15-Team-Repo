@@ -1,5 +1,8 @@
 package comp3111.covid;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,6 +18,7 @@ public class UIDataModel {
      *
      * It should be updated only if the user click the group of ratio button.
      */
+//    public InterestedData focusedData = InterestedData.ConfirmedCases;
     public InterestedData focusedData = InterestedData.ConfirmedCases;
 
     /**

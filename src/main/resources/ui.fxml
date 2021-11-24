@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
@@ -27,7 +28,7 @@
          <children>
             <TabPane fx:id="tabGroup" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="1.79769313E308">
               <tabs>
-                <Tab fx:id="tabTask12" text="Task 1">
+                <Tab fx:id="tabTask12" text="Task 1&amp;2">
                   <content>
                     <AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="0.0">
                            <children>
@@ -94,19 +95,10 @@
                   </AnchorPane>
               </content>
             </TitledPane>
-         </children>
-      </VBox>
-      <VBox fx:id="rightUI" prefHeight="687.0" prefWidth="457.0">
-         <children>
-            <Label fx:id="title" alignment="CENTER" maxHeight="-Infinity" prefHeight="23.0" prefWidth="471.0" text="title" textAlignment="CENTER">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
             <StackPane fx:id="stack" prefHeight="680.0" prefWidth="456.0">
                <children>
-                  <TableView fx:id="dataTable" disable="true" editable="true" prefHeight="51.0" prefWidth="456.0" />
-                  <LineChart fx:id="chart">
+                  <TableView fx:id="dataTable" editable="true" prefHeight="51.0" prefWidth="456.0" />
+                  <LineChart fx:id="chart" disable="true">
                     <xAxis>
                       <CategoryAxis fx:id="chartYAxis" animated="false" label="x-axis" side="BOTTOM" />
                     </xAxis>
@@ -116,6 +108,39 @@
                   </LineChart>
                </children>
             </StackPane>
+         </children>
+      </VBox>
+      <VBox fx:id="rightUI" prefHeight="687.0" prefWidth="457.0">
+         <children>
+            <Label fx:id="title" alignment="CENTER" maxHeight="-Infinity" prefHeight="23.0" prefWidth="471.0" text="title" textAlignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ScrollPane hbarPolicy="NEVER" prefHeight="670.0" prefWidth="456.0">
+               <content>
+                  <AnchorPane prefHeight="675.0" prefWidth="456.0">
+                     <children>
+                        <CheckBox layoutX="28.0" layoutY="128.0" mnemonicParsing="false" text="Hygiene Regulation: Forcing people to wash hand" />
+                        <CheckBox layoutX="28.0" layoutY="148.0" mnemonicParsing="false" text="Lockdown: People are not allowed to freely walk at public area" />
+                        <CheckBox layoutX="28.0" layoutY="169.0" mnemonicParsing="false" text="Vaccination: People are forced to be vaccinated " />
+                        <Label layoutX="12.0" layoutY="224.0" prefHeight="39.0" prefWidth="438.0" text="Besides from data simulation, you can also select countries and the period of date to compare the simulation and the actual data." wrapText="true" />
+                        <TextField layoutX="145.0" layoutY="197.0" text="10000" />
+                        <Label layoutX="12.0" layoutY="202.0" text="Initial confirmed cases:" />
+                        <LineChart layoutX="9.0" layoutY="269.0" prefHeight="306.0" prefWidth="414.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                        <Label layoutX="14.0" layoutY="4.0" prefHeight="104.0" prefWidth="418.0" text="Have you imagine how the number of confirmed cases decerase if we can impose epidemic prevention measures early?This data visualization tool provides the simulation of a goveronment that impose different stragaties to against COVID-19 and how will the data changes in response to the goveronment policies." wrapText="true" />
+                        <Label layoutX="15.0" layoutY="104.0" text="Control factor:" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
          </children>
       </VBox>
    </children>
