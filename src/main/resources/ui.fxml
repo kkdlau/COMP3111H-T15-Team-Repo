@@ -46,6 +46,20 @@
                         </AnchorPane>
                   </content>
                 </Tab>
+                  <Tab fx:id="b3Tab" text="Report B">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Text layoutX="18.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This report studies the correlation between death rate and vaccination rate and the correlation between death rate and confirmed rate in a country. By studying the correlation, the necessity of sealing off and vaccination can be proved." wrappingWidth="262.3999999999999" />
+                              <Label layoutX="90.0" layoutY="14.0" text="Problem Statement">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
                   <Tab fx:id="c3Tab" text="Report C">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -101,6 +115,20 @@
                       <NumberAxis fx:id="chartXAxis" animated="false" label="y-axis" side="LEFT" />
                     </yAxis>
                   </LineChart>
+                  <ScrollPane fx:id="reportB" prefHeight="200.0" prefWidth="200.0">
+	                  <content>
+                        <AnchorPane prefHeight="872.0" prefWidth="466.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="38.0" prefWidth="506.0" text="Are vaccination and border shutdown both necessary?">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Text layoutX="14.0" layoutY="54.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To reduce the influence of covid-19, vaccination and border shutdown are adopted in each country. However, the efficiency and safety of vaccines are doubted that may not reduce the risk of infection and may increase the risk of Myocarditis. Besides, a border shutdown may cause an economic depression. Thus, this report is going to analyze the correlation between the death rate and vaccination rate to determine the efficiency of vaccines and the death rate and confirmed rate to determine the cost of border shutdown." textAlignment="JUSTIFY" wrappingWidth="466.9368591308594" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+            </ScrollPane>
                   <ScrollPane fx:id="reportC" prefHeight="200.0" prefWidth="200.0">
                		<content>
                   	<AnchorPane prefHeight="872.0" prefWidth="466.0">
