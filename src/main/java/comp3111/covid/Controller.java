@@ -99,6 +99,8 @@ public class Controller {
     private ScatterChart chartReportB1,chartReportB2;
     @FXML
     private Button buttonReportB1;
+    @FXML
+    private Label taskB1correlation,taskB2correlation;
     
     // Report C
     @FXML
@@ -422,11 +424,15 @@ public class Controller {
     	
         Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+        double[] regression_result = new double[1];
+        String x_data = "new_deaths_per_million";
+        String y_data = "new_cases_per_million";
     	
         if(errorCheck_oneCountry(ISOStrings)) return;
         
-    	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],"new_deaths_per_million","new_cases_per_million");
+    	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result);
     	chartReportB1.getData().addAll(scatterData);
+    	taskB1correlation.setText("correlation = " + regression_result[0]);
     }
 	
 	void generateChartB2(final UIDataModel data) {
@@ -434,11 +440,15 @@ public class Controller {
     	
         Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+        double[] regression_result = new double[1];
+        String x_data = "new_deaths_per_million";
+        String y_data = "new_vaccinations";
     	
         if(errorCheck_oneCountry(ISOStrings)) return;
         
-    	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],"new_deaths_per_million","new_vaccinations");
+        Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result);
     	chartReportB2.getData().addAll(scatterData);
+    	taskB2correlation.setText("correlation = " + regression_result[0]);
     }
     
     void generateChartC1(final UIDataModel data) {

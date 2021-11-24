@@ -25,24 +25,34 @@ class ReportTask {
 	 * Generate Data for Table 1 in Report B
 	 * @return ObservableList
 	 */
-	public static Series<Float, Float> generateChartB(String iDataset, String iISO, String x_axis, String y_axis) {
+	public static Series<Float, Float> generateChartB(String iDataset, String iISO, String x_axis, String y_axis, double[] result) {
 		
-		XYChart.Series data = new Series<Float, Float>();
+		Series<Float, Float> data = new Series<Float, Float>();
+		double sum_x = 0, sum_y = 0, sum_xy = 0, sum_x2 = 0, sum_y2 =0;
+		int length=0;
 		
 		for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {
 			if(rec.get("iso_code").equals(iISO)) {
 				String x_data_string = rec.get(x_axis);
 				String y_data_string = rec.get(y_axis);
 				if(!x_data_string.isEmpty() && !y_data_string.isEmpty()) {
-					Float x_data_float = Float.parseFloat(x_data_string);
-					Float y_data_float = Float.parseFloat(y_data_string);
+					float x_data_float = Float.parseFloat(x_data_string);
+					float y_data_float = Float.parseFloat(y_data_string);
 					if(x_data_float > 0 && y_data_float > 0) {
 						data.getData().addAll(new XYChart.Data(x_data_float,y_data_float));
+						sum_x  += x_data_float;
+						sum_y  += y_data_float;
+						sum_xy += x_data_float*y_data_float;
+						sum_x2 += x_data_float*x_data_float;
+						sum_y2 += y_data_float*y_data_float;
+						length++;
 					}
 				}
 			}
 		}
 		
+		double correlationCoef = (length*sum_xy - sum_x*sum_y) / Math.sqrt((double)(length*sum_x2 - sum_x*sum_x)*(length*sum_y2 - sum_y*sum_y));
+		result[0]=correlationCoef;
 		return data;
 	}
 	
