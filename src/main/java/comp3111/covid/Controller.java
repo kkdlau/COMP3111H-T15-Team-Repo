@@ -13,6 +13,7 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.chart.ScatterChart;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.HBox;
@@ -94,6 +95,10 @@ public class Controller {
     private Tab b3Tab;
     @FXML
     private ScrollPane reportB;
+    @FXML
+    private ScatterChart chartReportB1,chartReportB2;
+    @FXML
+    private Button buttonReportB1;
     
     // Report C
     @FXML
@@ -173,6 +178,11 @@ public class Controller {
 
         UIDataModelUtils.setDataPath(dataInstance, textfieldDataset.getText());
         showTaskUI(!dataInstance.acumulativeData);
+        
+        buttonReportB1.setOnAction((e) -> {
+        	this.generateChartB1(dataInstance);
+        	this.generateChartB2(dataInstance);
+        });
         
         buttonReportC1.setOnAction((e) -> {
         	this.generateChartC1(dataInstance);
@@ -390,6 +400,47 @@ public class Controller {
      * UI output - Chart for the average cumulative number of vaccinations for countries in different GDP quartiles
      * @param data
      */
+
+    boolean errorCheck_oneCountry(String[] ISOStrings) {
+        if (ISOStrings.length == 0) {
+            Alert error = new Alert(AlertType.ERROR);
+            error.setContentText("Please select one country");
+            error.show();
+            return true;
+        }
+        if (ISOStrings.length > 1) {
+        	Alert error = new Alert(AlertType.ERROR);
+        	error.setContentText("Please select one country only");
+        	error.show(); 
+        	return true;
+        }
+        return false;
+    }
+    
+	void generateChartB1(final UIDataModel data) {
+    	chartReportB1.getData().clear();
+    	
+        Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
+        String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+    	
+        if(errorCheck_oneCountry(ISOStrings)) return;
+        
+    	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],"new_deaths_per_million","new_cases_per_million");
+    	chartReportB1.getData().addAll(scatterData);
+    }
+	
+	void generateChartB2(final UIDataModel data) {
+    	chartReportB2.getData().clear();
+    	
+        Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
+        String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+    	
+        if(errorCheck_oneCountry(ISOStrings)) return;
+        
+    	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],"new_deaths_per_million","new_vaccinations");
+    	chartReportB2.getData().addAll(scatterData);
+    }
+    
     void generateChartC1(final UIDataModel data) {
     	// no need to check input, just use the dataset
     	chartReportC1.getData().clear();

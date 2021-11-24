@@ -4,6 +4,7 @@ import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.csv.*;
@@ -19,6 +20,33 @@ class ReportTask {
 	 * Input: String iDataset
 	 * Output: ObservableList chartData
 	 */
+	
+	/** 
+	 * Generate Data for Table 1 in Report B
+	 * @return ObservableList
+	 */
+	public static Series<Float, Float> generateChartB(String iDataset, String iISO, String x_axis, String y_axis) {
+		
+		XYChart.Series data = new Series<Float, Float>();
+		
+		for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {
+			if(rec.get("iso_code").equals(iISO)) {
+				String x_data_string = rec.get(x_axis);
+				String y_data_string = rec.get(y_axis);
+				if(!x_data_string.isEmpty() && !y_data_string.isEmpty()) {
+					Float x_data_float = Float.parseFloat(x_data_string);
+					Float y_data_float = Float.parseFloat(y_data_string);
+					if(x_data_float > 0 && y_data_float > 0) {
+						data.getData().addAll(new XYChart.Data(x_data_float,y_data_float));
+					}
+				}
+			}
+		}
+		
+		return data;
+	}
+	
+	
 	public static ObservableList generateChartC1(String iDataset) {
 		Float[] gdp_quartile = DataAnalysis.getQuartiles(iDataset, "gdp_per_capita");
 		locByGDP.put("q1", new LinkedHashSet<String>());
