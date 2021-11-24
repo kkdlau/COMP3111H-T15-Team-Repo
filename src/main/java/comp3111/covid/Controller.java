@@ -1,6 +1,7 @@
 package comp3111.covid;
 
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.CategoryAxis;
@@ -14,7 +15,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -99,10 +103,31 @@ public class Controller {
     @FXML
     private Label title;
 
+    @FXML
+    private Button chartGenerateButton;
+
+    @FXML
+    private ListView<String> countryAListView;
+
+    @FXML
+    private Slider countryASlider;
+
+    @FXML
+    private ListView<String> countryBListView;
+
+    @FXML
+    private Slider countryBSlider;
+
+    @FXML
+    private LineChart compareChart;
 
     ToggleGroup ratioButtonGroups = new ToggleGroup();
 
     UIDataModel dataInstance = new UIDataModel();
+
+    ObservableList<XYChart.Series<String, Float>> unshifted;
+
+    ObservableList<XYChart.Series<String, Float>> shifted;
 
 
     public void initialize() {
@@ -118,7 +143,7 @@ public class Controller {
         this.updateUIDataModel();
 
         this.ratioButtonInitialize();
-        
+
         // Let list view listens to changes of getAvailableCountries().
         // So that when a new dataset is loaded, the list will update also.
         countryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -148,6 +173,49 @@ public class Controller {
 
         UIDataModelUtils.setDataPath(dataInstance, textfieldDataset.getText());
         showTaskUI(!dataInstance.acumulativeData);
+
+        tabTaskA3Initialize();
+    }
+
+    void tabTaskA3Initialize() {
+        countryAListView.setItems(dataInstance.getAvailableCountries());
+        countryBListView.setItems(dataInstance.getAvailableCountries());
+
+        countryAListView.setOnMouseClicked((e) -> countryASlider.setDisable(false));
+        countryBListView.setOnMouseClicked((e) -> countryBSlider.setDisable(false));
+
+        if (countryAListView.getSelectionModel().getSelectedItems().size() == 0) {
+            countryASlider.setDisable(true);
+        } else {
+            countryASlider.setDisable(false);
+        }
+
+        if (countryBListView.getSelectionModel().getSelectedItems().size() == 0) {
+            countryBSlider.setDisable(true);
+        } else {
+            countryBSlider.setDisable(false);
+        }
+
+        chartGenerateButton.setOnAction((e) -> generateComparsionChart(dataInstance));
+
+        startDatePicker.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            int days = (int) ChronoUnit.DAYS.between(newValue, dataInstance.end);
+            countryASlider.setValue(0);
+            countryBSlider.setValue(0);
+
+            countryASlider.setMax(days);
+            countryBSlider.setMax(days);
+        }));
+
+
+        endDatePicker.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            int days = (int) ChronoUnit.DAYS.between(dataInstance.start, newValue);
+            countryASlider.setValue(0);
+            countryBSlider.setValue(0);
+
+            countryASlider.setMax(days);
+            countryBSlider.setMax(days);
+        }));
     }
 
     ChangeListener<Tab> onTabChanged = (ov, disSelected, selected) -> {
@@ -168,6 +236,7 @@ public class Controller {
             rootUI.getChildren().add(rightUI); // reuse the right UI
             rightUI.getChildren().remove(stack); // but don't keep the stack
             title.setText("COVID-19 Confirmed Cases Report"); // update title
+            showPickPeriodUI();
         } else if (selected == b3Tab) {
 
         } else if (selected == c3Tab) {
@@ -256,10 +325,6 @@ public class Controller {
             error.show();
             return;
         }
-        // for debugging purpose
-//        System.out.println(dataInstance.dataPath);
-//        System.out.println(Arrays.toString(ISOStrings));
-//        System.out.println(validDate[1]);
 
         ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISOStrings),
                 validDate[1], getFocusedData());
@@ -268,6 +333,77 @@ public class Controller {
         col2.setCellValueFactory(new MapValueFactory<>("col2data"));
 
         dataTable.getItems().addAll(tableData);
+    }
+
+    void shiftingData() {
+        int shiftA = (int) countryASlider.getValue();
+        int shiftB = (int) countryBSlider.getValue();
+
+        XYChart.Series<String, Float> countryAData = unshifted.get(0);
+        XYChart.Series<String, Float> countryBData = unshifted.get(1);
+
+        for(int i = 0; i < countryAData.getData().size(); i++) {
+            XYChart.Series<String, Float> shiftedA = shifted.get(0);
+            XYChart.Data<String, Float> d = unshifted.get(0).getData().get(i);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(d.getXValue(), formatter).plusDays((int)countryASlider.getValue());
+            shiftedA.getData().set(i, new XYChart.Data<String, Float>(date.toString(), d.getYValue()));
+        }
+
+        for(int i = 0; i < countryBData.getData().size(); i++) {
+            XYChart.Series<String, Float> shiftedB = shifted.get(1);
+            XYChart.Data<String, Float> d = unshifted.get(1).getData().get(i);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(d.getXValue(), formatter).plusDays((int)countryBSlider.getValue());
+            shiftedB.getData().set(i, new XYChart.Data<String, Float>(date.toString(), d.getYValue()));
+        }
+
+
+    }
+
+    void generateComparsionChart(final UIDataModel data) {
+        compareChart.getData().clear();
+
+        String iDataset = data.dataPath;
+
+        String[] selectedCountries = new String[]{
+                countryAListView.getSelectionModel().getSelectedItem(),
+                countryBListView.getSelectionModel().getSelectedItem(),
+        };
+
+        Object[] ISO = dataInstance.getISOList(FXCollections.observableList(Arrays.asList(selectedCountries)));
+        String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+
+        if (ISOStrings.length == 0) {
+            Alert error = new Alert(AlertType.ERROR);
+            error.setContentText("Please select at least one country");
+            error.show();
+            return;
+        }
+
+        LocalDate iStartDate = data.start, iEndDate = data.end;
+        List<String> checkPeriodInput = CheckInput.checkValidPeriod(iStartDate, iEndDate, iDataset);
+        if (checkPeriodInput.size() == 1) {
+            Alert error = new Alert(AlertType.ERROR);
+            error.setContentText("Please select a valid date period");
+            error.show();
+            return;
+        }
+        if (!checkPeriodInput.get(checkPeriodInput.size() - 1).isEmpty()) {
+            Alert info = new Alert(AlertType.INFORMATION);
+            info.setContentText(checkPeriodInput.get(checkPeriodInput.size() - 1));
+//            info.show();
+        }
+
+        checkPeriodInput.remove(checkPeriodInput.size() - 1);
+        if (checkPeriodInput.get(0).equals(checkPeriodInput.get(1))) chart.setCreateSymbols(true);
+        else compareChart.setCreateSymbols(false);
+        unshifted = VaccinationRate.generateVacChart(iDataset, Arrays.asList(ISOStrings), checkPeriodInput, getFocusedData());
+        shifted = FXCollections.observableArrayList(unshifted);
+        shiftingData();
+        compareChart.setData(shifted);
     }
 
     void generateChart(final UIDataModel data) {
@@ -309,10 +445,7 @@ public class Controller {
     void showTaskUI(Boolean isTask1) {
         if (isTask1) {
             title.setText("Data Table");
-            dataRangeTile.setText("Date");
-            startDateLabel.setText("Date: ");
-            endDataLabel.setVisible(false);
-            endDatePicker.setVisible(false);
+            showPickDateUI();
             stack.getChildren().remove(chart);
             stack.getChildren().add(dataTable);
         } else {
@@ -327,13 +460,24 @@ public class Controller {
                     title.setText("Cumulative Rate of Vaccination against COVID-19");
                     break;
             }
-            dataRangeTile.setText("Date Range");
-            startDateLabel.setText("Start date: ");
-            endDataLabel.setVisible(true);
-            endDatePicker.setVisible(true);
+            showPickPeriodUI();
             stack.getChildren().remove(dataTable);
             stack.getChildren().add(chart);
         }
+    }
+
+    void showPickDateUI() {
+        dataRangeTile.setText("Date");
+        startDateLabel.setText("Date: ");
+        endDataLabel.setVisible(false);
+        endDatePicker.setVisible(false);
+    }
+
+    void showPickPeriodUI() {
+        dataRangeTile.setText("Date Range");
+        startDateLabel.setText("Start date: ");
+        endDataLabel.setVisible(true);
+        endDatePicker.setVisible(true);
     }
 
 

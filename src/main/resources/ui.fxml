@@ -10,6 +10,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
@@ -22,7 +23,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="rootUI" prefHeight="687.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+<HBox fx:id="rootUI" prefHeight="687.0" prefWidth="756.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
@@ -95,19 +96,6 @@
                   </AnchorPane>
               </content>
             </TitledPane>
-            <StackPane fx:id="stack" prefHeight="680.0" prefWidth="456.0">
-               <children>
-                  <TableView fx:id="dataTable" editable="true" prefHeight="51.0" prefWidth="456.0" />
-                  <LineChart fx:id="chart" disable="true">
-                    <xAxis>
-                      <CategoryAxis fx:id="chartYAxis" animated="false" label="x-axis" side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis fx:id="chartXAxis" animated="false" label="y-axis" side="LEFT" />
-                    </yAxis>
-                  </LineChart>
-               </children>
-            </StackPane>
          </children>
       </VBox>
       <VBox fx:id="rightUI" prefHeight="687.0" prefWidth="457.0">
@@ -121,13 +109,21 @@
                <content>
                   <AnchorPane prefHeight="675.0" prefWidth="456.0">
                      <children>
-                        <CheckBox layoutX="28.0" layoutY="128.0" mnemonicParsing="false" text="Hygiene Regulation: Forcing people to wash hand" />
-                        <CheckBox layoutX="28.0" layoutY="148.0" mnemonicParsing="false" text="Lockdown: People are not allowed to freely walk at public area" />
-                        <CheckBox layoutX="28.0" layoutY="169.0" mnemonicParsing="false" text="Vaccination: People are forced to be vaccinated " />
-                        <Label layoutX="12.0" layoutY="224.0" prefHeight="39.0" prefWidth="438.0" text="Besides from data simulation, you can also select countries and the period of date to compare the simulation and the actual data." wrapText="true" />
-                        <TextField layoutX="145.0" layoutY="197.0" text="10000" />
-                        <Label layoutX="12.0" layoutY="202.0" text="Initial confirmed cases:" />
-                        <LineChart layoutX="9.0" layoutY="269.0" prefHeight="306.0" prefWidth="414.0">
+                        <StackPane fx:id="stack" prefHeight="680.0" prefWidth="456.0">
+                           <children>
+                              <TableView fx:id="dataTable" editable="true" prefHeight="51.0" prefWidth="456.0" />
+                              <LineChart fx:id="chart" disable="true">
+                                <xAxis>
+                                  <CategoryAxis fx:id="chartYAxis" animated="false" label="x-axis" side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis fx:id="chartXAxis" animated="false" label="y-axis" side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                           </children>
+                        </StackPane>
+                        <Label layoutX="17.0" layoutY="20.0" prefHeight="89.0" prefWidth="414.0" text="Although different countries may have different confirmed cases on the same day, a country can have the same number of confirmed cases after few days later. You can select two countries from below, and use the slider to simulate how many days are needed for country A to reach the situation in country B." wrapText="true" />
+                        <LineChart fx:id="compareChart" layoutX="17.0" layoutY="280.0" prefHeight="306.0" prefWidth="414.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
@@ -135,8 +131,15 @@
                             <NumberAxis side="LEFT" />
                           </yAxis>
                         </LineChart>
-                        <Label layoutX="14.0" layoutY="4.0" prefHeight="104.0" prefWidth="418.0" text="Have you imagine how the number of confirmed cases decerase if we can impose epidemic prevention measures early?This data visualization tool provides the simulation of a goveronment that impose different stragaties to against COVID-19 and how will the data changes in response to the goveronment policies." wrapText="true" />
-                        <Label layoutX="15.0" layoutY="104.0" text="Control factor:" />
+                        <ListView fx:id="countryAListView" layoutX="17.0" layoutY="136.0" prefHeight="76.0" prefWidth="193.0" />
+                        <ListView fx:id="countryBListView" layoutX="228.0" layoutY="136.0" prefHeight="76.0" prefWidth="200.0" />
+                        <Label layoutX="17.0" layoutY="119.0" text="Country A:" />
+                        <Label layoutX="231.0" layoutY="119.0" text="Country B:" />
+                        <Slider fx:id="countryBSlider" layoutX="14.0" layoutY="263.0" prefHeight="17.0" prefWidth="420.0" />
+                        <Label layoutX="17.0" layoutY="246.0" text="X-axis shift for country B:" />
+                        <Slider fx:id="countryASlider" layoutX="14.0" layoutY="229.0" prefHeight="17.0" prefWidth="420.0" />
+                        <Label layoutX="17.0" layoutY="212.0" text="X-axis shift for country A:" />
+                        <Button fx:id="chartGenerateButton" layoutX="360.0" layoutY="586.0" mnemonicParsing="false" text="Generate" />
                      </children>
                   </AnchorPane>
                </content>
