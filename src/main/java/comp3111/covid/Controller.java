@@ -39,9 +39,6 @@ public class Controller {
     private Tab a3Tab;
 
     @FXML
-    private Tab b3Tab;
-
-    @FXML
     private CheckBox acumulativeCheckButton;
 
     @FXML
@@ -92,6 +89,12 @@ public class Controller {
     @FXML
     private StackPane stack;
 
+    // Report B
+    @FXML
+    private Tab b3Tab;
+    @FXML
+    private ScrollPane reportB;
+    
     // Report C
     @FXML
     private Tab c3Tab;
@@ -199,6 +202,7 @@ public class Controller {
         } else if (selected == a3Tab) {
 
         } else if (selected == b3Tab) {
+        	this.showReportUI(InterestedData.ConfirmedDeaths);
 
         } else if (selected == c3Tab) {
         	//rootUI.getChildren().remove(rightUI)
@@ -343,17 +347,13 @@ public class Controller {
             startDateLabel.setText("Date: ");
             endDataLabel.setVisible(false);
             endDatePicker.setVisible(false);
-            stack.getChildren().remove(chart);
-            stack.getChildren().add(dataTable);
-            stack.getChildren().remove(reportC);
+            stackShow(dataTable);
         } else {
             dataRangeTile.setText("Date Range");
             startDateLabel.setText("Start date: ");
             endDataLabel.setVisible(true);
             endDatePicker.setVisible(true);
-            stack.getChildren().remove(dataTable);
-            stack.getChildren().add(chart);
-            stack.getChildren().remove(reportC);
+            stackShow(chart);
         }
     }
     
@@ -365,10 +365,26 @@ public class Controller {
             endDataLabel.setVisible(true);
             endDatePicker.setVisible(true);
             countryInstruction.setVisible(false);
-            stack.getChildren().remove(dataTable);
-            stack.getChildren().remove(chart);
-            stack.getChildren().add(reportC);
+            stackShow(reportC);
+            break;
+    	case ConfirmedDeaths:
+    		dataRangeTile.setText("Date Range"); 
+            startDateLabel.setText("Start date: ");
+            endDataLabel.setVisible(true);
+            endDatePicker.setVisible(true);
+            countryInstruction.setVisible(false);
+            stackShow(reportB);
+            break;
     	}
+    }
+    
+    void stackShow(Node e) {
+        stack.getChildren().remove(chart);
+    	stack.getChildren().remove(dataTable);
+    	stack.getChildren().remove(reportC);
+    	stack.getChildren().remove(reportB);
+        stack.getChildren().add(e);
+    	
     }
     /**
      * UI output - Chart for the average cumulative number of vaccinations for countries in different GDP quartiles
