@@ -52,8 +52,10 @@ class ReportTask {
 		}
 		
 		double correlationCoef = (length*sum_xy - sum_x*sum_y) / Math.sqrt((double)(length*sum_x2 - sum_x*sum_x)*(length*sum_y2 - sum_y*sum_y));
+		double slope = (length*sum_xy-sum_x*sum_y)/(length*sum_x2-sum_x*sum_x);
 		result[0]=correlationCoef;
 		result[1]=length;
+		result[2]=slope;
 		return data;
 	}
 	
@@ -96,7 +98,7 @@ class ReportTask {
     	message += " relationship between death cases and vaccination rate.";
     	if(correlation>0.2) {message += " The positive relationship implies the public trust the efficiency of vaccine that can prevent death from covid-19.";}
     	else if(correlation>-0.2) {message += " That implies the death cases are not a factor affecting the citizen to be vaccinated.";}
-    	else {message += " The negative relationship implies the public is doubts about the efficiency of vaccines.";}
+    	else {message += " The negative relationship implies the public does not decide to be vaccinated when a new death case happens. Maybe there are not sufficient vaccine to be used at that moment.";}
     	
     	return message;
     }

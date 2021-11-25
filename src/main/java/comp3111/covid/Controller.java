@@ -430,16 +430,16 @@ public class Controller {
     	
         Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
-        double[] regression_result = new double[2];
-        String x_data = "new_deaths_per_million";
-        String y_data = "new_cases_per_million";
+        double[] regression_result = new double[3];
+        String x_data = "new_cases_per_million";
+        String y_data = "new_deaths_per_million";
     	
         if(errorCheck_oneCountry(ISOStrings)) return;
         
     	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result);
     	chartReportB1.getData().addAll(scatterData);
     	ResultB1.setText(ReportTask.correlation_analysis_B1(regression_result));
-    	taskB1correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1]));
+    	taskB1correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
     }
 	
 	void generateChartB2(final UIDataModel data) {
@@ -447,16 +447,16 @@ public class Controller {
     	
         Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
-        double[] regression_result = new double[2];
+        double[] regression_result = new double[3];
         String x_data = "new_deaths_per_million";
-        String y_data = "new_vaccinations";
+        String y_data = "new_vaccinations_smoothed_per_million";
     	
         if(errorCheck_oneCountry(ISOStrings)) return;
         
         Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result);
     	chartReportB2.getData().addAll(scatterData);
     	ResultB2.setText(ReportTask.correlation_analysis_B2(regression_result));
-    	taskB2correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1]));
+    	taskB2correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
     }
     
     void generateChartC1(final UIDataModel data) {
