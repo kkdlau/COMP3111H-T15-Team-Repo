@@ -1,5 +1,7 @@
 package comp3111.covid;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +17,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -121,6 +122,12 @@ public class Controller {
     @FXML
     private LineChart compareChart;
 
+    @FXML
+    private Label countryAShiftText;
+
+    @FXML
+    private Label countryBShiftText;
+
     ToggleGroup ratioButtonGroups = new ToggleGroup();
 
     UIDataModel dataInstance = new UIDataModel();
@@ -129,18 +136,20 @@ public class Controller {
 
     ObservableList<XYChart.Series<String, Float>> shifted;
 
+    DoubleProperty aShift = new SimpleDoubleProperty();
+    DoubleProperty bShift = new SimpleDoubleProperty();
+
 
     public void initialize() {
         // default data for data pickers
+        this.initializeUIDataModel();
+
         startDatePicker.setValue(LocalDate.now());
         endDatePicker.setValue(LocalDate.now());
         stack.getChildren().remove(chart);
         stack.getChildren().remove(dataTable);
         chartXAxis.setAutoRanging(true);
         chartYAxis.setAutoRanging(true);
-
-
-        this.updateUIDataModel();
 
         this.ratioButtonInitialize();
 
@@ -149,30 +158,25 @@ public class Controller {
         countryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.listViewSubscribe(dataInstance.getAvailableCountries());
 
-        textfieldDataset.textProperty().addListener((observable, oldValue, newValue) -> {
-            UIDataModelUtils.setDataPath(dataInstance, newValue);
-        });
-
         startDatePicker.valueProperty().addListener((ob, oldV, newV) -> dataInstance.start = newV);
 
         endDatePicker.valueProperty().addListener((ob, oldV, newV) -> dataInstance.end = newV);
 
         generateButton.setOnAction((e) -> {
-            if (dataInstance.acumulativeData)
+            if (dataInstance.acumulativeData.get())
                 this.generateChart(dataInstance);
             else
                 this.generateTable(dataInstance);
         });
 
-        acumulativeCheckButton.setOnAction(e -> {
-            dataInstance.acumulativeData = acumulativeCheckButton.isSelected();
-            showTaskUI(!dataInstance.acumulativeData);
+        dataInstance.acumulativeData.addListener((e) -> {
+            showTaskUI(!dataInstance.acumulativeData.get());
         });
 
         tabGroup.getSelectionModel().selectedItemProperty().addListener(onTabChanged);
 
-        UIDataModelUtils.setDataPath(dataInstance, textfieldDataset.getText());
-        showTaskUI(!dataInstance.acumulativeData);
+        acumulativeCheckButton.setSelected(false);
+        textfieldDataset.setText(textfieldDataset.getText());
 
         tabTaskA3Initialize();
     }
@@ -198,24 +202,42 @@ public class Controller {
 
         chartGenerateButton.setOnAction((e) -> generateComparsionChart(dataInstance));
 
+        aShift.bindBidirectional(countryASlider.valueProperty());
+        bShift.bindBidirectional(countryBSlider.valueProperty());
+
+        aShift.addListener((e) -> {
+            double d = aShift.getValue();
+            countryAShiftText.setText(String.format("X-axis shift for country A(The situation has been postponed for %d days):", (int) d));
+            if (shifted != null)
+                shiftingData();
+        });
+
+        aShift.addListener((e) -> {
+            double d = bShift.getValue();
+            countryBShiftText.setText(String.format("X-axis shift for country B(The situation has been postponed for %d days):", (int) d));
+            if (shifted != null)
+                shiftingData();
+        });
+
         startDatePicker.valueProperty().addListener(((observable, oldValue, newValue) -> {
             int days = (int) ChronoUnit.DAYS.between(newValue, dataInstance.end);
-            countryASlider.setValue(0);
-            countryBSlider.setValue(0);
-
-            countryASlider.setMax(days);
-            countryBSlider.setMax(days);
+            resetSliderRange(days);
         }));
 
 
         endDatePicker.valueProperty().addListener(((observable, oldValue, newValue) -> {
             int days = (int) ChronoUnit.DAYS.between(dataInstance.start, newValue);
-            countryASlider.setValue(0);
-            countryBSlider.setValue(0);
+            resetSliderRange(days);
 
-            countryASlider.setMax(days);
-            countryBSlider.setMax(days);
         }));
+    }
+
+    private void resetSliderRange(int days) {
+        countryASlider.setValue(0);
+        countryBSlider.setValue(0);
+
+        countryASlider.setMax(days);
+        countryBSlider.setMax(days);
     }
 
     ChangeListener<Tab> onTabChanged = (ov, disSelected, selected) -> {
@@ -251,7 +273,6 @@ public class Controller {
 
         ratioButtonGroups.selectedToggleProperty().addListener((ob, oldVal, newVal) -> {
             dataInstance.focusedData = buttonDataMapping((RadioButton) ratioButtonGroups.getSelectedToggle());
-            showTaskUI(!dataInstance.acumulativeData);
         });
     }
 
@@ -259,14 +280,16 @@ public class Controller {
         countryListView.setItems(src);
     }
 
-    public void updateUIDataModel() {
-        dataInstance.dataPath = textfieldDataset.getText();
+    public void initializeUIDataModel() {
+        dataInstance.dataPath = textfieldDataset.textProperty();
+        dataInstance.dataPath.addListener((e) -> {
+            UIDataModelUtils.setAvailableCountries(dataInstance);
+        });
+
         dataInstance.focusedData = this.getFocusedData();
-        dataInstance.acumulativeData = this.acumulativeCheckButton.isSelected();
         dataInstance.start = startDatePicker.getValue();
         dataInstance.end = endDatePicker.getValue();
-
-        UIDataModelUtils.setAvailableCountries(this.dataInstance);
+        dataInstance.acumulativeData = acumulativeCheckButton.selectedProperty();
     }
 
     InterestedData getFocusedData() {
@@ -311,7 +334,7 @@ public class Controller {
         TableColumn<Map, String> col1 = new TableColumn(col1Title);
         TableColumn<Map, String> col2 = new TableColumn(col2Title);
         dataTable.getColumns().addAll(country, col1, col2);
-        String[] validDate = CheckInput.checkValidDate(dataInstance.start, dataInstance.dataPath);
+        String[] validDate = CheckInput.checkValidDate(dataInstance.start, dataInstance.dataPath.get());
         System.out.println(validDate[0]);
 
         // todo: make it support any interest of data
@@ -326,7 +349,7 @@ public class Controller {
             return;
         }
 
-        ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath, Arrays.asList(ISOStrings),
+        ObservableList tableData = VaccinationRate.generateVacTable(dataInstance.dataPath.get(), Arrays.asList(ISOStrings),
                 validDate[1], getFocusedData());
         country.setCellValueFactory(new MapValueFactory<>("country"));
         col1.setCellValueFactory(new MapValueFactory<>("col1data"));
@@ -336,37 +359,36 @@ public class Controller {
     }
 
     void shiftingData() {
-        int shiftA = (int) countryASlider.getValue();
-        int shiftB = (int) countryBSlider.getValue();
+        int shiftA = (int) aShift.get();
+        int shiftB = (int) bShift.get();
 
         XYChart.Series<String, Float> countryAData = unshifted.get(0);
         XYChart.Series<String, Float> countryBData = unshifted.get(1);
 
-        for(int i = 0; i < countryAData.getData().size(); i++) {
+        for (int i = 0; i < countryAData.getData().size(); i++) {
             XYChart.Series<String, Float> shiftedA = shifted.get(0);
             XYChart.Data<String, Float> d = unshifted.get(0).getData().get(i);
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate date = LocalDate.parse(d.getXValue(), formatter).plusDays((int)countryASlider.getValue());
+            LocalDate date = LocalDate.parse(d.getXValue(), formatter).plusDays(shiftA);
             shiftedA.getData().set(i, new XYChart.Data<String, Float>(date.toString(), d.getYValue()));
         }
 
-        for(int i = 0; i < countryBData.getData().size(); i++) {
+        for (int i = 0; i < countryBData.getData().size(); i++) {
             XYChart.Series<String, Float> shiftedB = shifted.get(1);
             XYChart.Data<String, Float> d = unshifted.get(1).getData().get(i);
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate date = LocalDate.parse(d.getXValue(), formatter).plusDays((int)countryBSlider.getValue());
+            LocalDate date = LocalDate.parse(d.getXValue(), formatter).plusDays(shiftB);
             shiftedB.getData().set(i, new XYChart.Data<String, Float>(date.toString(), d.getYValue()));
         }
-
 
     }
 
     void generateComparsionChart(final UIDataModel data) {
         compareChart.getData().clear();
 
-        String iDataset = data.dataPath;
+        String iDataset = data.dataPath.get();
 
         String[] selectedCountries = new String[]{
                 countryAListView.getSelectionModel().getSelectedItem(),
@@ -409,7 +431,7 @@ public class Controller {
     void generateChart(final UIDataModel data) {
         chart.getData().clear();
 
-        String iDataset = data.dataPath;
+        String iDataset = data.dataPath.get();
 
         ObservableList<String> selectedCountries = countryListView.getSelectionModel().getSelectedItems();
         Object[] ISO = dataInstance.getISOList(selectedCountries);

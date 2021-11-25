@@ -136,9 +136,9 @@
                         <Label layoutX="17.0" layoutY="119.0" text="Country A:" />
                         <Label layoutX="231.0" layoutY="119.0" text="Country B:" />
                         <Slider fx:id="countryBSlider" layoutX="14.0" layoutY="263.0" prefHeight="17.0" prefWidth="420.0" />
-                        <Label layoutX="17.0" layoutY="246.0" text="X-axis shift for country B:" />
+                        <Label fx:id="countryBShiftText" layoutX="17.0" layoutY="246.0" text="X-axis shift for countryB(The situation has been postponed for 0 days):" />
                         <Slider fx:id="countryASlider" layoutX="14.0" layoutY="229.0" prefHeight="17.0" prefWidth="420.0" />
-                        <Label layoutX="17.0" layoutY="212.0" text="X-axis shift for country A:" />
+                        <Label fx:id="countryAShiftText" layoutX="17.0" layoutY="212.0" text="X-axis shift for country A(The situation has been postponed for 0 days):" />
                         <Button fx:id="chartGenerateButton" layoutX="360.0" layoutY="586.0" mnemonicParsing="false" text="Generate" />
                      </children>
                   </AnchorPane>

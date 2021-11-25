@@ -1,6 +1,7 @@
 package comp3111.covid;
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,12 +25,12 @@ public class UIDataModel {
     /**
      * Path where the dataset locates at.
      */
-    public String dataPath = null;
+    public StringProperty dataPath;
 
     /**
      * If it is set to true, the calculation should be acumulative.
      */
-    public boolean acumulativeData = false;
+    public BooleanProperty acumulativeData;
 
     /**
      * The range of date for searching data.
