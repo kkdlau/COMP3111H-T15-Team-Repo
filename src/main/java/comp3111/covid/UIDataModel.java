@@ -19,7 +19,6 @@ public class UIDataModel {
      *
      * It should be updated only if the user click the group of ratio button.
      */
-//    public InterestedData focusedData = InterestedData.ConfirmedCases;
     public InterestedData focusedData = InterestedData.ConfirmedCases;
 
     /**
