@@ -101,6 +101,8 @@ public class Controller {
     private Button buttonReportB1;
     @FXML
     private Label taskB1correlation,taskB2correlation;
+    @FXML
+    private Label ResultB1,ResultB2;
     
     // Report C
     @FXML
@@ -358,12 +360,14 @@ public class Controller {
             dataRangeTile.setText("Date");
             startDateLabel.setText("Date: ");
             endDataLabel.setVisible(false);
+            startDatePicker.setVisible(true);
             endDatePicker.setVisible(false);
             stackShow(dataTable);
         } else {
             dataRangeTile.setText("Date Range");
             startDateLabel.setText("Start date: ");
             endDataLabel.setVisible(true);
+            startDatePicker.setVisible(true);
             endDatePicker.setVisible(true);
             stackShow(chart);
         }
@@ -375,15 +379,17 @@ public class Controller {
     		dataRangeTile.setText("Date Range"); 
             startDateLabel.setText("Start date: ");
             endDataLabel.setVisible(true);
+            startDatePicker.setVisible(true);
             endDatePicker.setVisible(true);
             countryInstruction.setVisible(false);
             stackShow(reportC);
             break;
     	case ConfirmedDeaths:
-    		dataRangeTile.setText("Date Range"); 
-            startDateLabel.setText("Start date: ");
-            endDataLabel.setVisible(true);
-            endDatePicker.setVisible(true);
+    		dataRangeTile.setText(""); 
+            startDateLabel.setText("");
+            endDataLabel.setVisible(false);
+            startDatePicker.setVisible(false);
+            endDatePicker.setVisible(false);
             countryInstruction.setVisible(false);
             stackShow(reportB);
             break;
@@ -424,7 +430,7 @@ public class Controller {
     	
         Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
-        double[] regression_result = new double[1];
+        double[] regression_result = new double[2];
         String x_data = "new_deaths_per_million";
         String y_data = "new_cases_per_million";
     	
@@ -432,7 +438,8 @@ public class Controller {
         
     	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result);
     	chartReportB1.getData().addAll(scatterData);
-    	taskB1correlation.setText("correlation = " + regression_result[0]);
+    	ResultB1.setText(ReportTask.correlation_analysis_B1(regression_result));
+    	taskB1correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1]));
     }
 	
 	void generateChartB2(final UIDataModel data) {
@@ -440,7 +447,7 @@ public class Controller {
     	
         Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
-        double[] regression_result = new double[1];
+        double[] regression_result = new double[2];
         String x_data = "new_deaths_per_million";
         String y_data = "new_vaccinations";
     	
@@ -448,7 +455,8 @@ public class Controller {
         
         Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result);
     	chartReportB2.getData().addAll(scatterData);
-    	taskB2correlation.setText("correlation = " + regression_result[0]);
+    	ResultB2.setText(ReportTask.correlation_analysis_B2(regression_result));
+    	taskB2correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1]));
     }
     
     void generateChartC1(final UIDataModel data) {

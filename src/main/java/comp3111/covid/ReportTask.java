@@ -53,10 +53,54 @@ class ReportTask {
 		
 		double correlationCoef = (length*sum_xy - sum_x*sum_y) / Math.sqrt((double)(length*sum_x2 - sum_x*sum_x)*(length*sum_y2 - sum_y*sum_y));
 		result[0]=correlationCoef;
+		result[1]=length;
 		return data;
 	}
 	
+    public static String correlation_analysis_B1(double[] result) {
+    	double correlation = (double) Math.round(result[0]*100)/100;
+    	int length = (int) result[1];
+    	
+    	if(length<=2) {return "There are not sufficient data.";}
+
+    	String message = "The correlation between death cases and comfirmed cases is " + correlation + " that implies ";
+    	if(correlation>0.6) {message += "a strongly positive";}
+    	else if(correlation>0.2) {message += "a slightly positive";}
+    	else if(correlation>-0.2) {message += "no";}
+    	else if(correlation>-0.2) {message += "a slightly negative";}
+    	else  {message += "a strongly negative";}
+    	message += " relationship between death cases and confirmed cases.";
+    	if(correlation>0.2) {
+    		message += " Government should implement bounder shutdown and social distancing policies to reduce the death cases.";
+    	}
+    	else {
+    		message += " Most of the death cases are not related to the infection of covid-19.";
+    		message += " Bounder shutdown and social distancing can not effectively reduce the deaths."	;
+    	}
+    	
+    	return message;
+    }
 	
+    public static String correlation_analysis_B2(double[] result) {
+    	double correlation = (double) Math.round(result[0]*100)/100;
+    	int length = (int) result[1];
+    	
+    	if(length<=2) {return "There are not sufficient data.";}
+
+    	String message = "The correlation between death cases and vaccination rate is " + correlation + " that implies ";
+    	if(correlation>0.6) {message += "a strongly positive";}
+    	else if(correlation>0.2) {message += "a slightly positive";}
+    	else if(correlation>-0.2) {message += "no";}
+    	else if(correlation>-0.2) {message += "a slightly negative";}
+    	else  {message += "a strongly negative";}
+    	message += " relationship between death cases and vaccination rate.";
+    	if(correlation>0.2) {message += " The positive relationship implies the public trust the efficiency of vaccine that can prevent death from covid-19.";}
+    	else if(correlation>-0.2) {message += " That implies the death cases are not a factor affecting the citizen to be vaccinated.";}
+    	else {message += " The negative relationship implies the public is doubts about the efficiency of vaccines.";}
+    	
+    	return message;
+    }
+    
 	public static ObservableList generateChartC1(String iDataset) {
 		Float[] gdp_quartile = DataAnalysis.getQuartiles(iDataset, "gdp_per_capita");
 		locByGDP.put("q1", new LinkedHashSet<String>());
