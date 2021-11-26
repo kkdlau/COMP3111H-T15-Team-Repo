@@ -108,19 +108,25 @@ class ReportTask {
 		return data;
 	}
 	
-    public static String correlation_analysis_B1(double[] result) {
+	private static String correlation_analysis_B(double[] result,String x_data, String y_data) {
     	double correlation = (double) Math.round(result[0]*100)/100;
     	int length = (int) result[1];
-    	
     	if(length<=2) {return "There are not sufficient data to make a conclusion.";}
-
-    	String message = "The correlation between death cases and comfirmed cases is " + correlation + " that implies ";
+    	String message = "The correlation between "+x_data+" and "+y_data+" is " + correlation + " that implies ";
     	if(correlation>0.6) {message += "a strongly positive";}
     	else if(correlation>0.2) {message += "a slightly positive";}
     	else if(correlation>-0.2) {message += "no";}
     	else if(correlation>-0.2) {message += "a slightly negative";}
     	else  {message += "a strongly negative";}
-    	message += " relationship between death cases and confirmed cases.";
+    	message += " relationship between "+x_data+" and "+y_data+".";
+    	return message;
+	}
+	
+    public static String correlation_analysis_B1(double[] result) {
+    	double correlation = (double) Math.round(result[0]*100)/100;
+    	String message = correlation_analysis_B(result,"death cases","confirmed cases");
+    	if(message.equals("There are not sufficient data to make a conclusion.")) {return message;}
+    	
     	if(correlation>0.2) {
     		message += " Government should implement bounder shutdown and social distancing policies to reduce the death cases.";
     	}
@@ -128,47 +134,39 @@ class ReportTask {
     		message += " Most of the death cases are not related to the infection of covid-19.";
     		message += " Bounder shutdown and social distancing can not effectively reduce the deaths."	;
     	}
-    	
     	return message;
     }
 	
     public static String correlation_analysis_B2(double[] result) {
     	double correlation = (double) Math.round(result[0]*100)/100;
-    	int length = (int) result[1];
+    	String message = correlation_analysis_B(result,"death cases","vaccination rate");
+    	if(message.equals("There are not sufficient data to make a conclusion.")) {return message;}
     	
-    	if(length<=2) {return "There are not sufficient data to make a conclusion.";}
-
-    	String message = "The correlation between death cases and vaccination rate is " + correlation + " that implies ";
-    	if(correlation>0.6) {message += "a strongly positive";}
-    	else if(correlation>0.2) {message += "a slightly positive";}
-    	else if(correlation>-0.2) {message += "no";}
-    	else if(correlation>-0.2) {message += "a slightly negative";}
-    	else  {message += "a strongly negative";}
-    	message += " relationship between death cases and vaccination rate.";
-    	if(correlation>0.2) {message += " The positive relationship implies the public trust the efficiency of vaccine that can prevent death from covid-19.";}
-    	else if(correlation>-0.2) {message += " That implies the death cases are not a factor affecting the citizen to be vaccinated.";}
-    	else {message += " The negative relationship implies the public does not decide to be vaccinated when a new death case happens. Maybe there are not sufficient vaccine to be used at that moment.";}
-    	
+    	if(correlation>0.2) {
+    		message += " The positive correlation implies the public trust the efficiency of vaccine that can prevent death from covid-19.";
+    		message += " It implies the government can provide enough and reliable vaccines during the breakout.";
+    	}
+    	else if(correlation<-0.2){
+    		message += " The negative correlation implies the public did not decide to/ cannot be vaccinated when a new death case happens.";
+    		message += " It implies government did not have enough vaccines or had no reliable vaccine to use during the breakout.";
+    	}
     	return message;
     }
     
     public static String correlation_analysis_B3(double[] result, int dayChecked) {
     	double correlation = (double) Math.round(result[0]*100)/100;
-    	int length = (int) result[1];
+    	String message = correlation_analysis_B(result,"vaccination rate",dayChecked+"-days death cases");
+    	if(message.equals("There are not sufficient data to make a conclusion.")) {return message;}
     	
-    	if(length<=2) {return "There are not sufficient data to make a conclusion.";}
-
-    	String message = "The correlation between vaccination rate and death cases in the following "+dayChecked+"-days is " + correlation + " that implies ";
-    	if(correlation>0.6) {message += "a strongly positive";}
-    	else if(correlation>0.2) {message += "a slightly positive";}
-    	else if(correlation>-0.2) {message += "no";}
-    	else if(correlation>-0.2) {message += "a slightly negative";}
-    	else  {message += "a strongly negative";}
-    	message += " relationship.";
-    	if(correlation>0.2) {message += " The positive relationship implies the vaccine is deadly that increases the number of death cases in "+dayChecked+"-days.";}
-    	else if(correlation>-0.2) {message += " That implies the vaccine cannot effectively prevent a death cases in "+dayChecked+"-days.";}
-    	else {message += " The negative relationship implies the vaccine can effectively prevent a death cases in "+dayChecked+"-days.";}
-    	
+    	if(correlation>0.2) {
+    		message += " The positive relationship implies the vaccine is deadly that increases the number of death cases in "+dayChecked+"-days.";
+    	}
+    	else if(correlation>-0.2) {
+    		message += " That implies the vaccine cannot effectively prevent a death cases in "+dayChecked+"-days.";
+    	}
+    	else {
+    		message += " The negative relationship implies the vaccine can effectively prevent a death cases in "+dayChecked+"-days.";
+    	}
     	return message;
     }
    
