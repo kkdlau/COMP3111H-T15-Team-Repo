@@ -132,7 +132,7 @@
                   <AnchorPane prefHeight="675.0" prefWidth="456.0">
                      <children>
                         <Label layoutX="17.0" layoutY="20.0" prefHeight="89.0" prefWidth="414.0" text="Although different countries may have different confirmed cases on the same day, a country can have the same number of confirmed cases after few days later. You can select two countries from below, and use the slider to simulate how many days are needed for country A to reach the situation in country B." wrapText="true" />
-                        <LineChart fx:id="compareChart" layoutX="17.0" layoutY="280.0" prefHeight="306.0" prefWidth="414.0">
+                        <LineChart fx:id="compareChart" animated="false" layoutX="17.0" layoutY="280.0" prefHeight="306.0" prefWidth="414.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
@@ -149,7 +149,7 @@
                         <Slider fx:id="countryASlider" layoutX="14.0" layoutY="229.0" prefHeight="17.0" prefWidth="420.0" />
                         <Label fx:id="countryAShiftText" layoutX="17.0" layoutY="212.0" text="X-axis shift for country A(The situation has been postponed for 0 days):" />
                         <Button fx:id="chartGenerateButton" layoutX="360.0" layoutY="586.0" mnemonicParsing="false" text="Generate" />
-                        <LineChart fx:id="caseDeathChart" layoutX="17.0" layoutY="740.0" prefHeight="306.0" prefWidth="414.0">
+                        <LineChart fx:id="caseDeathChart" animated="false" layoutX="17.0" layoutY="740.0" prefHeight="306.0" prefWidth="414.0">
                            <xAxis>
                               <NumberAxis side="BOTTOM" />
                            </xAxis>

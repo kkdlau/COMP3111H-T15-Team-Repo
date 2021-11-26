@@ -1,8 +1,6 @@
 package comp3111.covid;
 
 import javafx.collections.ObservableList;
-
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
