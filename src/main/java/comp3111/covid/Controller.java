@@ -186,7 +186,7 @@ public class Controller {
         showTaskUI(!dataInstance.acumulativeData);
         
         buttonReportB1.setOnAction((e) -> {
-        	errorCheck_oneCountry();
+        	errorCheckOneCountry();
         	this.generateChartB1(dataInstance);
         	this.generateChartB2(dataInstance);
         	this.generateChartB3(dataInstance);
@@ -194,7 +194,7 @@ public class Controller {
         
         SliderReportB3.setOnMouseReleased((e) -> {
         	LabelSliderReportB3.setText((int) SliderReportB3.getValue() + "-days death cases are observed after vaccination ");
-        	errorCheck_oneCountry();
+        	errorCheckOneCountry();
         	this.generateChartB3(dataInstance);
         });
         
@@ -414,12 +414,11 @@ public class Controller {
         stack.getChildren().add(e);
     	
     }
+    
     /**
-     * UI output - Chart for the average cumulative number of vaccinations for countries in different GDP quartiles
-     * @param data
+     * Error check - to check the number of country selected is one or not
      */
-
-    boolean errorCheck_oneCountry() {
+    boolean errorCheckOneCountry() {
     	Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
         String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
         if (ISOStrings.length == 0) {
@@ -437,6 +436,10 @@ public class Controller {
         return false;
     }
     
+    /**
+     * UI output - Scatter Plot of the death cases and the confirmed rate.
+     * @param data
+     */
 	void generateChartB1(final UIDataModel data) {
     	chartReportB1.getData().clear();
     	
@@ -448,10 +451,14 @@ public class Controller {
         
     	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result,1);
     	chartReportB1.getData().addAll(scatterData);
-    	ResultB1.setText(ReportTask.correlation_analysis_B1(regression_result));
+    	ResultB1.setText(ReportTask.correlationAnalysisB1(regression_result));
     	taskB1correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
     }
 	
+    /**
+     * UI output - Scatter Plot of the death cases and the vaccination rate that could the citizens be immediately vaccinated during a breakout.
+     * @param data
+     */
 	void generateChartB2(final UIDataModel data) {
     	chartReportB2.getData().clear();
     	
@@ -463,10 +470,14 @@ public class Controller {
         
         Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result,1);
     	chartReportB2.getData().addAll(scatterData);
-    	ResultB2.setText(ReportTask.correlation_analysis_B2(regression_result));
+    	ResultB2.setText(ReportTask.correlationAnalysisB2(regression_result));
     	taskB2correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
     }
 	
+    /**
+     * UI output - Scatter Plot of the vaccination rate and the death cases to verify the efficiency of vaccines.
+     * @param data
+     */
 	void generateChartB3(final UIDataModel data) {
     	chartReportB3.getData().clear();
     	
@@ -479,7 +490,7 @@ public class Controller {
         
         Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result, dayChecked);
     	chartReportB3.getData().addAll(scatterData);
-    	ResultB3.setText(ReportTask.correlation_analysis_B3(regression_result,dayChecked));
+    	ResultB3.setText(ReportTask.correlationAnalysisB3(regression_result,dayChecked));
     	taskB3correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
     }
     

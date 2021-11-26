@@ -23,8 +23,8 @@ class ReportTask {
 	 */
 	
 	/** 
-	 * Generate Data for Table 1 in Report B
-	 * @return ObservableList
+	 * Generate a data series for scatter plot in report B
+	 * @return Series<Float,Float>
 	 */
 	public static Series<Float, Float> generateChartB(String iDataset, String iISO, String x_axis, String y_axis, double[] result, int y_data_cumulation) {
 		
@@ -108,7 +108,11 @@ class ReportTask {
 		return data;
 	}
 	
-	private static String correlation_analysis_B(double[] result,String x_data, String y_data) {
+	/** 
+	 * Generate a string to describe the correlation
+	 * @return String
+	 */
+	private static String correlationAnalysisB(double[] result,String x_data, String y_data) {
     	double correlation = (double) Math.round(result[0]*100)/100;
     	int length = (int) result[1];
     	if(length<=2) {return "There are not sufficient data to make a conclusion.";}
@@ -122,9 +126,13 @@ class ReportTask {
     	return message;
 	}
 	
-    public static String correlation_analysis_B1(double[] result) {
+	/** 
+	 * Generate a conclusion of chart 1 in report B
+	 * @return String
+	 */
+    public static String correlationAnalysisB1(double[] result) {
     	double correlation = (double) Math.round(result[0]*100)/100;
-    	String message = correlation_analysis_B(result,"death cases","confirmed cases");
+    	String message = correlationAnalysisB(result,"death cases","confirmed cases");
     	if(message.equals("There are not sufficient data to make a conclusion.")) {return message;}
     	
     	if(correlation>0.2) {
@@ -137,9 +145,13 @@ class ReportTask {
     	return message;
     }
 	
-    public static String correlation_analysis_B2(double[] result) {
+    /** 
+	 * Generate a conclusion of chart 2 in report B
+	 * @return String
+	 */
+    public static String correlationAnalysisB2(double[] result) {
     	double correlation = (double) Math.round(result[0]*100)/100;
-    	String message = correlation_analysis_B(result,"death cases","vaccination rate");
+    	String message = correlationAnalysisB(result,"death cases","vaccination rate");
     	if(message.equals("There are not sufficient data to make a conclusion.")) {return message;}
     	
     	if(correlation>0.2) {
@@ -152,10 +164,14 @@ class ReportTask {
     	}
     	return message;
     }
-    
-    public static String correlation_analysis_B3(double[] result, int dayChecked) {
+	
+    /** 
+	 * Generate a conclusion of chart 3 in report B
+	 * @return ObservableList
+	 */
+    public static String correlationAnalysisB3(double[] result, int dayChecked) {
     	double correlation = (double) Math.round(result[0]*100)/100;
-    	String message = correlation_analysis_B(result,"vaccination rate",dayChecked+"-days death cases");
+    	String message = correlationAnalysisB(result,"vaccination rate",dayChecked+"-days death cases");
     	if(message.equals("There are not sufficient data to make a conclusion.")) {return message;}
     	
     	if(correlation>0.2) {
