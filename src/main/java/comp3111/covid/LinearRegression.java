@@ -102,6 +102,11 @@ public class LinearRegression {
         return new LinearRegression(x, y);
     }
 
+    /**
+     * Creates a set of mock data that fit the regression model.
+     *
+     * @return mock data
+     */
     public XYChart.Series<Float, Float> generateMockData() {
         float y0 = (float) (slope() * 0 + intercept());
         float y1 = (float) (slope() * max_x + intercept());

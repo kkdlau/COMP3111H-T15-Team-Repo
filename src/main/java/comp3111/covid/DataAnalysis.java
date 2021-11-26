@@ -178,6 +178,15 @@ public class DataAnalysis {
 		}
 	}
 
+	/**
+	 * Search for the confirmed cases and confirmed deaths that match the given two countries.
+	 *
+	 * @param dataset dataset to be searched.
+	 * @param countryAISO ISO representation for the first country.
+	 * @param countryBISO ISO representation for the second country.
+	 *
+	 * @return A list that contains the confirmed cases and confirmed deaths.
+	 */
 	public static ObservableList casesAndDeathsData(String dataset, String countryAISO, String countryBISO) {
 		XYChart.Series<Float, Float> countryA = new XYChart.Series();
 		XYChart.Series<Float, Float> countryB = new XYChart.Series();

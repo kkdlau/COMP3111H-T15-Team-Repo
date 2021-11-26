@@ -157,7 +157,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <Label layoutX="18.0" layoutY="620.0" prefHeight="118.0" prefWidth="413.0" text="Furthermore, by comparing confirmed cases(x-axis) against confirmed deaths(y-axis), we can perform linear regression to find the relationship between confirmed deaths and confirmed cases. The slope for the relationship represent the level of healthcare. If one counrty's slope is lower than another country, we can conclude that the country have better health care since it has lower death rate per case." wrapText="true" />
+                        <Label layoutX="18.0" layoutY="620.0" prefHeight="118.0" prefWidth="413.0" text="Furthermore, by comparing confirmed cases(x-axis) against confirmed deaths(y-axis), we can perform linear regression to find the relationship between confirmed deaths and confirmed cases. The slope for the relationship represents the level of healthcare. If one counrty's slope is lower than another country, we can conclude that the country have better health care since it has lower death rate per case." wrapText="true" />
                         <Button fx:id="caseDeathGenerateButton" layoutX="360.0" layoutY="1054.0" mnemonicParsing="false" text="Generate" />
                         <Label fx:id="regressionReport" alignment="TOP_LEFT" layoutX="17.0" layoutY="1100.0" prefHeight="226.0" prefWidth="417.0" text="Regression report will be generated after the above chart is genereated." wrapText="true" />
                      </children>
