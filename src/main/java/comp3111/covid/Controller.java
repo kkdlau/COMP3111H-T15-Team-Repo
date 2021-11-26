@@ -14,6 +14,7 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.chart.ScatterChart;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.HBox;
@@ -38,9 +39,6 @@ public class Controller {
 
     @FXML
     private Tab a3Tab;
-
-    @FXML
-    private Tab b3Tab;
 
     @FXML
     private CheckBox acumulativeCheckButton;
@@ -93,6 +91,22 @@ public class Controller {
     @FXML
     private StackPane stack;
 
+    // Report B
+    @FXML
+    private Tab b3Tab;
+    @FXML
+    private ScrollPane reportB;
+    @FXML
+    private ScatterChart chartReportB1,chartReportB2,chartReportB3;
+    @FXML
+    private Button buttonReportB1;
+    @FXML
+    private Label taskB1correlation,taskB2correlation,taskB3correlation, LabelSliderReportB3;
+    @FXML
+    private Label ResultB1,ResultB2,ResultB3;
+    @FXML
+    private Slider SliderReportB3;
+    
     // Report C
     @FXML
     private Tab c3Tab;
@@ -173,6 +187,19 @@ public class Controller {
         UIDataModelUtils.setDataPath(dataInstance, textfieldDataset.getText());
         showTaskUI(!dataInstance.acumulativeData);
         
+        buttonReportB1.setOnAction((e) -> {
+        	errorCheckOneCountry();
+        	this.generateChartB1(dataInstance);
+        	this.generateChartB2(dataInstance);
+        	this.generateChartB3(dataInstance);
+        });
+        
+        SliderReportB3.setOnMouseReleased((e) -> {
+        	LabelSliderReportB3.setText((int) SliderReportB3.getValue() + "-days death cases are observed after vaccination ");
+        	errorCheckOneCountry();
+        	this.generateChartB3(dataInstance);
+        });
+        
         buttonReportC1.setOnAction((e) -> {
         	this.generateChartC1(dataInstance);
         });
@@ -203,6 +230,7 @@ public class Controller {
         } else if (selected == a3Tab) {
 
         } else if (selected == b3Tab) {
+        	this.showReportUI(InterestedData.ConfirmedDeaths);
 
         } else if (selected == c3Tab) {
         	//rootUI.getChildren().remove(rightUI)
@@ -348,18 +376,16 @@ public class Controller {
             dataRangeTile.setText("Date");
             startDateLabel.setText("Date: ");
             endDataLabel.setVisible(false);
+            startDatePicker.setVisible(true);
             endDatePicker.setVisible(false);
-            stack.getChildren().remove(chart);
-            stack.getChildren().add(dataTable);
-            stack.getChildren().remove(reportC);
+            stackShow(dataTable);
         } else {
             dataRangeTile.setText("Date Range");
             startDateLabel.setText("Start date: ");
             endDataLabel.setVisible(true);
+            startDatePicker.setVisible(true);
             endDatePicker.setVisible(true);
-            stack.getChildren().remove(dataTable);
-            stack.getChildren().add(chart);
-            stack.getChildren().remove(reportC);
+            stackShow(chart);
         }
     }
     /**
@@ -371,17 +397,114 @@ public class Controller {
     		dataRangeTile.setText("Date Range"); 
             startDateLabel.setText("Start date: ");
             endDataLabel.setVisible(true);
+            startDatePicker.setVisible(true);
             endDatePicker.setVisible(true);
             countryInstruction.setVisible(false);
-            stack.getChildren().remove(dataTable);
-            stack.getChildren().remove(chart);
-            stack.getChildren().add(reportC);
+            stackShow(reportC);
+            break;
+    	case ConfirmedDeaths:
+    		dataRangeTile.setText(""); 
+            startDateLabel.setText("");
+            endDataLabel.setVisible(false);
+            startDatePicker.setVisible(false);
+            endDatePicker.setVisible(false);
+            countryInstruction.setVisible(false);
+            stackShow(reportB);
+            break;
     	}
     }
     
+
     /**
      * @param data User input for all controls
      */
+    void stackShow(Node e) {
+        stack.getChildren().remove(chart);
+    	stack.getChildren().remove(dataTable);
+    	stack.getChildren().remove(reportC);
+    	stack.getChildren().remove(reportB);
+        stack.getChildren().add(e);
+    }
+    
+    /**
+     * Error check - to check the number of country selected is one or not
+     */
+    boolean errorCheckOneCountry() {
+    	Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
+        String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+        if (ISOStrings.length == 0) {
+            Alert error = new Alert(AlertType.ERROR);
+            error.setContentText("Please select one country");
+            error.show();
+            return true;
+        }
+        if (ISOStrings.length > 1) {
+        	Alert error = new Alert(AlertType.ERROR);
+        	error.setContentText("Please select one country only");
+        	error.show(); 
+        	return true;
+        }
+        return false;
+    }
+    
+    /**
+     * UI output - Scatter Plot of the death cases and the confirmed rate.
+     * @param data
+     */
+	void generateChartB1(final UIDataModel data) {
+    	chartReportB1.getData().clear();
+    	
+        Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
+        String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+        double[] regression_result = new double[3];
+        String x_data = "new_cases_per_million";
+        String y_data = "new_deaths_per_million";
+        
+    	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result,1);
+    	chartReportB1.getData().addAll(scatterData);
+    	ResultB1.setText(ReportTask.correlationAnalysisB1(regression_result));
+    	taskB1correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
+    }
+	
+    /**
+     * UI output - Scatter Plot of the death cases and the vaccination rate that could the citizens be immediately vaccinated during a breakout.
+     * @param data
+     */
+	void generateChartB2(final UIDataModel data) {
+    	chartReportB2.getData().clear();
+    	
+        Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
+        String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+        double[] regression_result = new double[3];
+        String x_data = "new_deaths_per_million";
+        String y_data = "new_vaccinations_smoothed_per_million";
+        
+        Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result,1);
+    	chartReportB2.getData().addAll(scatterData);
+    	ResultB2.setText(ReportTask.correlationAnalysisB2(regression_result));
+    	taskB2correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
+    }
+	
+    /**
+     * UI output - Scatter Plot of the vaccination rate and the death cases to verify the efficiency of vaccines.
+     * @param data
+     */
+	void generateChartB3(final UIDataModel data) {
+    	chartReportB3.getData().clear();
+    	
+        Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
+        String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+        double[] regression_result = new double[3];
+        String x_data = "new_vaccinations_smoothed_per_million";
+        String y_data = "new_deaths_per_million";
+        int dayChecked = (int) SliderReportB3.getValue();
+        
+        Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result, dayChecked);
+    	chartReportB3.getData().addAll(scatterData);
+    	ResultB3.setText(ReportTask.correlationAnalysisB3(regression_result,dayChecked));
+    	taskB3correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
+    }
+    
     void generateChartC1(final UIDataModel data) {
     	// no need to check input, just use the dataset
     	chartReportC1.getData().clear();
