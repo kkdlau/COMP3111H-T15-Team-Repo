@@ -96,13 +96,15 @@ public class Controller {
     @FXML
     private ScrollPane reportB;
     @FXML
-    private ScatterChart chartReportB1,chartReportB2;
+    private ScatterChart chartReportB1,chartReportB2,chartReportB3;
     @FXML
     private Button buttonReportB1;
     @FXML
-    private Label taskB1correlation,taskB2correlation;
+    private Label taskB1correlation,taskB2correlation,taskB3correlation;
     @FXML
-    private Label ResultB1,ResultB2;
+    private Label ResultB1,ResultB2,ResultB3;
+    @FXML
+    private Slider SliderReportB3;
     
     // Report C
     @FXML
@@ -186,6 +188,7 @@ public class Controller {
         buttonReportB1.setOnAction((e) -> {
         	this.generateChartB1(dataInstance);
         	this.generateChartB2(dataInstance);
+        	this.generateChartB3(dataInstance);
         });
         
         buttonReportC1.setOnAction((e) -> {
@@ -436,7 +439,7 @@ public class Controller {
     	
         if(errorCheck_oneCountry(ISOStrings)) return;
         
-    	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result);
+    	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result,1);
     	chartReportB1.getData().addAll(scatterData);
     	ResultB1.setText(ReportTask.correlation_analysis_B1(regression_result));
     	taskB1correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
@@ -453,10 +456,28 @@ public class Controller {
     	
         if(errorCheck_oneCountry(ISOStrings)) return;
         
-        Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result);
+        Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result,1);
     	chartReportB2.getData().addAll(scatterData);
     	ResultB2.setText(ReportTask.correlation_analysis_B2(regression_result));
     	taskB2correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
+    }
+	
+	void generateChartB3(final UIDataModel data) {
+    	chartReportB3.getData().clear();
+    	
+        Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
+        String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
+        double[] regression_result = new double[3];
+        String x_data = "new_vaccinations_smoothed_per_million";
+        String y_data = "new_deaths_per_million";
+        int dayChecked = (int) SliderReportB3.getValue();
+    	
+        if(errorCheck_oneCountry(ISOStrings)) return;
+        
+        Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result, dayChecked);
+    	chartReportB3.getData().addAll(scatterData);
+    	ResultB3.setText(ReportTask.correlation_analysis_B3(regression_result,dayChecked));
+    	taskB3correlation.setText("Correlation = " + regression_result[0] +"\nNumber of data = " + Math.round(regression_result[1])+"\nSlope = "+regression_result[2]);
     }
     
     void generateChartC1(final UIDataModel data) {

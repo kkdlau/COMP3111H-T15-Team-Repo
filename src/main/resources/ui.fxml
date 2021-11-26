@@ -11,6 +11,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
@@ -117,7 +118,7 @@
                   </LineChart>
                   <ScrollPane fx:id="reportB" prefHeight="200.0" prefWidth="200.0">
 	                  <content>
-                        <AnchorPane prefHeight="1200.0" prefWidth="466.0">
+                        <AnchorPane prefHeight="1750.0" prefWidth="466.0">
                            <children>
                               <Label alignment="CENTER" prefHeight="38.0" prefWidth="506.0" text="Are vaccination and border shutdown both necessary?">
                                  <font>
@@ -146,6 +147,17 @@
                               </ScatterChart>
                               <Label fx:id="taskB2correlation" layoutX="36.0" layoutY="1050.0" />
                               <Label fx:id="ResultB2" layoutX="22.0" layoutY="1100.0" prefWidth="450.0" text="Conclusion" wrapText="true" />
+                              <Slider fx:id="SliderReportB3" layoutX="34.0" layoutY="1200.0" majorTickUnit="1.0" max="14.0" min="1.0" minorTickCount="0" prefHeight="37.0" prefWidth="429.0" showTickLabels="true" snapToTicks="true" value="7.0" />
+                              <ScatterChart fx:id="chartReportB3" animated="false" layoutX="38.0" layoutY="1250.0" legendSide="RIGHT" prefHeight="353.0" prefWidth="439.0">
+                                 <xAxis>
+                                    <NumberAxis label="new vaccinations per million" side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis label="average deaths case per million" side="LEFT" />
+                                 </yAxis>
+                              </ScatterChart>
+                              <Label fx:id="taskB3correlation" layoutX="46.0" layoutY="1600.0" />
+                              <Label fx:id="ResultB3" layoutX="32.0" layoutY="1650.0" prefWidth="450.0" text="Conclusion" wrapText="true" />
                            </children>
                         </AnchorPane>
                      </content>
