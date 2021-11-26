@@ -12,6 +12,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -20,9 +21,7 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class DeepCopyUtils {
@@ -246,14 +245,14 @@ public class Controller {
         aShift.addListener((e) -> {
             double d = aShift.getValue();
             countryAShiftText.setText(String.format("X-axis shift for country A(The situation has been postponed for %d days):", (int) d));
-            if (shifted != null)
+            if (shifted != null && d != 0)
                 shiftingData();
         });
 
         bShift.addListener((e) -> {
             double d = bShift.getValue();
             countryBShiftText.setText(String.format("X-axis shift for country B(The situation has been postponed for %d days):", (int) d));
-            if (shifted != null)
+            if (shifted != null && d != 0)
                 shiftingData();
         });
 
@@ -305,8 +304,8 @@ public class Controller {
     /**
      * Compares regression model and generate a conclusion that which country is better.
      *
-     * @param rgA regression model of the first country.
-     * @param rgB regression model of the second country.
+     * @param rgA      regression model of the first country.
+     * @param rgB      regression model of the second country.
      * @param countryA first country's name.
      * @param countryB second country's name.
      */
@@ -456,34 +455,40 @@ public class Controller {
     }
 
     void shiftingData() {
-        int shiftA = (int) aShift.get();
-        int shiftB = (int) bShift.get();
+        long shiftA = (int) countryASlider.valueProperty().get();
+        long shiftB = (int) countryBSlider.valueProperty().get();
 
-        XYChart.Series<String, Float> rawAData = unshifted.get(0);
-        XYChart.Series<String, Float> rawBData = unshifted.get(1);
 
-        XYChart.Series<String, Float> shiftedA = shifted.get(0);
-        for (int i = 0; i < rawAData.getData().size(); i++) {
-            XYChart.Data<String, Float> d = rawAData.getData().get(i);
-            String s = d.getXValue();
-            float f = d.getYValue();
+        shiftCountryData(unshifted.get(0), shifted.get(0), shiftA);
+        shiftCountryData(unshifted.get(1), shifted.get(1), shiftB);
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate date = LocalDate.parse(s, formatter).plusDays(shiftA);
-            shiftedA.getData().set(i, new XYChart.Data<>(date.toString(), f));
+        XYChart.Series<String, Float> s1 = DeepCopyUtils.copySeries(shifted.get(0));
+        XYChart.Series<String, Float> s2 = DeepCopyUtils.copySeries(shifted.get(1));
+
+        compareChart.setAnimated(false);
+        compareChart.getData().clear();
+        compareChart.layout();
+        compareChart.getData().add(s1);
+        compareChart.getData().add(s2);
+
+    }
+
+    void shiftCountryData(XYChart.Series<String, Float> original, XYChart.Series<String, Float> updated, long days) {
+        if (days <= 0) return;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        Iterator<XYChart.Data<String, Float>> ptr = original.getData().iterator();
+        Iterator<XYChart.Data<String, Float>> updatePtr = updated.getData().iterator();
+
+        while (ptr.hasNext()) {
+            XYChart.Data<String, Float> d = ptr.next();
+            XYChart.Data<String, Float> updateD = updatePtr.next();
+            LocalDate newDate = LocalDate.parse(d.getXValue(), formatter).plusDays(days);
+            updateD.setXValue(newDate.toString());
         }
 
-        XYChart.Series<String, Float> shiftedB = shifted.get(1);
-        for (int i = 0; i < rawBData.getData().size(); i++) {
-            XYChart.Data<String, Float> d = rawBData.getData().get(i);
-            String s = d.getXValue();
-            float f = d.getYValue();
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate date = LocalDate.parse(s, formatter).plusDays(shiftB);
-            shiftedB.getData().set(i, new XYChart.Data<>(date.toString(), f));
-        }
-
+        updated.getData().sort(Comparator.comparing(XYChart.Data::getXValue));
     }
 
     void generateComparisonChart(final UIDataModel data) throws Exception {
@@ -519,7 +524,7 @@ public class Controller {
         shifted.add(DeepCopyUtils.copySeries(unshifted.get(0)));
         shifted.add(DeepCopyUtils.copySeries(unshifted.get(1)));
 
-        shiftingData();
+        compareChart.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);
         compareChart.setData(shifted);
     }
 
