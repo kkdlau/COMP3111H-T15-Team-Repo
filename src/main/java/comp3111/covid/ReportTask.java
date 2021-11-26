@@ -159,13 +159,10 @@ class ReportTask {
 	 * Generate Data for Chart 2 in Report C
 	 * @param iDataset
 	 */
-	public static ObservableList generateChartC2(String iDataset) {
+	public static ObservableList generateChartC2(String iDataset, LocalDate lastDate) {
 		// human_development_index 
 		// continent - to know which series to add into - consider enum
 		// people_fully_vaccinated_per_hundred - use the last date in iDataset 
-		List<LocalDate> period = DataAnalysis.getValidPeriod(iDataset);
-		LocalDate lastDate = period.get(1);
-		
 		String[] continents = {"Africa", "Asia", "Europe", "North America", "South America", "Oceania"};
 		
 		List<XYChart.Series> data = new ArrayList<>();
@@ -223,42 +220,49 @@ class ReportTask {
 		LocalDate endDate = LocalDate.parse(iPeriod.get(1), inputFormatter);
 		ObservableList<XYChart.Series<String, Float>> allData = 
 				FXCollections.<XYChart.Series<String, Float>>observableArrayList();
+
 		XYChart.Series<String, Float> vacData = new XYChart.Series();
 		XYChart.Series<String, Float> icuData = new XYChart.Series();
 		XYChart.Series<String, Float> hospData = new XYChart.Series();
-		System.out.println(iISO);
+		
 		float vac_rate = 0.0f;
 		float hosp = 0.0f;
 		float icu = 0.0f;
-		boolean found = true;
+		boolean found = false;
+		//System.out.println("TARGET " + iISO);
 		for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {
-			String temp = rec.get("iso_code");
-			if (!temp.equals(iISO)) {
-				if (found) break;
-				else continue;
-			}
-			String s1 = rec.get("people_fully_vaccinated_per_hundred");
-			if (!s1.isEmpty())
-				vac_rate = Float.parseFloat(s1);
-			LocalDate readDate = LocalDate.parse(rec.get("date"), datasetFormatter);
-			String s2 = rec.get("icu_patients_per_million");
-			String s3 = rec.get("hosp_patients_per_million");
-			if (!readDate.isBefore(startDate) && !readDate.isAfter(endDate)) {
-				System.out.println(readDate.toString());
-				if (!s2.isEmpty()) icu = Float.parseFloat(s2);
-				if (!s3.isEmpty()) hosp = Float.parseFloat(s3);
+			if (rec.get("iso_code").equals(iISO)) {
+				//System.out.println("Found ISO");
+				LocalDate readDate = LocalDate.parse(rec.get("date"), datasetFormatter);
+				
+				String s1 = rec.get("people_fully_vaccinated_per_hundred");
+				if (!s1.isEmpty())
+					vac_rate = Float.parseFloat(s1); // cumulative data 
+				if (readDate.isBefore(startDate) && readDate.isAfter(endDate)) 
+					continue;
+				String s2 = rec.get("icu_patients_per_million");
+				String s3 = rec.get("hosp_patients_per_million");
+				System.out.println("Get data " + s2 + s3);
+				if (s2.isEmpty() || s3.isEmpty()) 
+					continue;
+				found = true;
+				icu = Float.parseFloat(s2) / 10;
+				hosp = Float.parseFloat(s3) / 10;
 				vacData.getData().add(new XYChart.Data(readDate.toString(), vac_rate));
 				icuData.getData().add(new XYChart.Data(readDate.toString(), icu));
 				hospData.getData().add(new XYChart.Data(readDate.toString(), hosp));
+				System.out.println("Found icu and hosp data");
 			}
 		}
-		
-		vacData.setName("Rate of vaccination");
-		icuData.setName("# of ICU patients per million");
-		hospData.setName("# of hospital patients per million");
-		allData.addAll(vacData, icuData, hospData);
-		System.out.println("end of fcn");
-		return allData;
-		
+	
+		if (found == true) {
+			vacData.setName("Rate of vaccination");
+			icuData.setName("# of ICU patients per 100,000");
+			hospData.setName("# of hospital patients per 100,000");
+			allData.addAll(vacData, icuData, hospData);
+			System.out.println("end of fcn");
+			return allData;
+		}
+		else return null;		
 	}
 }	

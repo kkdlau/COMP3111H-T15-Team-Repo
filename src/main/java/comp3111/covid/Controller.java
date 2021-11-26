@@ -6,6 +6,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.text.Text;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
@@ -98,14 +99,15 @@ public class Controller {
     @FXML
     private ScrollPane reportC;
     @FXML
-    private Button buttonReportC1, buttonReportC3;
+    private Button buttonReportC1, buttonReportC2, buttonReportC3;
     @FXML
     private LineChart chartReportC1, chartReportC3;
     @FXML
     private ScatterChart chartReportC2;
     @FXML
     private TableView tableReportC1;
-
+    @FXML 
+    private Text chartReportC1Title, chartReportC2Title, chartReportC3Title;
     @FXML
     private HBox rootUI;
     @FXML
@@ -173,6 +175,8 @@ public class Controller {
         
         buttonReportC1.setOnAction((e) -> {
         	this.generateChartC1(dataInstance);
+        });
+        buttonReportC2.setOnAction((e) -> {
         	this.generateChartC2(dataInstance);
         });
         buttonReportC3.setOnAction((e) -> {
@@ -394,13 +398,22 @@ public class Controller {
     	q3.setCellValueFactory(new MapValueFactory<>("q3"));
     	q4.setCellValueFactory(new MapValueFactory<>("q4"));
     	tableReportC1.getItems().addAll(tableData);
+    	chartReportC1Title.setVisible(true);
     }
     void generateChartC2(final UIDataModel data) {
     	// no need to check input, just use the dataset 
     	chartReportC2.getData().clear();
-    	ObservableList scatterData = ReportTask.generateChartC2(data.dataPath);
+    	List<LocalDate> period = DataAnalysis.getValidPeriod(data.dataPath);
+    	LocalDate lastDate = period.get(1);
+    	ObservableList scatterData = ReportTask.generateChartC2(data.dataPath, lastDate);
     	chartReportC2.setData(scatterData);
     	System.out.println("Got some data");
+    	String title = "Figure 2. Scatter plot of vaccination rates against HDI as of "
+    			+ lastDate.toString() + " labelled by continents. While not all countries "
+    			+ "with high HDI have high vaccination rates, most countries with "
+    			+ "low HDI have minimal vaccination rates.";
+    	chartReportC2Title.setText(title);
+    	chartReportC2Title.setVisible(true);
     }
     void generateChartC3(final UIDataModel data) {
     	chartReportC3.getData().clear();
@@ -447,6 +460,7 @@ public class Controller {
         	error.show();
         	return;
         }
+        chartReportC3Title.setVisible(true);
         chartReportC3.setData(allData);
     }
 }
