@@ -147,7 +147,8 @@
                               </ScatterChart>
                               <Label fx:id="taskB2correlation" layoutX="36.0" layoutY="1050.0" />
                               <Label fx:id="ResultB2" layoutX="22.0" layoutY="1100.0" prefWidth="450.0" text="Conclusion" wrapText="true" />
-                              <Slider fx:id="SliderReportB3" layoutX="34.0" layoutY="1200.0" majorTickUnit="1.0" max="14.0" min="1.0" minorTickCount="0" prefHeight="37.0" prefWidth="429.0" showTickLabels="true" snapToTicks="true" value="7.0" />
+                              <Label fx:id="LabelSliderReportB3" layoutX="34.0" layoutY="1175.0" text="14-days death cases are observed after vaccination" />
+                              <Slider fx:id="SliderReportB3" layoutX="34.0" layoutY="1200.0" majorTickUnit="7.0" max="70.0" min="14.0" minorTickCount="0" prefHeight="37.0" prefWidth="429.0" showTickLabels="true" snapToTicks="true" value="14.0" />
                               <ScatterChart fx:id="chartReportB3" animated="false" layoutX="38.0" layoutY="1250.0" legendSide="RIGHT" prefHeight="353.0" prefWidth="439.0">
                                  <xAxis>
                                     <NumberAxis label="new vaccinations per million" side="BOTTOM" />

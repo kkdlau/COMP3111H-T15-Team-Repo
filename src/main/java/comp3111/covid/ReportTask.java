@@ -54,8 +54,9 @@ class ReportTask {
 		}
 		else if(y_data_cumulation>1){
 			float[] sum_of_y_data = new float[y_data_cumulation];
-			float[] count_of_y_data = new float[y_data_cumulation];
+			Arrays.fill(sum_of_y_data, 0);
 			float[] value_of_x_data = new float[y_data_cumulation];
+			Arrays.fill(value_of_x_data, 0);
 			LocalDate startDate = null;
 			LocalDate currentDate = null;
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "M/d/uuuu" ) ;
@@ -70,10 +71,9 @@ class ReportTask {
 					if(dayDiff>=y_data_cumulation) {
 						int index = dayDiff%y_data_cumulation;
 						float x_data_float = value_of_x_data[index];
-						float y_data_float = sum_of_y_data[index]/count_of_y_data[index];
+						float y_data_float = sum_of_y_data[index];
 						value_of_x_data[index]=0;
 						sum_of_y_data[index]=0;
-						count_of_y_data[index]=0;
 						LocalDate dateBefore;
 						LocalDate dateAfter;
 						if(x_data_float > 0 && x_data_float > 0) {
@@ -89,8 +89,8 @@ class ReportTask {
 					
 					if(!rec.get(y_axis).isEmpty()) {
 						for(int i=0;i<Math.min(dayDiff,y_data_cumulation);i++) {
-							sum_of_y_data[i]+=Float.parseFloat(rec.get(y_axis));
-							count_of_y_data[i]++;
+							if(sum_of_y_data[i]==0) {sum_of_y_data[i]+=Float.parseFloat(rec.get(y_axis));}
+							else {sum_of_y_data[i]=(float) (sum_of_y_data[i]*0.4+Float.parseFloat(rec.get(y_axis))*0.6);}
 						}
 					}
 					if(!rec.get(x_axis).isEmpty()) {

@@ -100,7 +100,7 @@ public class Controller {
     @FXML
     private Button buttonReportB1;
     @FXML
-    private Label taskB1correlation,taskB2correlation,taskB3correlation;
+    private Label taskB1correlation,taskB2correlation,taskB3correlation, LabelSliderReportB3;
     @FXML
     private Label ResultB1,ResultB2,ResultB3;
     @FXML
@@ -188,6 +188,11 @@ public class Controller {
         buttonReportB1.setOnAction((e) -> {
         	this.generateChartB1(dataInstance);
         	this.generateChartB2(dataInstance);
+        	this.generateChartB3(dataInstance);
+        });
+        
+        SliderReportB3.setOnMouseReleased((e) -> {
+        	LabelSliderReportB3.setText((int) SliderReportB3.getValue() + "-days death cases are observed after vaccination ");
         	this.generateChartB3(dataInstance);
         });
         
