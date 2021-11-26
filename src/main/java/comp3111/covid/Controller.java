@@ -252,7 +252,9 @@ public class Controller {
         else
             return InterestedData.RateOfVaccination;
     }
-
+    /**
+     * @param data User input for all controls
+     */
     void generateTable(final UIDataModel data) {
         System.out.println(dataInstance.focusedData);
         String col1Title = "", col2Title = "";
@@ -291,11 +293,6 @@ public class Controller {
             error.show();
             return;
         }
-        // for debugging purpose
-//        System.out.println(dataInstance.dataPath);
-//        System.out.println(Arrays.toString(ISOStrings));
-//        System.out.println(validDate[1]);
-
         ObservableList tableData = TableChartTask.generateTable(dataInstance.dataPath, Arrays.asList(ISOStrings), 
         															validDate[1], getFocusedData());
         country.setCellValueFactory(new MapValueFactory<>("country"));
@@ -305,6 +302,9 @@ public class Controller {
         dataTable.getItems().addAll(tableData);
     }
 
+    /**
+     * @param data User input for all controls
+     */
     void generateChart(final UIDataModel data) {
         chart.getData().clear();
 
@@ -340,7 +340,9 @@ public class Controller {
         ObservableList<XYChart.Series<String, Float>> allData = TableChartTask.generateChart(iDataset, Arrays.asList(ISOStrings), checkPeriodInput, getFocusedData());
         chart.setData(allData);
     }
-
+    /**
+     * @param isTask1 Check if user chooses Task 1
+     */
     void showTaskUI(Boolean isTask1) {
         if (isTask1) {
             dataRangeTile.setText("Date");
@@ -360,7 +362,9 @@ public class Controller {
             stack.getChildren().remove(reportC);
         }
     }
-    
+    /**
+     * @param type Data user is interested in
+     */
     void showReportUI(InterestedData type) { // switch the UI of StackPane
     	switch(type) {
     	case RateOfVaccination:
@@ -374,9 +378,9 @@ public class Controller {
             stack.getChildren().add(reportC);
     	}
     }
+    
     /**
-     * UI output - Chart for the average cumulative number of vaccinations for countries in different GDP quartiles
-     * @param data
+     * @param data User input for all controls
      */
     void generateChartC1(final UIDataModel data) {
     	// no need to check input, just use the dataset
@@ -398,6 +402,10 @@ public class Controller {
     	tableReportC1.getItems().addAll(tableData);
     	chartReportC1Title.setVisible(true);
     }
+    
+    /**
+     * @param data User input for all controls
+     */
     void generateChartC2(final UIDataModel data) {
     	// no need to check input, just use the dataset 
     	chartReportC2.getData().clear();
@@ -413,6 +421,10 @@ public class Controller {
     	chartReportC2Title.setText(title);
     	chartReportC2Title.setVisible(true);
     }
+    
+    /**
+     * @param data User input for all controls
+     */
     void generateChartC3(final UIDataModel data) {
     	chartReportC3.getData().clear();
 

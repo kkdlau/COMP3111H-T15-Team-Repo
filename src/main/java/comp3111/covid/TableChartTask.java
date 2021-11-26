@@ -8,14 +8,21 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.csv.*;
 import edu.duke.*;
-
+/**
+ * Class to generate data for Task 1 and 2
+ * @author Magdalene
+ *
+ */
 class TableChartTask {
 	static DateTimeFormatter datasetFormatter = DateTimeFormatter.ofPattern( "M/d/uuuu" ) ;
 	static DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern( "uuuu-M-d" );
 	
-	/** Method 1: Generate Data for Table in Task 1
-	 * Input: List<String> Country, String iDate
-	 * Output: Something that can be put into Table View 
+	/**
+	 * @param iDataset Filename of dataset 
+	 * @param iISOStrings Target countries 
+	 * @param iStrDate Target date 
+	 * @param focusedData Target data of interest
+	 * @return ObservableList to populate Table
 	 */
 	public static ObservableList generateTable(String iDataset, List<String> iISOStrings, String iStrDate, InterestedData focusedData) {
 		String col1target = "", col2target = "";
@@ -77,9 +84,12 @@ class TableChartTask {
 		return data;
 	}
 	
-	/** Method 2: Generate Data for Chart in Task 2
-	 * Input: List<String> iLocations, List<String> iPeriod, String iDataset
-	 * Output: people_fully_vaccinated_per_hundred
+	/**
+	 * @param iDataset Filename of dataset 
+	 * @param iISOStrings Target countries 
+	 * @param iPeriod Target date range 
+	 * @param focusedData Target data of interest
+	 * @return ObservableList to populate LineChart
 	 */
 	public static ObservableList generateChart(String iDataset, List<String> iISOStrings, List<String> iPeriod, InterestedData focusedData) {
 		String dataTarget = "";

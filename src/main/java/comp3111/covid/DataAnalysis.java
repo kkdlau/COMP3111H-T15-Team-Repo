@@ -14,7 +14,10 @@ import edu.duke.*;
  * 
  */
 public class DataAnalysis {
- 
+	/**
+	 * @param dataset Filename of dataset 
+	 * @return CSVParser
+	 */
 	public static CSVParser getFileParser(String dataset) {
 			try {
 				FileResource fr = new FileResource("dataset/" + dataset);
@@ -24,7 +27,7 @@ public class DataAnalysis {
 				return null;
 			}
 		}
-
+	
 	public static String getConfirmedCases(String dataset, String iso_code) {
 		String oReport = "";	
 		long confirmedCases = 0;
@@ -129,7 +132,11 @@ public class DataAnalysis {
 		return date;
 	}
 	
-	// Modified from getValidDate - return earliest and latest date instead of input date 
+	/**
+	 * 
+	 * @param dataset Filename of dataset
+	 * @return Earliest and latest date in dataset
+	 */
 	public static List<LocalDate> getValidPeriod(String dataset) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/uuuu");
 		LocalDate earliest = null, latest = null;
@@ -145,7 +152,11 @@ public class DataAnalysis {
 		validPeriod.add(latest);
 		return validPeriod;
 	}
-	
+	/**
+	 * 
+	 * @param dataset Filename for dataset 
+	 * @return Map for location and ISO codes
+	 */
 	public static Map<String, String> getAllLocationIso(String dataset) {
 		try {
 			LinkedHashSet<String> uniqueLocations = new LinkedHashSet();
@@ -175,7 +186,12 @@ public class DataAnalysis {
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @param iDataset Filename of dataset
+	 * @param variable Target variable to get the quartiles 
+	 * @return 4 quartile values 
+	 */
 	public static Float[] getQuartiles(String iDataset, String variable) {
 		// assume that one country only has ONE value for this variable 
 		// provided that datasets are similar to given one, suitable for:

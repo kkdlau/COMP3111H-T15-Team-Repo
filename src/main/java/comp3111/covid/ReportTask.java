@@ -9,16 +9,20 @@ import java.time.format.DateTimeFormatter;
 import org.apache.commons.csv.*;
 import edu.duke.*;
 
+/**
+ * A class to generate data for Report C
+ * @author Magdalene
+ */
 class ReportTask {
+
 	static DateTimeFormatter datasetFormatter = DateTimeFormatter.ofPattern( "M/d/uuuu" ) ;
 	static DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern( "uuuu-M-d" );
 	static String[] quartiles = {"Quartile 1", "Quartile 2", "Quartile 3", "Quartile 4"};
 	public static Map<String, Set<String>> locByGDP = new HashMap<>();
 	
-	/** TODO: refactor code - such bad writing here
-	 *  Generate Data for Chart 1 in Report C
-	 * Input: String iDataset
-	 * Output: ObservableList chartData
+	/**
+	 * @param iDataset Filename of dataset
+	 * @return ObservableList Data for LineChart
 	 */
 	public static ObservableList generateChartC1(String iDataset) {
 		Float[] gdpQuartile = DataAnalysis.getQuartiles(iDataset, "gdp_per_capita");
@@ -85,8 +89,7 @@ class ReportTask {
 	}
 	
 	/** 
-	 * Generate Data for Table 1 in Report C
-	 * @return ObservableList
+	 * @return ObservableList Data to populate TableView
 	 */
 	public static ObservableList generateTableC1() {
 		try {
@@ -119,8 +122,9 @@ class ReportTask {
 	}
 	
 	/**
-	 * Generate Data for Chart 2 in Report C
-	 * @param iDataset
+	 * @param iDataset Filename of dataset
+	 * @param lastDate Last date with data in dataset
+	 * @return ObservableList Data for ScatterChart
 	 */
 	public static ObservableList generateChartC2(String iDataset, LocalDate lastDate) {
 		// human_development_index 
@@ -162,8 +166,6 @@ class ReportTask {
 
 			}
 		}
-		// debugging
-		System.out.println("Gave data to input");
 		ObservableList<XYChart.Series> allData = FXCollections.<XYChart.Series>observableArrayList();
 		for (int i = 0; i < continents.length; ++i) {
 			allData.add(data.get(i));
@@ -172,11 +174,10 @@ class ReportTask {
 	}
 	
 	/**
-	 * Generate Data for Chart 3 in Report C
-	 * @param iDataset
-	 * @param iISO
-	 * @param iPeriod
-	 * @return ObservableList
+	 * @param iDataset Filename of dataset 
+	 * @param iISO ISO chosen by user
+	 * @param iPeriod Date range chosen by user 
+	 * @return ObservableList Data to populate LineChart
 	 */
 	public static ObservableList generateChartC3(String iDataset, String iISO, List<String> iPeriod) {
 		LocalDate startDate = LocalDate.parse(iPeriod.get(0), inputFormatter);
