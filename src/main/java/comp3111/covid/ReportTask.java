@@ -116,7 +116,7 @@ class ReportTask {
     	if(correlation>0.6) {message += "a strongly positive";}
     	else if(correlation>0.2) {message += "a slightly positive";}
     	else if(correlation>-0.2) {message += "no";}
-    	else if(correlation>-0.2) {message += "a slightly negative";}
+    	else if(correlation>-0.6) {message += "a slightly negative";}
     	else  {message += "a strongly negative";}
     	message += " relationship between "+x_data+" and "+y_data+".";
     	return message;

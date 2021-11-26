@@ -58,6 +58,7 @@
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
+                              <Button fx:id="buttonReportB1" layoutX="194.0" layoutY="198.0" mnemonicParsing="false" text="Generate" />
                            </children>
                         </AnchorPane>
                     </content>
@@ -100,7 +101,7 @@
       </VBox>
       <VBox fx:id="rightUI" prefHeight="687.0" prefWidth="507.0">
          <children>
-            <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="493.0" text="title" textAlignment="CENTER">
+            <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="493.0" textAlignment="CENTER">
 
                <font>
                   <Font size="18.0" />
@@ -127,7 +128,6 @@
                                  </font>
                               </Label>
                               <Text layoutX="14.0" layoutY="54.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To reduce the influence of covid-19, vaccination and border shutdown are adopted in each country. However, the efficiency and safety of vaccines are doubted that may not reduce the risk of infection and may increase the risk of Myocarditis. Besides, a border shutdown may cause an economic depression. Thus, this report is going to analyze the correlation between the death rate and vaccination rate to determine the efficiency of vaccines and the death rate and confirmed rate to determine the cost of border shutdown." textAlignment="JUSTIFY" wrappingWidth="466.9368591308594" />
-                              <Button fx:id="buttonReportB1" layoutX="371.0" layoutY="169.0" mnemonicParsing="false" text="Generate" />
                               <Separator layoutY="200.0" prefHeight="6.0" prefWidth="493.0" />
                               <ScatterChart fx:id="chartReportB1" animated="false" layoutX="28.0" layoutY="200.0" legendSide="RIGHT" prefHeight="353.0" prefWidth="439.0">
                                  <xAxis>
