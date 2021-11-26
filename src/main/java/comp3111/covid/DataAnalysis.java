@@ -14,7 +14,10 @@ import edu.duke.*;
  * 
  */
 public class DataAnalysis {
- 
+	/**
+	 * @param dataset Filename of dataset 
+	 * @return CSVParser
+	 */
 	public static CSVParser getFileParser(String dataset) {
 			try {
 				FileResource fr = new FileResource("dataset/" + dataset);
@@ -25,7 +28,6 @@ public class DataAnalysis {
 			}
 		}
 	
-
 	public static String getConfirmedCases(String dataset, String iso_code) {
 		String oReport = "";	
 		long confirmedCases = 0;
@@ -129,7 +131,12 @@ public class DataAnalysis {
 		if(date.compareTo(earliest)<0) {return earliest;}
 		return date;
 	}
-	// Modified from getValidDate - return earliest and latest date instead of input date 
+	
+	/**
+	 * 
+	 * @param dataset Filename of dataset
+	 * @return Earliest and latest date in dataset
+	 */
 	public static List<LocalDate> getValidPeriod(String dataset) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/uuuu");
 		LocalDate earliest = null, latest = null;
@@ -145,6 +152,11 @@ public class DataAnalysis {
 		validPeriod.add(latest);
 		return validPeriod;
 	}
+	/**
+	 * 
+	 * @param dataset Filename for dataset 
+	 * @return Map for location and ISO codes
+	 */
 	public static Map<String, String> getAllLocationIso(String dataset) {
 		try {
 			LinkedHashSet<String> uniqueLocations = new LinkedHashSet();
@@ -172,5 +184,58 @@ public class DataAnalysis {
 		} catch (Exception e) {
 			return new HashMap<>();
 		}
+	}
+	
+	/**
+	 * 
+	 * @param iDataset Filename of dataset
+	 * @param variable Target variable to get the quartiles 
+	 * @return 4 quartile values 
+	 */
+	public static Float[] getQuartiles(String iDataset, String variable) {
+		// assume that one country only has ONE value for this variable 
+		// provided that datasets are similar to given one, suitable for:
+		// population, median_age, aged_65_older, aged_70_older, gdp_per_capita, extreme_poverty
+		// cardiovasc_death_rate, diabetes, female_smokers, male_smokers, 
+		// hospital_beds_per_thousand, life_expectancy, human_development_index, excess_mortality,
+		Set<Float> set = new HashSet<Float>();
+		String prevISO = "";
+		String ISO = "";
+		float GDP = 0.0f;
+		String s1 = "";
+		for (CSVRecord rec : getFileParser(iDataset)) {
+			ISO = rec.get("iso_code");
+			if (ISO.equals(prevISO)) continue; 
+			prevISO = ISO;
+			s1 = rec.get(variable);
+			if (!s1.isEmpty()) {
+				GDP = Float.parseFloat(s1);
+				set.add(GDP);
+			}
+		}
+		try {
+			Float[] list = new Float[set.size()];
+			set.toArray(list);
+			System.out.println("BP1");
+			Arrays.sort(list);
+			System.out.println("BP2");
+			Float[] quartile = new Float[4];
+			for (int i = 1; i <= 4; ++i) {
+				int n = (int) Math.round(list.length * i / 4);
+				quartile[i - 1] = list[n - 1];
+			}
+			System.out.println(quartile[0]);
+			System.out.println(quartile[1]);
+			System.out.println(quartile[2]);
+			System.out.println(quartile[3]);
+			return quartile;
+		} 
+		catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+		
+		
+		
 	}
 }
