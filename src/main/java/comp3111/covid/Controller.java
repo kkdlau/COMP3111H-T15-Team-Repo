@@ -387,16 +387,14 @@ public class Controller {
     	ObservableList<XYChart.Series<String, Float>> chartData = ReportTask.generateChartC1(iDataset);
     	chartReportC1.setData(chartData);
     	// generate table of countries in different quartiles 
-    	TableColumn<Map, String> q1 = new TableColumn("Quartile 1");
-    	TableColumn<Map, String> q2 = new TableColumn("Quartile 2");
-    	TableColumn<Map, String> q3 = new TableColumn("Quartile 3");
-    	TableColumn<Map, String> q4 = new TableColumn("Quartile 4");
-    	tableReportC1.getColumns().addAll(q1, q2, q3, q4);
+    	String[] quartiles = {"Quartile 1", "Quartile 2", "Quartile 3", "Quartile 4"};
+    	
+    	for (int i = 0; i < 4; ++i) {
+    		TableColumn<Map, String> q = new TableColumn(quartiles[i]);
+    		q.setCellValueFactory(new MapValueFactory<>(quartiles[i]));
+    		tableReportC1.getColumns().add(q);
+    	}
     	ObservableList tableData = ReportTask.generateTableC1();
-    	q1.setCellValueFactory(new MapValueFactory<>("q1"));
-    	q2.setCellValueFactory(new MapValueFactory<>("q2"));
-    	q3.setCellValueFactory(new MapValueFactory<>("q3"));
-    	q4.setCellValueFactory(new MapValueFactory<>("q4"));
     	tableReportC1.getItems().addAll(tableData);
     	chartReportC1Title.setVisible(true);
     }
