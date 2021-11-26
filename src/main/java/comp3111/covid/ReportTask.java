@@ -4,10 +4,12 @@ import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.csv.*;
 import edu.duke.*;
+import java.time.temporal.ChronoUnit;
 
 /**
  * A class to generate data for Report C
@@ -24,6 +26,171 @@ class ReportTask {
 	 * @param iDataset Filename of dataset
 	 * @return ObservableList Data for LineChart
 	 */
+	
+	/** 
+	 * Generate a data series for scatter plot in report B
+	 * @return Series<Float,Float>
+	 */
+	public static Series<Float, Float> generateChartB(String iDataset, String iISO, String x_axis, String y_axis, double[] result, int y_data_cumulation) {
+		
+		Series<Float, Float> data = new Series<Float, Float>();
+		double sum_x = 0, sum_y = 0, sum_xy = 0, sum_x2 = 0, sum_y2 =0;
+		int length=0;
+
+		
+		if(y_data_cumulation==1) {
+			for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {
+				if(rec.get("iso_code").equals(iISO)) {
+					if(!rec.get(x_axis).isEmpty() && !rec.get(y_axis).isEmpty()) {
+						float x_data_float = Float.parseFloat(rec.get(x_axis));
+						float y_data_float = Float.parseFloat(rec.get(y_axis));
+						if(x_data_float > 0 && y_data_float > 0) {
+							data.getData().addAll(new XYChart.Data(x_data_float,y_data_float));
+							sum_x  += x_data_float;
+							sum_y  += y_data_float;
+							sum_xy += x_data_float*y_data_float;
+							sum_x2 += x_data_float*x_data_float;
+							sum_y2 += y_data_float*y_data_float;
+							length++;
+						}
+					}
+				}
+			}
+		}
+		else if(y_data_cumulation>1){
+			float[] sum_of_y_data = new float[y_data_cumulation];
+			Arrays.fill(sum_of_y_data, 0);
+			float[] value_of_x_data = new float[y_data_cumulation];
+			Arrays.fill(value_of_x_data, 0);
+			LocalDate startDate = null;
+			LocalDate currentDate = null;
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "M/d/uuuu" ) ;
+			
+			for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {
+				if(rec.get("iso_code").equals(iISO)) {
+					
+					if(startDate==null) {startDate = LocalDate.parse(rec.get("date"),formatter);}
+					currentDate = LocalDate.parse(rec.get("date"),formatter);
+					int dayDiff = (int) ChronoUnit.DAYS.between(startDate, currentDate);
+					
+					if(dayDiff>=y_data_cumulation) {
+						int index = dayDiff%y_data_cumulation;
+						float x_data_float = value_of_x_data[index];
+						float y_data_float = sum_of_y_data[index];
+						value_of_x_data[index]=0;
+						sum_of_y_data[index]=0;
+						LocalDate dateBefore;
+						LocalDate dateAfter;
+						if(x_data_float > 0 && y_data_float > 0) {
+							data.getData().addAll(new XYChart.Data(x_data_float,y_data_float));
+							sum_x  += x_data_float;
+							sum_y  += y_data_float;
+							sum_xy += x_data_float*y_data_float;
+							sum_x2 += x_data_float*x_data_float;
+							sum_y2 += y_data_float*y_data_float;
+							length++;
+						}
+					}
+					
+					if(!rec.get(y_axis).isEmpty()) {
+						for(int i=0;i<Math.min(dayDiff,y_data_cumulation);i++) {
+							if(sum_of_y_data[i]==0) {sum_of_y_data[i]+=Float.parseFloat(rec.get(y_axis));}
+							else {sum_of_y_data[i]=(float) (sum_of_y_data[i]*0.4+Float.parseFloat(rec.get(y_axis))*0.6);}
+						}
+					}
+					if(!rec.get(x_axis).isEmpty()) {
+						value_of_x_data[dayDiff%y_data_cumulation]=Float.parseFloat(rec.get(x_axis));
+					}
+				}
+			}
+		}
+		
+		double correlationCoef = (length*sum_xy - sum_x*sum_y) / Math.sqrt((double)(length*sum_x2 - sum_x*sum_x)*(length*sum_y2 - sum_y*sum_y));
+		double slope = (length*sum_xy-sum_x*sum_y)/(length*sum_x2-sum_x*sum_x);
+		result[0]=correlationCoef;
+		result[1]=length;
+		result[2]=slope;
+		return data;
+	}
+	
+	/** 
+	 * Generate a string to describe the correlation
+	 * @return String
+	 */
+	private static String correlationAnalysisB(double[] result,String x_data, String y_data) {
+    	double correlation = (double) Math.round(result[0]*100)/100;
+    	int length = (int) result[1];
+    	if(length<=2) {return "There are not sufficient data to make a conclusion.";}
+    	String message = "The correlation between "+x_data+" and "+y_data+" is " + correlation + " that implies ";
+    	if(correlation>0.6) {message += "a strongly positive";}
+    	else if(correlation>0.2) {message += "a slightly positive";}
+    	else if(correlation>-0.2) {message += "no";}
+    	else if(correlation>-0.6) {message += "a slightly negative";}
+    	else  {message += "a strongly negative";}
+    	message += " relationship between "+x_data+" and "+y_data+".";
+    	return message;
+	}
+	
+	/** 
+	 * Generate a conclusion of chart 1 in report B
+	 * @return String
+	 */
+    public static String correlationAnalysisB1(double[] result) {
+    	double correlation = (double) Math.round(result[0]*100)/100;
+    	String message = correlationAnalysisB(result,"death cases","confirmed cases");
+    	if(message.equals("There are not sufficient data to make a conclusion.")) {return message;}
+    	
+    	if(correlation>0.2) {
+    		message += " Government should implement bounder shutdown and social distancing policies to reduce the death cases.";
+    	}
+    	else {
+    		message += " Most of the death cases are not related to the infection of covid-19.";
+    		message += " Bounder shutdown and social distancing can not effectively reduce the deaths."	;
+    	}
+    	return message;
+    }
+	
+    /** 
+	 * Generate a conclusion of chart 2 in report B
+	 * @return String
+	 */
+    public static String correlationAnalysisB2(double[] result) {
+    	double correlation = (double) Math.round(result[0]*100)/100;
+    	String message = correlationAnalysisB(result,"death cases","vaccination rate");
+    	if(message.equals("There are not sufficient data to make a conclusion.")) {return message;}
+    	
+    	if(correlation>0.2) {
+    		message += " The positive correlation implies the public trust the efficiency of vaccine that can prevent death from covid-19.";
+    		message += " It implies the government can provide enough and reliable vaccines during the breakout.";
+    	}
+    	else if(correlation<-0.2){
+    		message += " The negative correlation implies the public did not decide to/ cannot be vaccinated when a new death case happens.";
+    		message += " It implies government did not have enough vaccines or had no reliable vaccine to use during the breakout.";
+    	}
+    	return message;
+    }
+	
+    /** 
+	 * Generate a conclusion of chart 3 in report B
+	 * @return ObservableList
+	 */
+    public static String correlationAnalysisB3(double[] result, int dayChecked) {
+    	double correlation = (double) Math.round(result[0]*100)/100;
+    	String message = correlationAnalysisB(result,"vaccination rate",dayChecked+"-days death cases");
+    	if(message.equals("There are not sufficient data to make a conclusion.")) {return message;}
+    	
+    	if(correlation>0.2) {
+    		message += " The positive relationship implies the vaccine is deadly that increases the number of death cases in "+dayChecked+"-days.";
+    	}
+    	else if(correlation>-0.2) {
+    		message += " That implies the vaccine cannot effectively prevent a death cases in "+dayChecked+"-days.";
+    	}
+    	else {
+    		message += " The negative relationship implies the vaccine can effectively prevent a death cases in "+dayChecked+"-days.";
+    	}
+    	return message;
+    }
+   
 	public static ObservableList generateChartC1(String iDataset) {
 		Float[] gdpQuartile = DataAnalysis.getQuartiles(iDataset, "gdp_per_capita");
 		
