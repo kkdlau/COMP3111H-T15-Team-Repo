@@ -186,6 +186,7 @@ public class Controller {
         showTaskUI(!dataInstance.acumulativeData);
         
         buttonReportB1.setOnAction((e) -> {
+        	errorCheck_oneCountry();
         	this.generateChartB1(dataInstance);
         	this.generateChartB2(dataInstance);
         	this.generateChartB3(dataInstance);
@@ -193,6 +194,7 @@ public class Controller {
         
         SliderReportB3.setOnMouseReleased((e) -> {
         	LabelSliderReportB3.setText((int) SliderReportB3.getValue() + "-days death cases are observed after vaccination ");
+        	errorCheck_oneCountry();
         	this.generateChartB3(dataInstance);
         });
         
@@ -417,7 +419,9 @@ public class Controller {
      * @param data
      */
 
-    boolean errorCheck_oneCountry(String[] ISOStrings) {
+    boolean errorCheck_oneCountry() {
+    	Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
+        String[] ISOStrings = Arrays.copyOf(ISO, ISO.length, String[].class);
         if (ISOStrings.length == 0) {
             Alert error = new Alert(AlertType.ERROR);
             error.setContentText("Please select one country");
@@ -441,8 +445,6 @@ public class Controller {
         double[] regression_result = new double[3];
         String x_data = "new_cases_per_million";
         String y_data = "new_deaths_per_million";
-    	
-        if(errorCheck_oneCountry(ISOStrings)) return;
         
     	Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result,1);
     	chartReportB1.getData().addAll(scatterData);
@@ -458,8 +460,6 @@ public class Controller {
         double[] regression_result = new double[3];
         String x_data = "new_deaths_per_million";
         String y_data = "new_vaccinations_smoothed_per_million";
-    	
-        if(errorCheck_oneCountry(ISOStrings)) return;
         
         Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result,1);
     	chartReportB2.getData().addAll(scatterData);
@@ -476,8 +476,6 @@ public class Controller {
         String x_data = "new_vaccinations_smoothed_per_million";
         String y_data = "new_deaths_per_million";
         int dayChecked = (int) SliderReportB3.getValue();
-    	
-        if(errorCheck_oneCountry(ISOStrings)) return;
         
         Series<Float, Float> scatterData = ReportTask.generateChartB(data.dataPath, ISOStrings[0],x_data,y_data,regression_result, dayChecked);
     	chartReportB3.getData().addAll(scatterData);

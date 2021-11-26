@@ -76,7 +76,7 @@ class ReportTask {
 						sum_of_y_data[index]=0;
 						LocalDate dateBefore;
 						LocalDate dateAfter;
-						if(x_data_float > 0 && x_data_float > 0) {
+						if(x_data_float > 0 && y_data_float > 0) {
 							data.getData().addAll(new XYChart.Data(x_data_float,y_data_float));
 							sum_x  += x_data_float;
 							sum_y  += y_data_float;

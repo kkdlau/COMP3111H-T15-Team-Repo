@@ -11,6 +11,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -127,6 +128,7 @@
                               </Label>
                               <Text layoutX="14.0" layoutY="54.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To reduce the influence of covid-19, vaccination and border shutdown are adopted in each country. However, the efficiency and safety of vaccines are doubted that may not reduce the risk of infection and may increase the risk of Myocarditis. Besides, a border shutdown may cause an economic depression. Thus, this report is going to analyze the correlation between the death rate and vaccination rate to determine the efficiency of vaccines and the death rate and confirmed rate to determine the cost of border shutdown." textAlignment="JUSTIFY" wrappingWidth="466.9368591308594" />
                               <Button fx:id="buttonReportB1" layoutX="371.0" layoutY="169.0" mnemonicParsing="false" text="Generate" />
+                              <Separator layoutY="200.0" prefHeight="6.0" prefWidth="493.0" />
                               <ScatterChart fx:id="chartReportB1" animated="false" layoutX="28.0" layoutY="200.0" legendSide="RIGHT" prefHeight="353.0" prefWidth="439.0">
                                  <xAxis>
                                     <NumberAxis label="new cofirmed case per million" side="BOTTOM" />
@@ -137,6 +139,7 @@
                               </ScatterChart>
                               <Label fx:id="taskB1correlation" layoutX="36.0" layoutY="550.0" />
                               <Label fx:id="ResultB1" layoutX="22.0" layoutY="600.0" prefWidth="450.0" text="Conclusion" wrapText="true" />
+                              <Separator layoutY="690.0" prefHeight="6.0" prefWidth="493.0" />
                               <ScatterChart fx:id="chartReportB2" animated="false" layoutX="28.0" layoutY="700.0" legendSide="RIGHT" prefHeight="353.0" prefWidth="439.0">
                                  <xAxis>
                                     <NumberAxis label="new deaths case per million" side="BOTTOM" />
@@ -147,6 +150,7 @@
                               </ScatterChart>
                               <Label fx:id="taskB2correlation" layoutX="36.0" layoutY="1050.0" />
                               <Label fx:id="ResultB2" layoutX="22.0" layoutY="1100.0" prefWidth="450.0" text="Conclusion" wrapText="true" />
+                              <Separator layoutY="1165.0" prefHeight="6.0" prefWidth="493.0" />
                               <Label fx:id="LabelSliderReportB3" layoutX="34.0" layoutY="1175.0" text="14-days death cases are observed after vaccination" />
                               <Slider fx:id="SliderReportB3" layoutX="34.0" layoutY="1200.0" majorTickUnit="7.0" max="70.0" min="14.0" minorTickCount="0" prefHeight="37.0" prefWidth="429.0" showTickLabels="true" snapToTicks="true" value="14.0" />
                               <ScatterChart fx:id="chartReportB3" animated="false" layoutX="38.0" layoutY="1250.0" legendSide="RIGHT" prefHeight="353.0" prefWidth="439.0">
