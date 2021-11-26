@@ -6,6 +6,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.text.Text;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
@@ -112,14 +113,15 @@ public class Controller {
     @FXML
     private ScrollPane reportC;
     @FXML
-    private Button buttonReportC1, buttonReportC3;
+    private Button buttonReportC1, buttonReportC2, buttonReportC3;
     @FXML
     private LineChart chartReportC1, chartReportC3;
     @FXML
     private ScatterChart chartReportC2;
     @FXML
     private TableView tableReportC1;
-
+    @FXML 
+    private Text chartReportC1Title, chartReportC2Title, chartReportC3Title;
     @FXML
     private HBox rootUI;
     @FXML
@@ -200,6 +202,8 @@ public class Controller {
         
         buttonReportC1.setOnAction((e) -> {
         	this.generateChartC1(dataInstance);
+        });
+        buttonReportC2.setOnAction((e) -> {
         	this.generateChartC2(dataInstance);
         });
         buttonReportC3.setOnAction((e) -> {
@@ -276,7 +280,9 @@ public class Controller {
         else
             return InterestedData.RateOfVaccination;
     }
-
+    /**
+     * @param data User input for all controls
+     */
     void generateTable(final UIDataModel data) {
         System.out.println(dataInstance.focusedData);
         String col1Title = "", col2Title = "";
@@ -315,11 +321,6 @@ public class Controller {
             error.show();
             return;
         }
-        // for debugging purpose
-//        System.out.println(dataInstance.dataPath);
-//        System.out.println(Arrays.toString(ISOStrings));
-//        System.out.println(validDate[1]);
-
         ObservableList tableData = TableChartTask.generateTable(dataInstance.dataPath, Arrays.asList(ISOStrings), 
         															validDate[1], getFocusedData());
         country.setCellValueFactory(new MapValueFactory<>("country"));
@@ -329,6 +330,9 @@ public class Controller {
         dataTable.getItems().addAll(tableData);
     }
 
+    /**
+     * @param data User input for all controls
+     */
     void generateChart(final UIDataModel data) {
         chart.getData().clear();
 
@@ -364,7 +368,9 @@ public class Controller {
         ObservableList<XYChart.Series<String, Float>> allData = TableChartTask.generateChart(iDataset, Arrays.asList(ISOStrings), checkPeriodInput, getFocusedData());
         chart.setData(allData);
     }
-
+    /**
+     * @param isTask1 Check if user chooses Task 1
+     */
     void showTaskUI(Boolean isTask1) {
         if (isTask1) {
             dataRangeTile.setText("Date");
@@ -382,7 +388,9 @@ public class Controller {
             stackShow(chart);
         }
     }
-    
+    /**
+     * @param type Data user is interested in
+     */
     void showReportUI(InterestedData type) { // switch the UI of StackPane
     	switch(type) {
     	case RateOfVaccination:
@@ -406,13 +414,16 @@ public class Controller {
     	}
     }
     
+
+    /**
+     * @param data User input for all controls
+     */
     void stackShow(Node e) {
         stack.getChildren().remove(chart);
     	stack.getChildren().remove(dataTable);
     	stack.getChildren().remove(reportC);
     	stack.getChildren().remove(reportB);
         stack.getChildren().add(e);
-    	
     }
     
     /**
@@ -503,25 +514,40 @@ public class Controller {
     	ObservableList<XYChart.Series<String, Float>> chartData = ReportTask.generateChartC1(iDataset);
     	chartReportC1.setData(chartData);
     	// generate table of countries in different quartiles 
-    	TableColumn<Map, String> q1 = new TableColumn("Quartile 1");
-    	TableColumn<Map, String> q2 = new TableColumn("Quartile 2");
-    	TableColumn<Map, String> q3 = new TableColumn("Quartile 3");
-    	TableColumn<Map, String> q4 = new TableColumn("Quartile 4");
-    	tableReportC1.getColumns().addAll(q1, q2, q3, q4);
+    	String[] quartiles = {"Quartile 1", "Quartile 2", "Quartile 3", "Quartile 4"};
+    	
+    	for (int i = 0; i < 4; ++i) {
+    		TableColumn<Map, String> q = new TableColumn(quartiles[i]);
+    		q.setCellValueFactory(new MapValueFactory<>(quartiles[i]));
+    		tableReportC1.getColumns().add(q);
+    	}
     	ObservableList tableData = ReportTask.generateTableC1();
-    	q1.setCellValueFactory(new MapValueFactory<>("q1"));
-    	q2.setCellValueFactory(new MapValueFactory<>("q2"));
-    	q3.setCellValueFactory(new MapValueFactory<>("q3"));
-    	q4.setCellValueFactory(new MapValueFactory<>("q4"));
     	tableReportC1.getItems().addAll(tableData);
+    	chartReportC1Title.setVisible(true);
     }
+    
+    /**
+     * @param data User input for all controls
+     */
     void generateChartC2(final UIDataModel data) {
     	// no need to check input, just use the dataset 
     	chartReportC2.getData().clear();
-    	ObservableList scatterData = ReportTask.generateChartC2(data.dataPath);
+    	List<LocalDate> period = DataAnalysis.getValidPeriod(data.dataPath);
+    	LocalDate lastDate = period.get(1);
+    	ObservableList scatterData = ReportTask.generateChartC2(data.dataPath, lastDate);
     	chartReportC2.setData(scatterData);
     	System.out.println("Got some data");
+    	String title = "Figure 2. Scatter plot of vaccination rates against HDI as of "
+    			+ lastDate.toString() + " labelled by continents. While not all countries "
+    			+ "with high HDI have high vaccination rates, most countries with "
+    			+ "low HDI have minimal vaccination rates.";
+    	chartReportC2Title.setText(title);
+    	chartReportC2Title.setVisible(true);
     }
+    
+    /**
+     * @param data User input for all controls
+     */
     void generateChartC3(final UIDataModel data) {
     	chartReportC3.getData().clear();
 
@@ -567,6 +593,7 @@ public class Controller {
         	error.show();
         	return;
         }
+        chartReportC3Title.setVisible(true);
         chartReportC3.setData(allData);
     }
 }
