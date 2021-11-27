@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.chart.CategoryAxis;
@@ -22,6 +23,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -53,7 +55,7 @@ class DeepCopyUtils {
     }
 }
 
-public class Controller {
+public class Controller implements Initializable {
 
     ToggleGroup ratioButtonGroups = new ToggleGroup();
     UIDataModel dataInstance = new UIDataModel();
@@ -158,11 +160,17 @@ public class Controller {
     @FXML
     private Label countryBShiftText;
     @FXML
-    private Label regressionReport;
+    Label regressionReport;
     @FXML
     private ScrollPane reportA;
     @FXML
     private Tab a3Tab;
+
+    private boolean init = false;
+
+    boolean isInit() {
+        return init;
+    }
     ChangeListener<Tab> onTabChanged = (ov, disSelected, selected) -> {
         rightUI.getChildren().clear();
         System.out.println(selected.getText());
@@ -241,6 +249,7 @@ public class Controller {
         tabTaskC3Initialize();
 
         tabGroup.getSelectionModel().select(0); // select task 1&2 tab by default
+        init = true;
     }
 
     void tabTaskB3Initialize() {
@@ -859,6 +868,11 @@ public class Controller {
         }
         chartReportC3Title.setVisible(true);
         chartReportC3.setData(allData);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initialize();
     }
 }
 
