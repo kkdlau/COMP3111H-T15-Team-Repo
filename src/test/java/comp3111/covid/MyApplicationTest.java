@@ -1,4 +1,5 @@
 package comp3111.covid;
+
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
@@ -36,7 +37,7 @@ public class MyApplicationTest extends ApplicationTest {
         controller = c;
 
         c.setStage(stage);
-        Scene scene =  new Scene(root);
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("COMP3111H - COVID Data Visualization");
     }
@@ -45,21 +46,24 @@ public class MyApplicationTest extends ApplicationTest {
     public void regressionReort() {
         LinearRegression tmp = new LinearRegression(new double[]{0.0, 1.0}, new double[]{0.0, 1.0});
 
-        WaitForAsyncUtils.waitForAsyncFx(1000, () -> {
+        WaitForAsyncUtils.waitFor(WaitForAsyncUtils.asyncFx(() -> {
             controller.generateRegressionReport(tmp, tmp, "C1", "C2");
-        });
+        }));
 
         Assertions.assertThat(controller.regressionReport.getText()).contains("C1");
         Assertions.assertThat(controller.regressionReport.getText()).contains("C2");
     }
 
-    @Test void generateChartC() {
-        WaitForAsyncUtils.waitForAsyncFx(1000, () -> {
+    @Test
+    public void generateChartC() {
+        WaitForAsyncUtils.waitFor(WaitForAsyncUtils.asyncFx(() -> {
             controller.generateChartC1(controller.dataInstance);
             controller.generateChartC2(controller.dataInstance);
             controller.generateChartC3(controller.dataInstance);
-        });
+        }));
 
-        
+
+        Assertions.assertThat(controller.chartReportC1Title.isVisible()).isEqualTo(true);
+        Assertions.assertThat(controller.chartReportC2Title.isVisible()).isEqualTo(true);
     }
 }

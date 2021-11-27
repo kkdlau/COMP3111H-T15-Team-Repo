@@ -130,7 +130,8 @@ public class Controller implements Initializable {
     @FXML
     private TableView tableReportC1;
     @FXML
-    private Text chartReportC1Title, chartReportC2Title, chartReportC3Title;
+    Text chartReportC1Title, chartReportC2Title, chartReportC3Title;
+
     @FXML
     private HBox rootUI;
     @FXML
