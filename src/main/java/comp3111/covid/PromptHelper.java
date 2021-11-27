@@ -3,8 +3,6 @@ package comp3111.covid;
 import javafx.scene.control.Alert;
 import javafx.stage.Window;
 
-import java.util.Objects;
-
 public class PromptHelper {
     private PromptHelper() {
 

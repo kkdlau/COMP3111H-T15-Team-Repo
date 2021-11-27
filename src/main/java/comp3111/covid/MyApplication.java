@@ -35,7 +35,7 @@ import javafx.scene.Scene;
 public class MyApplication extends Application {
 
     private static final String UI_FILE = "/ui.fxml";  //file in the folder of src/main/resources/
-	
+	public Controller controller;
 	/** 
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
 	 * 
@@ -46,7 +46,10 @@ public class MyApplication extends Application {
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource(UI_FILE));
    		HBox root = (HBox) loader.load();
+
    		Controller c = loader.getController();
+   		controller = c;
+
    		c.setStage(stage);
    		Scene scene =  new Scene(root);
    		stage.setScene(scene);
