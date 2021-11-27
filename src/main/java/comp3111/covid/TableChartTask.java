@@ -144,7 +144,7 @@ class TableChartTask {
                 } else if (found == 1) break;
             }
             temp = LocalDate.now();
-            while (readDate != null && !readDate.isAfter(endDate) && !readDate.isAfter(temp)) { // for dates behind period in dataset
+            while (readDate != null && !readDate.isAfter(endDate)) { // for dates behind period in dataset
                 if (!readDate.isBefore(startDate)) data.getData().add(new XYChart.Data(readDate.toString(), rate));
                 readDate = readDate.plusDays(1);
             }
