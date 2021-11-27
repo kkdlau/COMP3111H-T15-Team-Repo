@@ -5,10 +5,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CheckInput {
-	/** Method 1:
-	 * input: string of country names 
-	 * output: object[] - first is String - error messages for wrong inputs 
-	 * 					  second is String[] of valid iso codes 
+	/**
+	 * Checks if the given ISO within the dataset or not.
+	 *
+	 * @param iLocations ISO
+	 * @param iDataset Path to dataset
+	 *
+	 * @return String List that [0] = error message, and [1] = valid iso codes.
 	 */
 	public static List<String> checkValidLocations(String iLocations, String iDataset) {
 		

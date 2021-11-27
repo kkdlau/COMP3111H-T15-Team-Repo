@@ -227,6 +227,7 @@ public class DataAnalysis {
 		allData.add(countryB);
 
 		return allData;
+	}
 	
 	/**
 	 * 
