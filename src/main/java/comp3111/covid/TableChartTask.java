@@ -115,6 +115,7 @@ class TableChartTask {
 			LocalDate temp = null;
 			for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {
 				if (rec.get("iso_code").equals(iso)) {
+					if (rec.get("date").equals("")) continue;
 					readDate = LocalDate.parse(rec.get("date"), datasetFormatter);
 					if (found == 0) {
 						found = 1;

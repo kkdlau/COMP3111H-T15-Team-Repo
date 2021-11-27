@@ -3,6 +3,10 @@ package comp3111.covid;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.XYChart;
 import org.apache.commons.csv.*;
 import edu.duke.*;
 
@@ -184,6 +188,45 @@ public class DataAnalysis {
 		} catch (Exception e) {
 			return new HashMap<>();
 		}
+	}
+
+	/**
+	 * Search for the confirmed cases and confirmed deaths that match the given two countries.
+	 *
+	 * @param dataset dataset to be searched.
+	 * @param countryAISO ISO representation for the first country.
+	 * @param countryBISO ISO representation for the second country.
+	 *
+	 * @return A list that contains the confirmed cases and confirmed deaths.
+	 */
+	public static ObservableList casesAndDeathsData(String dataset, String countryAISO, String countryBISO) {
+		XYChart.Series<Float, Float> countryA = new XYChart.Series();
+		XYChart.Series<Float, Float> countryB = new XYChart.Series();
+
+		for (CSVRecord rec : getFileParser(dataset)) {
+			String iso = rec.get("iso_code");
+			if (iso.equals(countryAISO) || iso.equals(countryBISO)) {
+				String numCases = rec.get("total_cases_per_million");
+				String numDeaths = rec.get("total_deaths_per_million");
+				if (numCases.isEmpty() || numDeaths.isEmpty()) continue;
+
+				float cases = Float.valueOf(numCases);
+				float deaths = Float.valueOf(numDeaths);
+				if (iso.equals(countryAISO)) {
+					countryA.getData().add(new XYChart.Data<>(cases, deaths));
+				} else {
+					countryB.getData().add(new XYChart.Data<>(cases, deaths));
+				}
+			}
+		}
+
+		ObservableList<XYChart.Series<Float, Float>> allData =
+				FXCollections.observableArrayList();
+
+		allData.add(countryA);
+		allData.add(countryB);
+
+		return allData;
 	}
 	
 	/**

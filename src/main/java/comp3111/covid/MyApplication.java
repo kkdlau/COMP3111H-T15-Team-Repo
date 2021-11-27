@@ -46,6 +46,8 @@ public class MyApplication extends Application {
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource(UI_FILE));
    		HBox root = (HBox) loader.load();
+   		Controller c = loader.getController();
+   		c.setStage(stage);
    		Scene scene =  new Scene(root);
    		stage.setScene(scene);
       	stage.setTitle("COMP3111H - COVID Data Visualization");
