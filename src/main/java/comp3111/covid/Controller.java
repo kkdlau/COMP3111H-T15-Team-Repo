@@ -72,7 +72,7 @@ public class Controller implements Initializable {
     @FXML
     private Label countryInstruction;
     @FXML
-    private ListView<String> countryListView;
+    ListView<String> countryListView;
     @FXML
     private RadioButton dataCaseButton;
     @FXML
@@ -105,7 +105,7 @@ public class Controller implements Initializable {
     @FXML
     private Tab b3Tab;
     @FXML
-    private ScrollPane reportB;
+    ScrollPane reportB;
     @FXML
     private ScatterChart chartReportB1, chartReportB2, chartReportB3;
     @FXML
@@ -120,7 +120,7 @@ public class Controller implements Initializable {
     @FXML
     private Tab c3Tab;
     @FXML
-    private ScrollPane reportC;
+    ScrollPane reportC;
     @FXML
     private Button buttonReportC1, buttonReportC2, buttonReportC3;
     @FXML
@@ -137,7 +137,7 @@ public class Controller implements Initializable {
     @FXML
     private VBox rightUI;
     @FXML
-    private TabPane tabGroup;
+    TabPane tabGroup;
     @FXML
     private Label title;
     @FXML
@@ -145,7 +145,7 @@ public class Controller implements Initializable {
     @FXML
     private ListView<String> countryAListView;
     @FXML
-    private Slider countryASlider;
+    Slider countryASlider;
     @FXML
     private ListView<String> countryBListView;
     @FXML
@@ -163,7 +163,7 @@ public class Controller implements Initializable {
     @FXML
     Label regressionReport;
     @FXML
-    private ScrollPane reportA;
+    ScrollPane reportA;
     @FXML
     private Tab a3Tab;
 
@@ -340,7 +340,7 @@ public class Controller implements Initializable {
         caseDeathChart.getYAxis().setLabel("Confirmed Deaths (per M)");
     }
 
-    private void generateRegressionChart(UIDataModel data) throws Exception {
+    void generateRegressionChart(UIDataModel data) throws Exception {
         caseDeathChart.getData().clear();
 
         String iDataset = data.dataPath.get();
@@ -405,7 +405,7 @@ public class Controller implements Initializable {
      *
      * @param days the maximum days that a slider can represent.
      */
-    private void resetSliderRange(int days) {
+    void resetSliderRange(int days) {
         if (days < 0) return;
         countryASlider.setValue(0);
         countryBSlider.setValue(0);
@@ -698,7 +698,6 @@ public class Controller implements Initializable {
 
         stack.getChildren().add(e);
         e.setVisible(true);
-        System.out.println("add");
     }
 
     /**
