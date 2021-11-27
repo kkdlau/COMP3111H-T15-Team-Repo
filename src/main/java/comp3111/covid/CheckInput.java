@@ -86,6 +86,10 @@ public class CheckInput {
 		validationResult.add(errorMsg);
 		return validationResult;		
 	}
+
+	private CheckInput() {
+
+	}
 }
 
 

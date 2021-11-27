@@ -12,41 +12,34 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class UIDataModel {
-    private ObservableList<String> availableCountries = FXCollections.observableArrayList();
-
     /**
      * Selected data.
-     *
+     * <p>
      * It should be updated only if the user click the group of ratio button.
      */
     public InterestedData focusedData = InterestedData.ConfirmedCases;
-
     /**
      * Path where the dataset locates at.
      */
     public StringProperty dataPath;
-
     /**
      * If it is set to true, the calculation should be acumulative.
      */
     public BooleanProperty acumulativeData;
-
     /**
      * The range of date for searching data.
      */
     public LocalDate start = null, end = null;
-
-
     public Map<String, String> ISORepresentation = null;
+    private ObservableList<String> availableCountries = FXCollections.observableArrayList();
 
     public ObservableList<String> getAvailableCountries() {
-
         return availableCountries;
     }
 
     public Object[] getISOList(ObservableList<String> countries) {
         ArrayList<String> iso = new ArrayList<>();
-        for (var c: countries) {
+        for (var c : countries) {
             iso.add(ISORepresentation.get(c));
         }
 
