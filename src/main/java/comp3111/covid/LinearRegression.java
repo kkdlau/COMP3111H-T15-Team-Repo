@@ -1,4 +1,5 @@
-package comp3111.covid; /******************************************************************************
+package comp3111.covid;
+/******************************************************************************
  *  Compilation:  javac comp3111.covid.LinearRegression.java
  *  Execution:    java  comp3111.covid.LinearRegression
  *  Dependencies: none
@@ -7,7 +8,6 @@ package comp3111.covid; /*******************************************************
  *  Simple linear regression.
  *
  ******************************************************************************/
-
 
 import javafx.scene.chart.XYChart;
 

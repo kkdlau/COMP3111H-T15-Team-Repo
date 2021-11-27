@@ -14,8 +14,8 @@ public class PromptHelper {
      * Show a alert dialog.
      *
      * @param owner the stage associated with the dialog.
-     * @param msg message to be displayed.
-     * @param type alert type.
+     * @param msg   message to be displayed.
+     * @param type  alert type.
      */
     static public void showPrompt(Window owner, String msg, Alert.AlertType type) {
         if (owner == null) return;
@@ -29,7 +29,7 @@ public class PromptHelper {
      * Factory method for showing a error dialog.
      *
      * @param owner the stage associated with the dialog.
-     * @param msg message to be displayed.
+     * @param msg   message to be displayed.
      */
     static public void showErrorPrompt(Window owner, String msg) {
         showPrompt(owner, msg, Alert.AlertType.ERROR);
@@ -39,7 +39,7 @@ public class PromptHelper {
      * Factory method for showing a information dialog.
      *
      * @param owner the stage associated with the dialog.
-     * @param msg message to be displayed.
+     * @param msg   message to be displayed.
      */
     static public void showInfoPrompt(Window owner, String msg) {
         showPrompt(owner, msg, Alert.AlertType.INFORMATION);

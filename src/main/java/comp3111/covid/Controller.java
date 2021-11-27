@@ -32,6 +32,10 @@ import java.util.stream.Collectors;
  * A singleton class that consist of deep copy methods.
  */
 class DeepCopyUtils {
+    private DeepCopyUtils() {
+
+    }
+
     /**
      * Performs deep copying on a series of data.
      *
@@ -47,71 +51,54 @@ class DeepCopyUtils {
                         .collect(Collectors.toCollection(FXCollections::observableArrayList)));
         return copy;
     }
-
-    private DeepCopyUtils() {
-
-    }
 }
 
 public class Controller {
 
+    ToggleGroup ratioButtonGroups = new ToggleGroup();
+    UIDataModel dataInstance = new UIDataModel();
+    ObservableList<XYChart.Series<String, Float>> unshifted;
+    ObservableList<XYChart.Series<String, Float>> shifted;
+    DoubleProperty aShift = new SimpleDoubleProperty();
+    DoubleProperty bShift = new SimpleDoubleProperty();
     @FXML
     private Tab tabTask12;
-
     @FXML
     private TextField textfieldDataset;
-
     @FXML
     private CheckBox acumulativeCheckButton;
-
     @FXML
     private Label countryInstruction;
-
     @FXML
     private ListView<String> countryListView;
-
     @FXML
     private RadioButton dataCaseButton;
-
     @FXML
     private RadioButton dataDeathButton;
-
     @FXML
     private TableView dataTable;
-
     @FXML
     private RadioButton dataVaccinButton;
-
     @FXML
     private Label endDataLabel;
-
     @FXML
     private DatePicker endDatePicker;
-
     @FXML
     private Label startDateLabel;
-
     @FXML
     private DatePicker startDatePicker;
-
     @FXML
     private Button generateButton;
-
     @FXML
     private TitledPane dataRangeTile;
-
     @FXML
     private LineChart chart;
-
     @FXML
     private NumberAxis chartXAxis;
-
     @FXML
     private CategoryAxis chartYAxis;
-
     @FXML
     private StackPane stack;
-
     // Report B
     @FXML
     private Tab b3Tab;
@@ -127,7 +114,6 @@ public class Controller {
     private Label ResultB1, ResultB2, ResultB3;
     @FXML
     private Slider SliderReportB3;
-
     // Report C
     @FXML
     private Tab c3Tab;
@@ -147,64 +133,66 @@ public class Controller {
     private HBox rootUI;
     @FXML
     private VBox rightUI;
-
     @FXML
     private TabPane tabGroup;
-
     @FXML
     private Label title;
-
     @FXML
     private Button chartGenerateButton;
-
     @FXML
     private ListView<String> countryAListView;
-
     @FXML
     private Slider countryASlider;
-
     @FXML
     private ListView<String> countryBListView;
-
     @FXML
     private Slider countryBSlider;
-
     @FXML
     private LineChart compareChart;
-
     @FXML
     private LineChart<Float, Float> caseDeathChart;
-
     @FXML
     private Button caseDeathGenerateButton;
-
     @FXML
     private Label countryAShiftText;
-
     @FXML
     private Label countryBShiftText;
-
     @FXML
     private Label regressionReport;
-
     @FXML
     private ScrollPane reportA;
-
     @FXML
     private Tab a3Tab;
+    ChangeListener<Tab> onTabChanged = (ov, disSelected, selected) -> {
+        rightUI.getChildren().clear();
+        System.out.println(selected.getText());
+        if (disSelected == tabTask12) {
+        } else if (disSelected == a3Tab) {
+        } else if (disSelected == b3Tab) {
 
+        } else if (disSelected == c3Tab) {
+            countryInstruction.setVisible(true);
+        }
+
+        if (selected == tabTask12) {
+            rightUI.getChildren().add(title);
+            rightUI.getChildren().add(stack);
+            this.showTaskUI(!dataInstance.acumulativeData.get());
+        } else if (selected == a3Tab) {
+            rightUI.getChildren().add(title);
+            rightUI.getChildren().add(stack);
+            title.setText("COVID-19 Confirmed Cases Report"); // update title
+            showPickPeriodUI();
+            this.showReportUI(InterestedData.ConfirmedCases);
+        } else if (selected == b3Tab) {
+            rightUI.getChildren().add(stack);
+            this.showReportUI(InterestedData.ConfirmedDeaths);
+        } else if (selected == c3Tab) {
+            rightUI.getChildren().add(stack);
+            this.showReportUI(InterestedData.RateOfVaccination);
+        }
+    };
     private Stage window;
-
-    ToggleGroup ratioButtonGroups = new ToggleGroup();
-
-    UIDataModel dataInstance = new UIDataModel();
-
-    ObservableList<XYChart.Series<String, Float>> unshifted;
-
-    ObservableList<XYChart.Series<String, Float>> shifted;
-
-    DoubleProperty aShift = new SimpleDoubleProperty();
-    DoubleProperty bShift = new SimpleDoubleProperty();
 
     public void setStage(Stage stage) {
         this.window = stage;
@@ -415,36 +403,6 @@ public class Controller {
         countryASlider.setMax(days);
         countryBSlider.setMax(days);
     }
-
-    ChangeListener<Tab> onTabChanged = (ov, disSelected, selected) -> {
-        rightUI.getChildren().clear();
-        System.out.println(selected.getText());
-        if (disSelected == tabTask12) {
-        } else if (disSelected == a3Tab) {
-        } else if (disSelected == b3Tab) {
-
-        } else if (disSelected == c3Tab) {
-            countryInstruction.setVisible(true);
-        }
-
-        if (selected == tabTask12) {
-            rightUI.getChildren().add(title);
-            rightUI.getChildren().add(stack);
-            this.showTaskUI(!dataInstance.acumulativeData.get());
-        } else if (selected == a3Tab) {
-            rightUI.getChildren().add(title);
-            rightUI.getChildren().add(stack);
-            title.setText("COVID-19 Confirmed Cases Report"); // update title
-            showPickPeriodUI();
-            this.showReportUI(InterestedData.ConfirmedCases);
-        } else if (selected == b3Tab) {
-            rightUI.getChildren().add(stack);
-            this.showReportUI(InterestedData.ConfirmedDeaths);
-        } else if (selected == c3Tab) {
-            rightUI.getChildren().add(stack);
-            this.showReportUI(InterestedData.RateOfVaccination);
-        }
-    };
 
     public void ratioButtonInitialize() {
         dataCaseButton.setToggleGroup(ratioButtonGroups);
