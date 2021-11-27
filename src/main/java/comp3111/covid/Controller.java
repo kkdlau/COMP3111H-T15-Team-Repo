@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.chart.CategoryAxis;
@@ -22,6 +23,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -53,7 +55,7 @@ class DeepCopyUtils {
     }
 }
 
-public class Controller {
+public class Controller implements Initializable {
 
     ToggleGroup ratioButtonGroups = new ToggleGroup();
     UIDataModel dataInstance = new UIDataModel();
@@ -70,7 +72,7 @@ public class Controller {
     @FXML
     private Label countryInstruction;
     @FXML
-    private ListView<String> countryListView;
+    ListView<String> countryListView;
     @FXML
     private RadioButton dataCaseButton;
     @FXML
@@ -103,7 +105,7 @@ public class Controller {
     @FXML
     private Tab b3Tab;
     @FXML
-    private ScrollPane reportB;
+    ScrollPane reportB;
     @FXML
     private ScatterChart chartReportB1, chartReportB2, chartReportB3;
     @FXML
@@ -118,7 +120,7 @@ public class Controller {
     @FXML
     private Tab c3Tab;
     @FXML
-    private ScrollPane reportC;
+    ScrollPane reportC;
     @FXML
     private Button buttonReportC1, buttonReportC2, buttonReportC3;
     @FXML
@@ -128,13 +130,14 @@ public class Controller {
     @FXML
     private TableView tableReportC1;
     @FXML
-    private Text chartReportC1Title, chartReportC2Title, chartReportC3Title;
+    Text chartReportC1Title, chartReportC2Title, chartReportC3Title;
+
     @FXML
     private HBox rootUI;
     @FXML
     private VBox rightUI;
     @FXML
-    private TabPane tabGroup;
+    TabPane tabGroup;
     @FXML
     private Label title;
     @FXML
@@ -142,7 +145,7 @@ public class Controller {
     @FXML
     private ListView<String> countryAListView;
     @FXML
-    private Slider countryASlider;
+    Slider countryASlider;
     @FXML
     private ListView<String> countryBListView;
     @FXML
@@ -158,11 +161,17 @@ public class Controller {
     @FXML
     private Label countryBShiftText;
     @FXML
-    private Label regressionReport;
+    Label regressionReport;
     @FXML
-    private ScrollPane reportA;
+    ScrollPane reportA;
     @FXML
     private Tab a3Tab;
+
+    private boolean init = false;
+
+    boolean isInit() {
+        return init;
+    }
     ChangeListener<Tab> onTabChanged = (ov, disSelected, selected) -> {
         rightUI.getChildren().clear();
         System.out.println(selected.getText());
@@ -241,6 +250,7 @@ public class Controller {
         tabTaskC3Initialize();
 
         tabGroup.getSelectionModel().select(0); // select task 1&2 tab by default
+        init = true;
     }
 
     void tabTaskB3Initialize() {
@@ -330,7 +340,7 @@ public class Controller {
         caseDeathChart.getYAxis().setLabel("Confirmed Deaths (per M)");
     }
 
-    private void generateRegressionChart(UIDataModel data) throws Exception {
+    void generateRegressionChart(UIDataModel data) throws Exception {
         caseDeathChart.getData().clear();
 
         String iDataset = data.dataPath.get();
@@ -395,7 +405,7 @@ public class Controller {
      *
      * @param days the maximum days that a slider can represent.
      */
-    private void resetSliderRange(int days) {
+    void resetSliderRange(int days) {
         if (days < 0) return;
         countryASlider.setValue(0);
         countryBSlider.setValue(0);
@@ -688,7 +698,6 @@ public class Controller {
 
         stack.getChildren().add(e);
         e.setVisible(true);
-        System.out.println("add");
     }
 
     /**
@@ -859,6 +868,11 @@ public class Controller {
         }
         chartReportC3Title.setVisible(true);
         chartReportC3.setData(allData);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initialize();
     }
 }
 
