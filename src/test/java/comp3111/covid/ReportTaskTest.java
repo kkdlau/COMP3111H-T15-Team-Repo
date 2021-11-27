@@ -32,10 +32,16 @@ public class ReportTaskTest {
 		}
 	}
 	@Test
-	public void generateChartB() {
+	public void generateChartBValid() {
 		double[] result = new double[3];
 		ReportTask.generateChartB(dataset,ISO_code,x_axis,y_axis,result,1);
 		ReportTask.generateChartB(dataset,ISO_code,x_axis,y_axis,result,14);
+	}
+	@Test
+	public void generateChartBNoData() {
+		double[] result = new double[3];
+		ReportTask.generateChartB(dataset,"AIA",x_axis,y_axis,result,1);
+		ReportTask.generateChartB(dataset,"AIA",x_axis,y_axis,result,14);
 	}
 	@Test
 	public void correlationAnalysisB1() {
