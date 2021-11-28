@@ -25,7 +25,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox fx:id="rootUI" prefHeight="687.0" prefWidth="756.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+<HBox fx:id="rootUI" prefHeight="686.0" prefWidth="810.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
@@ -113,15 +113,15 @@
             </TitledPane>
          </children>
       </VBox>
-      <VBox fx:id="rightUI" prefHeight="687.0" prefWidth="507.0">
+      <VBox fx:id="rightUI" prefHeight="687.0" prefWidth="508.0">
          <children>
-            <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="493.0" textAlignment="CENTER">
+            <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="498.0" textAlignment="CENTER">
 
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <StackPane fx:id="stack" prefHeight="680.0" prefWidth="456.0">
+            <StackPane fx:id="stack" prefHeight="680.0" prefWidth="499.0">
                <children>
                   <TableView fx:id="dataTable" prefHeight="200.0" prefWidth="200.0" />
                   <LineChart fx:id="chart">
@@ -134,10 +134,10 @@
                   </LineChart>
                   <ScrollPane fx:id="reportA" hbarPolicy="NEVER" prefHeight="670.0" prefWidth="456.0">
                      <content>
-                        <AnchorPane prefHeight="675.0" prefWidth="456.0">
+                        <AnchorPane prefHeight="1326.0" prefWidth="494.0">
                            <children>
-                              <Label layoutX="17.0" layoutY="20.0" prefHeight="89.0" prefWidth="414.0" text="Although different countries may have different confirmed cases on the same day, a country can have the same number of confirmed cases after few days later. You can select two countries from below, and use the slider to simulate how many days are needed for country A to reach the situation in country B." wrapText="true" />
-                              <LineChart fx:id="compareChart" animated="false" layoutX="17.0" layoutY="280.0" prefHeight="306.0" prefWidth="414.0">
+                              <Label layoutX="17.0" layoutY="20.0" prefHeight="89.0" prefWidth="466.0" text="Although different countries may have different confirmed cases on the same day, a country can have the same number of confirmed cases after few days later. You can select two countries from below, and use the slider to simulate how many days are needed for country A to reach the situation in country B." wrapText="true" />
+                              <LineChart fx:id="compareChart" animated="false" layoutX="37.0" layoutY="280.0" prefHeight="306.0" prefWidth="414.0">
                                 <xAxis>
                                   <CategoryAxis side="BOTTOM" />
                                 </xAxis>
@@ -146,14 +146,14 @@
                                 </yAxis>
                               </LineChart>
                               <ListView fx:id="countryAListView" layoutX="17.0" layoutY="136.0" prefHeight="76.0" prefWidth="193.0" />
-                              <ListView fx:id="countryBListView" layoutX="228.0" layoutY="136.0" prefHeight="76.0" prefWidth="200.0" />
+                              <ListView fx:id="countryBListView" layoutX="268.0" layoutY="136.0" prefHeight="76.0" prefWidth="200.0" />
                               <Label layoutX="17.0" layoutY="119.0" text="Country A:" />
-                              <Label layoutX="231.0" layoutY="119.0" text="Country B:" />
-                              <Slider fx:id="countryBSlider" layoutX="14.0" layoutY="263.0" prefHeight="17.0" prefWidth="420.0" />
+                              <Label layoutX="271.0" layoutY="119.0" text="Country B:" />
+                              <Slider fx:id="countryBSlider" layoutX="14.0" layoutY="262.0" prefHeight="19.0" prefWidth="459.0" />
                               <Label fx:id="countryBShiftText" layoutX="17.0" layoutY="246.0" text="X-axis shift for countryB(The situation has been postponed for 0 days):" />
-                              <Slider fx:id="countryASlider" layoutX="14.0" layoutY="229.0" prefHeight="17.0" prefWidth="420.0" />
+                              <Slider fx:id="countryASlider" layoutX="14.0" layoutY="228.0" prefHeight="19.0" prefWidth="460.0" />
                               <Label fx:id="countryAShiftText" layoutX="17.0" layoutY="212.0" text="X-axis shift for country A(The situation has been postponed for 0 days):" />
-                              <Button fx:id="chartGenerateButton" layoutX="360.0" layoutY="586.0" mnemonicParsing="false" text="Generate" />
+                              <Button fx:id="chartGenerateButton" layoutX="390.0" layoutY="586.0" mnemonicParsing="false" text="Generate" />
                               <LineChart fx:id="caseDeathChart" animated="false" layoutX="17.0" layoutY="740.0" prefHeight="306.0" prefWidth="414.0">
                                  <xAxis>
                                     <NumberAxis side="BOTTOM" />
@@ -162,14 +162,14 @@
                                     <NumberAxis side="LEFT" />
                                  </yAxis>
                               </LineChart>
-                              <Label layoutX="18.0" layoutY="620.0" prefHeight="118.0" prefWidth="413.0" text="Furthermore, by comparing confirmed cases(x-axis) against confirmed deaths(y-axis), we can perform linear regression to find the relationship between confirmed deaths and confirmed cases. The slope for the relationship represents the level of healthcare. If one counrty's slope is lower than another country, we can conclude that the country have better health care since it has lower death rate per case." wrapText="true" />
-                              <Button fx:id="caseDeathGenerateButton" layoutX="360.0" layoutY="1054.0" mnemonicParsing="false" text="Generate" />
-                              <Label fx:id="regressionReport" alignment="TOP_LEFT" layoutX="17.0" layoutY="1100.0" prefHeight="226.0" prefWidth="417.0" text="Regression report will be generated after the above chart is genereated." wrapText="true" />
+                              <Label layoutX="18.0" layoutY="620.0" prefHeight="118.0" prefWidth="461.0" text="Furthermore, by comparing confirmed cases(x-axis) against confirmed deaths(y-axis), we can perform linear regression to find the relationship between confirmed deaths and confirmed cases. The slope for the relationship represents the level of healthcare. If one counrty's slope is lower than another country, we can conclude that the country have better health care since it has lower death rate per case." wrapText="true" />
+                              <Button fx:id="caseDeathGenerateButton" layoutX="390.0" layoutY="1054.0" mnemonicParsing="false" text="Generate" />
+                              <Label fx:id="regressionReport" alignment="TOP_LEFT" layoutX="17.0" layoutY="1100.0" prefHeight="226.0" prefWidth="462.0" text="Regression report will be generated after the above chart is genereated." wrapText="true" />
                            </children>
                         </AnchorPane>
                      </content>
                   </ScrollPane>
-                  <ScrollPane fx:id="reportB" prefHeight="200.0" prefWidth="200.0">
+                  <ScrollPane fx:id="reportB" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" visible="false">
 	                  <content>
                         <AnchorPane prefHeight="1800.0" prefWidth="466.0">
                            <children>
@@ -218,16 +218,16 @@
                         </AnchorPane>
                      </content>
             </ScrollPane>
-                  <ScrollPane fx:id="reportC" prefHeight="200.0" prefWidth="200.0">
+                  <ScrollPane fx:id="reportC" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" visible="false">
                		<content>
                   	<AnchorPane prefHeight="872.0" prefWidth="466.0">
                      <children>
-                        <Label alignment="CENTER" prefHeight="38.0" prefWidth="506.0" text="Vaccine Inequity - is it real?">
+                        <Label alignment="CENTER" layoutY="-10.0" prefHeight="38.0" prefWidth="506.0" text="Vaccine Inequity - is it real?">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Text layoutX="14.0" layoutY="44.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="As COVID-19 swept the world in 2020 and 2021, lives were lost and economies closed. When vaccines were produced in late 2020, we thought that they were the answers to normality. Yet, now at the end of 2021, there still seems to be no end to this ravaging pandemic around the world. It is not that the vaccines are ineffective but that some do not have the chance to get one. Vaccine inequity has caused a huge disparity in vaccine rollouts across the world. " textAlignment="JUSTIFY" wrappingWidth="466.9368591308594" />
+                        <Text layoutX="14.0" layoutY="31.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="As COVID-19 swept the world in 2020 and 2021, lives were lost and economies closed. When vaccines were produced in late 2020, we thought that they were the answers to normality. Yet, now at the end of 2021, there still seems to be no end to this ravaging pandemic around the world. It is not that the vaccines are ineffective but that some do not have the chance to get one. Vaccine inequity has caused a huge disparity in vaccine rollouts across the world. " textAlignment="JUSTIFY" wrappingWidth="466.9368591308594" />
                         <Text layoutX="28.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Click the button on the right to compare vaccine rollouts across countries with different economic situations" textAlignment="JUSTIFY" wrappingWidth="222.13677978515625">
                            <font>
                               <Font name="System Italic" size="12.0" />

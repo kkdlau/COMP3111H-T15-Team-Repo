@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.chart.CategoryAxis;
@@ -22,6 +23,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -53,7 +55,7 @@ class DeepCopyUtils {
     }
 }
 
-public class Controller {
+public class Controller implements Initializable {
 
     ToggleGroup ratioButtonGroups = new ToggleGroup();
     UIDataModel dataInstance = new UIDataModel();
@@ -70,7 +72,7 @@ public class Controller {
     @FXML
     private Label countryInstruction;
     @FXML
-    private ListView<String> countryListView;
+    ListView<String> countryListView;
     @FXML
     private RadioButton dataCaseButton;
     @FXML
@@ -92,6 +94,8 @@ public class Controller {
     @FXML
     private TitledPane dataRangeTile;
     @FXML
+    private TitledPane countryFilter;
+    @FXML
     private LineChart chart;
     @FXML
     private NumberAxis chartXAxis;
@@ -103,7 +107,7 @@ public class Controller {
     @FXML
     private Tab b3Tab;
     @FXML
-    private ScrollPane reportB;
+    ScrollPane reportB;
     @FXML
     private ScatterChart chartReportB1, chartReportB2, chartReportB3;
     @FXML
@@ -118,7 +122,7 @@ public class Controller {
     @FXML
     private Tab c3Tab;
     @FXML
-    private ScrollPane reportC;
+    ScrollPane reportC;
     @FXML
     private Button buttonReportC1, buttonReportC2, buttonReportC3;
     @FXML
@@ -128,13 +132,14 @@ public class Controller {
     @FXML
     private TableView tableReportC1;
     @FXML
-    private Text chartReportC1Title, chartReportC2Title, chartReportC3Title;
+    Text chartReportC1Title, chartReportC2Title, chartReportC3Title;
+
     @FXML
     private HBox rootUI;
     @FXML
     private VBox rightUI;
     @FXML
-    private TabPane tabGroup;
+    TabPane tabGroup;
     @FXML
     private Label title;
     @FXML
@@ -142,7 +147,7 @@ public class Controller {
     @FXML
     private ListView<String> countryAListView;
     @FXML
-    private Slider countryASlider;
+    Slider countryASlider;
     @FXML
     private ListView<String> countryBListView;
     @FXML
@@ -158,18 +163,24 @@ public class Controller {
     @FXML
     private Label countryBShiftText;
     @FXML
-    private Label regressionReport;
+    Label regressionReport;
     @FXML
-    private ScrollPane reportA;
+    ScrollPane reportA;
     @FXML
     private Tab a3Tab;
+
+    private boolean init = false;
+
+
     ChangeListener<Tab> onTabChanged = (ov, disSelected, selected) -> {
         rightUI.getChildren().clear();
-        System.out.println(selected.getText());
+
         if (disSelected == tabTask12) {
         } else if (disSelected == a3Tab) {
+            countryFilter.setExpanded(true);
+            countryFilter.setVisible(true);
         } else if (disSelected == b3Tab) {
-
+            countryInstruction.setVisible(true);
         } else if (disSelected == c3Tab) {
             countryInstruction.setVisible(true);
         }
@@ -179,6 +190,8 @@ public class Controller {
             rightUI.getChildren().add(stack);
             this.showTaskUI(!dataInstance.acumulativeData.get());
         } else if (selected == a3Tab) {
+            countryFilter.setExpanded(false);
+            countryFilter.setVisible(false);
             rightUI.getChildren().add(title);
             rightUI.getChildren().add(stack);
             title.setText("COVID-19 Confirmed Cases Report"); // update title
@@ -194,10 +207,18 @@ public class Controller {
     };
     private Stage window;
 
+    /**
+     * Sets the stage that the controller belongs to.
+     *
+     * @param stage stage that the controller belongs to
+     */
     public void setStage(Stage stage) {
         this.window = stage;
     }
 
+    /**
+     * Initialize the cotroller.
+     */
     public void initialize() {
         // default data for data pickers
 
@@ -240,9 +261,16 @@ public class Controller {
         tabTaskB3Initialize();
         tabTaskC3Initialize();
 
+        stack.getChildren().clear();
+        this.showTaskUI(!dataInstance.acumulativeData.get());
+
         tabGroup.getSelectionModel().select(0); // select task 1&2 tab by default
+        init = true;
     }
 
+    /**
+     * Initialize UI components for tab B3.
+     */
     void tabTaskB3Initialize() {
         buttonReportB1.setOnAction((e) -> {
             errorCheckOneCountry();
@@ -257,7 +285,9 @@ public class Controller {
             this.generateChartB3(dataInstance);
         });
     }
-
+    /**
+     * Initialize UI components for tab C3.
+     */
     void tabTaskC3Initialize() {
         buttonReportC1.setOnAction((e) -> {
             this.generateChartC1(dataInstance);
@@ -270,6 +300,9 @@ public class Controller {
         });
     }
 
+    /**
+     * Initialize UI components for tab A3.
+     */
     void tabTaskA3Initialize() {
         countryAListView.setItems(dataInstance.getAvailableCountries());
         countryBListView.setItems(dataInstance.getAvailableCountries());
@@ -330,7 +363,13 @@ public class Controller {
         caseDeathChart.getYAxis().setLabel("Confirmed Deaths (per M)");
     }
 
-    private void generateRegressionChart(UIDataModel data) throws Exception {
+    /**
+     * Generates regression model and display on the chart.
+     *
+     * @param data data model
+     * @throws Exception the error occurs during the generation, can be caught to get the fail message
+     */
+    void generateRegressionChart(UIDataModel data) throws Exception {
         caseDeathChart.getData().clear();
 
         String iDataset = data.dataPath.get();
@@ -395,7 +434,7 @@ public class Controller {
      *
      * @param days the maximum days that a slider can represent.
      */
-    private void resetSliderRange(int days) {
+    void resetSliderRange(int days) {
         if (days < 0) return;
         countryASlider.setValue(0);
         countryBSlider.setValue(0);
@@ -404,6 +443,9 @@ public class Controller {
         countryBSlider.setMax(days);
     }
 
+    /**
+     * Groups all ratio buttons.
+     */
     public void ratioButtonInitialize() {
         dataCaseButton.setToggleGroup(ratioButtonGroups);
         dataDeathButton.setToggleGroup(ratioButtonGroups);
@@ -414,6 +456,9 @@ public class Controller {
         });
     }
 
+    /**
+     * Gets the default values from UI and initialize the data model with the values.
+     */
     public void initializeUIDataModel() {
         dataInstance.dataPath = textfieldDataset.textProperty();
         dataInstance.dataPath.addListener((e) -> {
@@ -426,6 +471,11 @@ public class Controller {
         dataInstance.acumulativeData = acumulativeCheckButton.selectedProperty();
     }
 
+    /**
+     * Gets current selected data.
+     *
+     * @return current selected data
+     */
     InterestedData getFocusedData() {
         if (dataCaseButton.isSelected())
             return buttonDataMapping(dataCaseButton);
@@ -435,6 +485,12 @@ public class Controller {
             return buttonDataMapping(dataVaccinButton);
     }
 
+    /**
+     * Get the interested data that the button represents.
+     *
+     * @param btn button to check
+     * @return interested data
+     */
     InterestedData buttonDataMapping(RadioButton btn) {
         if (dataCaseButton == btn)
             return InterestedData.ConfirmedCases;
@@ -489,10 +545,24 @@ public class Controller {
         country.setCellValueFactory(new MapValueFactory<>("country"));
         col1.setCellValueFactory(new MapValueFactory<>("col1data"));
         col2.setCellValueFactory(new MapValueFactory<>("col2data"));
-
+        switch (dataInstance.focusedData) {
+            case ConfirmedCases:
+                title.setText("Number of Confirmed COVID-19 Cases as of ");
+                break;
+            case ConfirmedDeaths:
+                title.setText("Number of Confirmed COVID-19 Deaths as of ");
+                break;
+            case RateOfVaccination:
+                title.setText("Rate of Vaccination against COVID-19 as of ");
+                break;
+        }
+        title.setText(title.getText() + validDate[1]);
         dataTable.getItems().addAll(tableData);
     }
 
+    /**
+     * Shifting the data according to countryASlider and countryBSlider.
+     */
     void shiftingData() {
         long shiftA = (int) countryASlider.valueProperty().get();
         long shiftB = (int) countryBSlider.valueProperty().get();
@@ -512,6 +582,13 @@ public class Controller {
 
     }
 
+    /**
+     * Shifts a series of confirmed cases data for a country.
+     *
+     * @param original unshifted data
+     * @param updated reference to the shifted data, will be modified
+     * @param days days to shift
+     */
     void shiftCountryData(XYChart.Series<String, Float> original, XYChart.Series<String, Float> updated, long days) {
         if (days <= 0) return;
 
@@ -530,6 +607,12 @@ public class Controller {
         updated.getData().sort(Comparator.comparing(XYChart.Data::getXValue));
     }
 
+    /**
+     * Fetches the confirmed cases for two selected countries and display the results on the chart.
+     *
+     * @param data data model
+     * @throws Exception the reason why cannot generate the result
+     */
     void generateComparisonChart(final UIDataModel data) throws Exception {
         compareChart.getData().clear();
 
@@ -599,6 +682,21 @@ public class Controller {
         if (checkPeriodInput.get(0).equals(checkPeriodInput.get(1))) chart.setCreateSymbols(true);
         else chart.setCreateSymbols(false);
         ObservableList<XYChart.Series<String, Float>> allData = TableChartTask.generateChart(iDataset, Arrays.asList(ISOStrings), checkPeriodInput, getFocusedData());
+        switch (dataInstance.focusedData) {
+            case ConfirmedCases:
+                title.setText("Cumulative Confirmed COVID-19 Cases (per 1M)");
+                chart.getYAxis().setLabel("Cases");
+                break;
+            case ConfirmedDeaths:
+                title.setText("Cumulative Confirmed COVID-19 Deaths (per 1M)");
+                chart.getYAxis().setLabel("Deaths");
+                break;
+            case RateOfVaccination:
+                title.setText("Cumulative Rate of Vaccination against COVID-19");
+                chart.getYAxis().setLabel("Rate");
+                break;
+        }
+        chart.getXAxis().setLabel("Date");
         chart.setData(allData);
     }
 
@@ -627,6 +725,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Hides period UI and display single date picker UI.
+     */
     void showPickDateUI() {
         dataRangeTile.setText("Date");
         startDateLabel.setText("Date: ");
@@ -635,6 +736,9 @@ public class Controller {
         endDatePicker.setVisible(false);
     }
 
+    /**
+     * Hides single date picker UI and display period UI.
+     */
     void showPickPeriodUI() {
         dataRangeTile.setText("Date Range");
         startDateLabel.setText("Start date: ");
@@ -671,6 +775,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Removes a node from stackPane.
+     *
+     * @param e UI to be removed
+     */
     void removeFromStack(Node e) {
         try {
             stack.getChildren().remove(e);
@@ -679,6 +788,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Shows the UI in stack. This method will ensure only the given is shown on stack.
+     *
+     * @param e UI to be displayed.
+     */
     void stackShow(Node e) {
         removeFromStack(chart);
         removeFromStack(dataTable);
@@ -688,11 +802,11 @@ public class Controller {
 
         stack.getChildren().add(e);
         e.setVisible(true);
-        System.out.println("add");
     }
 
     /**
      * Error check - to check the number of country selected is one or not
+     * @return boolean value that error exist or not
      */
     boolean errorCheckOneCountry() {
         Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
@@ -711,7 +825,7 @@ public class Controller {
     /**
      * UI output - Scatter Plot of the death cases and the confirmed rate.
      *
-     * @param data
+     * @param data user inputed for all controls
      */
     void generateChartB1(final UIDataModel data) {
         chartReportB1.getData().clear();
@@ -731,7 +845,7 @@ public class Controller {
     /**
      * UI output - Scatter Plot of the death cases and the vaccination rate that could the citizens be immediately vaccinated during a breakout.
      *
-     * @param data
+     * @param data user inputed for all controls
      */
     void generateChartB2(final UIDataModel data) {
         chartReportB2.getData().clear();
@@ -751,7 +865,7 @@ public class Controller {
     /**
      * UI output - Scatter Plot of the vaccination rate and the death cases to verify the efficiency of vaccines.
      *
-     * @param data
+     * @param data user inputed for all controls
      */
     void generateChartB3(final UIDataModel data) {
         chartReportB3.getData().clear();
@@ -859,6 +973,11 @@ public class Controller {
         }
         chartReportC3Title.setVisible(true);
         chartReportC3.setData(allData);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initialize();
     }
 }
 

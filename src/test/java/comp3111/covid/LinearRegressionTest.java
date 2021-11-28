@@ -26,15 +26,7 @@ public class LinearRegressionTest {
 		for(double d:x2) {d = Math.random();}
 		for(double d:y2) {d = Math.random();}
 	}
-	@Test
-	public void LinearRegressionConstructorNull() {
-		LinearRegression model1 = new LinearRegression(null,y1);
-		LinearRegression model2 = new LinearRegression(x1,null);
-	}
-	@Test
-	public void LinearRegressionConstructorUnmatch() {
-		LinearRegression model = new LinearRegression(x2,y1);
-	}
+
 	@Test
 	public void LinearRegressionConstructorValid() {
 		LinearRegression model1 = new LinearRegression(x1,y1);

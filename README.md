@@ -2,6 +2,10 @@
 
 https://github.com/kkdlau/COMP3111H-T15-Team-Repo.git
 
+## Code Documentation [Javadoc]
+
+https://kkdlau.github.io/COMP3111H-T15-Team-Repo/
+
 ## Team Formation
 
 #### 1. Lau, Ka Kit Danny

@@ -1,3 +1,5 @@
+package comp3111.covid;
+
 import comp3111.covid.CheckInput;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +27,12 @@ public class CheckInputTest{
 	}
 	@Test
 	public void DateValidationNull() {
+		try {
 		CheckInput.checkValidDate(null, dataset);
+
+		} catch (Exception e) {
+
+		}
 	}
 	@Test
 	public void DateValidationOutRange() {
@@ -67,8 +74,12 @@ public class CheckInputTest{
     }
     @Test
     public void LocationValidationNoISOcode() {
-    	CheckInput.checkValidLocations(null,dataset);
-    	CheckInput.checkValidLocations("",dataset);
+try {
+	CheckInput.checkValidLocations(null,dataset);
+	CheckInput.checkValidLocations("",dataset);
+} catch (Exception e) {
+
+}
     }
     @Test
     public void LocationValidationWrongISOcode() {
