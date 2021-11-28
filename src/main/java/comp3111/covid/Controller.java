@@ -545,7 +545,17 @@ public class Controller implements Initializable {
         country.setCellValueFactory(new MapValueFactory<>("country"));
         col1.setCellValueFactory(new MapValueFactory<>("col1data"));
         col2.setCellValueFactory(new MapValueFactory<>("col2data"));
-
+        switch (dataInstance.focusedData) {
+            case ConfirmedCases:
+                title.setText("Confirmed COVID-19 Cases (per 1M)");
+                break;
+            case ConfirmedDeaths:
+                title.setText("Confirmed COVID-19 Deaths (per 1M)");
+                break;
+            case RateOfVaccination:
+                title.setText("Rate of Vaccination against COVID-19");
+                break;
+        }
         dataTable.getItems().addAll(tableData);
     }
 
@@ -636,17 +646,6 @@ public class Controller implements Initializable {
         shifted.add(DeepCopyUtils.copySeries(unshifted.get(1)));
 
         compareChart.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);
-        switch (dataInstance.focusedData) {
-            case ConfirmedCases:
-                title.setText("Confirmed COVID-19 Cases (per 1M)");
-                break;
-            case ConfirmedDeaths:
-                title.setText("Confirmed COVID-19 Deaths (per 1M)");
-                break;
-            case RateOfVaccination:
-                title.setText("Rate of Vaccination against COVID-19");
-                break;
-        }
         compareChart.setData(shifted);
     }
 
