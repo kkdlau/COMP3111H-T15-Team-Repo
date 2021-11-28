@@ -35,7 +35,7 @@ class ReportTask {
      * @param y_axis			the name of y_axis
      * @param result			the regression analysis result will be stored here
      * @param y_data_cumulation	the number of record cumulated
-     * @return Series<Float, Float>
+     * @return Series series of data
      */
     public static Series<Float, Float> generateChartB(String iDataset, String iISO, String x_axis, String y_axis, double[] result, int y_data_cumulation) {
 
