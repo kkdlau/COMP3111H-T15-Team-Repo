@@ -196,6 +196,7 @@ public class Controller implements Initializable {
         } else if (selected == a3Tab) {
             countryFilter.setExpanded(false);
             countryFilter.setVisible(false);
+            countryInstruction.setVisible(false);
             rightUI.getChildren().add(title);
             rightUI.getChildren().add(stack);
             title.setText("COVID-19 Confirmed Cases Report"); // update title
@@ -578,11 +579,27 @@ public class Controller implements Initializable {
         XYChart.Series<String, Float> s1 = DeepCopyUtils.copySeries(shifted.get(0));
         XYChart.Series<String, Float> s2 = DeepCopyUtils.copySeries(shifted.get(1));
 
+        ObservableList<String> allXAxis = FXCollections.observableArrayList();
+        for (var d: s1.getData()) {
+            if (!allXAxis.contains(d.getXValue())){
+                allXAxis.add(d.getXValue());
+            }
+        }
+        for (var d: s2.getData()) {
+            if (!allXAxis.contains(d.getXValue())){
+                allXAxis.add(d.getXValue());
+            }
+        }
+        allXAxis.sort(Comparator.naturalOrder());
+
         compareChart.setAnimated(false);
         compareChart.getData().clear();
         compareChart.layout();
         compareChart.getData().add(s1);
         compareChart.getData().add(s2);
+        CategoryAxis axis = (CategoryAxis) compareChart.getXAxis();
+        axis.getCategories().clear();
+        axis.setCategories(allXAxis);
 
     }
 
