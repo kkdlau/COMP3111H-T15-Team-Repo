@@ -31,6 +31,12 @@ public class DataAnalysis {
         }
     }
 
+    /**
+     * Retrieves the confirmed cases from given dataset for a country.
+     * @param dataset dataset
+     * @param iso_code country ISO
+     * @return confirmed cases
+     */
     public static String getConfirmedCases(String dataset, String iso_code) {
         String oReport = "";
         long confirmedCases = 0;
@@ -57,6 +63,12 @@ public class DataAnalysis {
         return oReport;
     }
 
+    /**
+     * Retrieves the confirmed deaths from given dataset for a country.
+     * @param dataset dataset
+     * @param iso_code country ISO
+     * @return confirmed deaths
+     */
     public static String getConfirmedDeaths(String dataset, String iso_code) {
         String oReport = "";
         long confirmedDeaths = 0;
@@ -83,6 +95,12 @@ public class DataAnalysis {
         return oReport;
     }
 
+    /**
+     * Retrieves the rate of vaccination from given dataset for a country.
+     * @param dataset dataset
+     * @param iso_code country ISO
+     * @return rate of vaccination
+     */
     public static String getRateOfVaccination(String dataset, String iso_code) {
         String oReport = "";
         long fullyVaccinated = 0;
@@ -119,6 +137,13 @@ public class DataAnalysis {
         return oReport;
     }
 
+    /**
+     * Gets a valid date that is available in the dataset.
+     *
+     * @param dataset dataset
+     * @param date date to check
+     * @return valid date
+     */
     public static LocalDate getValidDate(String dataset, LocalDate date) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/uuuu");

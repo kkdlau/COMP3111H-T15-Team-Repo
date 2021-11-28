@@ -171,6 +171,7 @@ public class Controller implements Initializable {
 
     private boolean init = false;
 
+
     ChangeListener<Tab> onTabChanged = (ov, disSelected, selected) -> {
         rightUI.getChildren().clear();
 
@@ -206,10 +207,18 @@ public class Controller implements Initializable {
     };
     private Stage window;
 
+    /**
+     * Sets the stage that the controller belongs to.
+     *
+     * @param stage stage that the controller belongs to
+     */
     public void setStage(Stage stage) {
         this.window = stage;
     }
 
+    /**
+     * Initialize the cotroller.
+     */
     public void initialize() {
         // default data for data pickers
 
@@ -259,6 +268,9 @@ public class Controller implements Initializable {
         init = true;
     }
 
+    /**
+     * Initialize UI components for tab B3.
+     */
     void tabTaskB3Initialize() {
         buttonReportB1.setOnAction((e) -> {
             errorCheckOneCountry();
@@ -273,7 +285,9 @@ public class Controller implements Initializable {
             this.generateChartB3(dataInstance);
         });
     }
-
+    /**
+     * Initialize UI components for tab C3.
+     */
     void tabTaskC3Initialize() {
         buttonReportC1.setOnAction((e) -> {
             this.generateChartC1(dataInstance);
@@ -286,6 +300,9 @@ public class Controller implements Initializable {
         });
     }
 
+    /**
+     * Initialize UI components for tab A3.
+     */
     void tabTaskA3Initialize() {
         countryAListView.setItems(dataInstance.getAvailableCountries());
         countryBListView.setItems(dataInstance.getAvailableCountries());
@@ -346,6 +363,12 @@ public class Controller implements Initializable {
         caseDeathChart.getYAxis().setLabel("Confirmed Deaths (per M)");
     }
 
+    /**
+     * Generates regression model and display on the chart.
+     *
+     * @param data data model
+     * @throws Exception the error occurs during the generation, can be caught to get the fail message
+     */
     void generateRegressionChart(UIDataModel data) throws Exception {
         caseDeathChart.getData().clear();
 
@@ -420,6 +443,9 @@ public class Controller implements Initializable {
         countryBSlider.setMax(days);
     }
 
+    /**
+     * Groups all ratio buttons.
+     */
     public void ratioButtonInitialize() {
         dataCaseButton.setToggleGroup(ratioButtonGroups);
         dataDeathButton.setToggleGroup(ratioButtonGroups);
@@ -430,6 +456,9 @@ public class Controller implements Initializable {
         });
     }
 
+    /**
+     * Gets the default values from UI and initialize the data model with the values.
+     */
     public void initializeUIDataModel() {
         dataInstance.dataPath = textfieldDataset.textProperty();
         dataInstance.dataPath.addListener((e) -> {
@@ -442,6 +471,11 @@ public class Controller implements Initializable {
         dataInstance.acumulativeData = acumulativeCheckButton.selectedProperty();
     }
 
+    /**
+     * Gets current selected data.
+     *
+     * @return current selected data
+     */
     InterestedData getFocusedData() {
         if (dataCaseButton.isSelected())
             return buttonDataMapping(dataCaseButton);
@@ -451,6 +485,12 @@ public class Controller implements Initializable {
             return buttonDataMapping(dataVaccinButton);
     }
 
+    /**
+     * Get the interested data that the button represents.
+     *
+     * @param btn button to check
+     * @return interested data
+     */
     InterestedData buttonDataMapping(RadioButton btn) {
         if (dataCaseButton == btn)
             return InterestedData.ConfirmedCases;
@@ -509,6 +549,9 @@ public class Controller implements Initializable {
         dataTable.getItems().addAll(tableData);
     }
 
+    /**
+     * Shifting the data according to countryASlider and countryBSlider.
+     */
     void shiftingData() {
         long shiftA = (int) countryASlider.valueProperty().get();
         long shiftB = (int) countryBSlider.valueProperty().get();
@@ -528,6 +571,13 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * Shifts a series of confirmed cases data for a country.
+     *
+     * @param original unshifted data
+     * @param updated reference to the shifted data, will be modified
+     * @param days days to shift
+     */
     void shiftCountryData(XYChart.Series<String, Float> original, XYChart.Series<String, Float> updated, long days) {
         if (days <= 0) return;
 
@@ -546,6 +596,12 @@ public class Controller implements Initializable {
         updated.getData().sort(Comparator.comparing(XYChart.Data::getXValue));
     }
 
+    /**
+     * Fetches the confirmed cases for two selected countries and display the results on the chart.
+     *
+     * @param data data model
+     * @throws Exception the reason why cannot generate the result
+     */
     void generateComparisonChart(final UIDataModel data) throws Exception {
         compareChart.getData().clear();
 
@@ -665,6 +721,9 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Hides period UI and display single date picker UI.
+     */
     void showPickDateUI() {
         dataRangeTile.setText("Date");
         startDateLabel.setText("Date: ");
@@ -673,6 +732,9 @@ public class Controller implements Initializable {
         endDatePicker.setVisible(false);
     }
 
+    /**
+     * Hides single date picker UI and display period UI.
+     */
     void showPickPeriodUI() {
         dataRangeTile.setText("Date Range");
         startDateLabel.setText("Start date: ");
@@ -709,6 +771,11 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Removes a node from stackPane.
+     *
+     * @param e UI to be removed
+     */
     void removeFromStack(Node e) {
         try {
             stack.getChildren().remove(e);
@@ -717,6 +784,11 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Shows the UI in stack. This method will ensure only the given is shown on stack.
+     *
+     * @param e UI to be displayed.
+     */
     void stackShow(Node e) {
         removeFromStack(chart);
         removeFromStack(dataTable);
