@@ -547,15 +547,16 @@ public class Controller implements Initializable {
         col2.setCellValueFactory(new MapValueFactory<>("col2data"));
         switch (dataInstance.focusedData) {
             case ConfirmedCases:
-                title.setText("Confirmed COVID-19 Cases (per 1M)");
+                title.setText("Number of Confirmed COVID-19 Cases as of ");
                 break;
             case ConfirmedDeaths:
-                title.setText("Confirmed COVID-19 Deaths (per 1M)");
+                title.setText("Number of Confirmed COVID-19 Deaths as of ");
                 break;
             case RateOfVaccination:
-                title.setText("Rate of Vaccination against COVID-19");
+                title.setText("Rate of Vaccination against COVID-19 as of ");
                 break;
         }
+        title.setText(title.getText() + validDate[1]);
         dataTable.getItems().addAll(tableData);
     }
 
@@ -684,14 +685,18 @@ public class Controller implements Initializable {
         switch (dataInstance.focusedData) {
             case ConfirmedCases:
                 title.setText("Cumulative Confirmed COVID-19 Cases (per 1M)");
+                chart.getYAxis().setLabel("Cases");
                 break;
             case ConfirmedDeaths:
                 title.setText("Cumulative Confirmed COVID-19 Deaths (per 1M)");
+                chart.getYAxis().setLabel("Deaths");
                 break;
             case RateOfVaccination:
                 title.setText("Cumulative Rate of Vaccination against COVID-19");
+                chart.getYAxis().setLabel("Rate");
                 break;
         }
+        chart.getXAxis().setLabel("Date");
         chart.setData(allData);
     }
 
