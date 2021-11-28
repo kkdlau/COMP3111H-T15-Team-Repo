@@ -2,10 +2,6 @@
 
 https://github.com/kkdlau/COMP3111H-T15-Team-Repo.git
 
-## Code Documentation [Javadoc]
-
-https://kkdlau.github.io/COMP3111H-T15-Team-Repo/
-
 ## Team Formation
 
 #### 1. Lau, Ka Kit Danny
@@ -41,9 +37,22 @@ https://kkdlau.github.io/COMP3111H-T15-Team-Repo/
 
 * Assigned tasks: C1, C2, C3
 
+## Code Documentation [Javadoc]
 
-## Useful Links (for the laziness of searching on CANVAS)
-* [Task Description](https://canvas.ust.hk/courses/38865/pages/task-description?module_item_id=629082)
-* [Project Components(including grading, deadlines, etc)](https://canvas.ust.hk/courses/38865/pages/components-of-project-assessment?module_item_id=629089)
-* [Dataset](https://canvas.ust.hk/courses/38865/pages/dataset-for-team-project?module_item_id=629097)
-* [Activity 2 -Documentation](https://drive.google.com/drive/folders/1x-6xDBKXWHExG0wpLuWhw3ln1fcfTkUK?usp=sharing)
+https://kkdlau.github.io/COMP3111H-T15-Team-Repo/  
+
+
+## Screenshots of application  
+
+#### Table-Generating Task 
+Task A1  
+<img src="assets/TaskA1.png" alt="Task A1" width="200">
+
+Task B1  
+<img src="assets/TaskB1.png" alt="Task B1" width="300">  
+
+Task C1  
+<img src="assets/TaskC1.png" alt="Task C1" width="400">  
+
+
+
