@@ -180,7 +180,7 @@ public class Controller implements Initializable {
             countryFilter.setExpanded(true);
             countryFilter.setVisible(true);
         } else if (disSelected == b3Tab) {
-
+            countryInstruction.setVisible(true);
         } else if (disSelected == c3Tab) {
             countryInstruction.setVisible(true);
         }
