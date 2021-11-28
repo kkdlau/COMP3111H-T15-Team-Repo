@@ -94,6 +94,8 @@ public class Controller implements Initializable {
     @FXML
     private TitledPane dataRangeTile;
     @FXML
+    private TitledPane countryFilter;
+    @FXML
     private LineChart chart;
     @FXML
     private NumberAxis chartXAxis;
@@ -169,14 +171,13 @@ public class Controller implements Initializable {
 
     private boolean init = false;
 
-    boolean isInit() {
-        return init;
-    }
     ChangeListener<Tab> onTabChanged = (ov, disSelected, selected) -> {
         rightUI.getChildren().clear();
-        System.out.println(selected.getText());
+
         if (disSelected == tabTask12) {
         } else if (disSelected == a3Tab) {
+            countryFilter.setExpanded(true);
+            countryFilter.setVisible(true);
         } else if (disSelected == b3Tab) {
 
         } else if (disSelected == c3Tab) {
@@ -188,6 +189,8 @@ public class Controller implements Initializable {
             rightUI.getChildren().add(stack);
             this.showTaskUI(!dataInstance.acumulativeData.get());
         } else if (selected == a3Tab) {
+            countryFilter.setExpanded(false);
+            countryFilter.setVisible(false);
             rightUI.getChildren().add(title);
             rightUI.getChildren().add(stack);
             title.setText("COVID-19 Confirmed Cases Report"); // update title
@@ -248,6 +251,9 @@ public class Controller implements Initializable {
         tabTaskA3Initialize();
         tabTaskB3Initialize();
         tabTaskC3Initialize();
+
+        stack.getChildren().clear();
+        this.showTaskUI(!dataInstance.acumulativeData.get());
 
         tabGroup.getSelectionModel().select(0); // select task 1&2 tab by default
         init = true;
@@ -574,6 +580,17 @@ public class Controller implements Initializable {
         shifted.add(DeepCopyUtils.copySeries(unshifted.get(1)));
 
         compareChart.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);
+        switch (dataInstance.focusedData) {
+            case ConfirmedCases:
+                title.setText("Confirmed COVID-19 Cases (per 1M)");
+                break;
+            case ConfirmedDeaths:
+                title.setText("Confirmed COVID-19 Deaths (per 1M)");
+                break;
+            case RateOfVaccination:
+                title.setText("Rate of Vaccination against COVID-19");
+                break;
+        }
         compareChart.setData(shifted);
     }
 
@@ -609,6 +626,17 @@ public class Controller implements Initializable {
         if (checkPeriodInput.get(0).equals(checkPeriodInput.get(1))) chart.setCreateSymbols(true);
         else chart.setCreateSymbols(false);
         ObservableList<XYChart.Series<String, Float>> allData = TableChartTask.generateChart(iDataset, Arrays.asList(ISOStrings), checkPeriodInput, getFocusedData());
+        switch (dataInstance.focusedData) {
+            case ConfirmedCases:
+                title.setText("Cumulative Confirmed COVID-19 Cases (per 1M)");
+                break;
+            case ConfirmedDeaths:
+                title.setText("Cumulative Confirmed COVID-19 Deaths (per 1M)");
+                break;
+            case RateOfVaccination:
+                title.setText("Cumulative Rate of Vaccination against COVID-19");
+                break;
+        }
         chart.setData(allData);
     }
 

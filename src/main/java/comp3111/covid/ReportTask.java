@@ -1,7 +1,6 @@
 package comp3111.covid;
 
 import java.util.*;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
@@ -15,7 +14,7 @@ import org.apache.commons.csv.*;
 import java.time.temporal.ChronoUnit;
 
 /**
- * A class to generate data for Report C
+ * A class to generate data for Reports
  *
  * @author Magdalene
  */
@@ -26,10 +25,6 @@ class ReportTask {
     static String[] quartiles = {"Quartile 1", "Quartile 2", "Quartile 3", "Quartile 4"};
     public static Map<String, Set<String>> locByGDP = new HashMap<>();
 
-    /**
-     * @param iDataset Filename of dataset
-     * @return ObservableList Data for LineChart
-     */
 
     /**
      * Generate a data series for scatter plot in report B
@@ -213,6 +208,11 @@ class ReportTask {
         }
         return message;
     }
+    
+    /**
+     * @param iDataset Filename of dataset
+     * @return ObservableList Data for LineChart
+     */
 
     public static ObservableList generateChartC1(String iDataset) {
         Float[] gdpQuartile = DataAnalysis.getQuartiles(iDataset, "gdp_per_capita");
@@ -239,7 +239,7 @@ class ReportTask {
                 if (s1.isEmpty()) { // no GDP data
                     valid = 0;
                     continue;
-                } else {
+                } else {	
                     numDoses = 0.0f; // reset to zero
                     gdp = Float.parseFloat(s1);
                     valid = 1;
@@ -393,7 +393,7 @@ class ReportTask {
                 String s1 = rec.get("people_fully_vaccinated_per_hundred");
                 if (!s1.isEmpty())
                     vac_rate = Float.parseFloat(s1); // cumulative data
-                if (readDate.isBefore(startDate) && readDate.isAfter(endDate))
+                if (readDate.isBefore(startDate) || readDate.isAfter(endDate))
                     continue;
                 String s2 = rec.get("icu_patients_per_million");
                 String s3 = rec.get("hosp_patients_per_million");
