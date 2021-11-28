@@ -59,23 +59,23 @@ https://kkdlau.github.io/COMP3111H-T15-Team-Repo/
 
 #### Report Generating Tasks  
 Task A3  
-| <img src="assets/TaskA3a.png" alt="Task A3" width="400"> | <img src="assets/TaskA3b.png" alt="Task A3" width="400"> | <img src="assets/TaskA3c.png" alt="Task A3" width="400"> |
+<img src="assets/TaskA3a.png" alt="Task A3" width="500"> <img src="assets/TaskA3b.png" alt="Task A3" width="500"> <img src="assets/TaskA3c.png" alt="Task A3" width="500"> 
 
 Task B3  
-| <img src="assets/TaskB3a.png" alt="Task B3" width="400"> | <img src="assets/TaskB3b.png" alt="Task B3" width="400"> | <img src="assets/TaskB3c.png" alt="Task B3" width="400"> |
+<img src="assets/TaskB3a.png" alt="Task B3" width="500"> <img src="assets/TaskB3b.png" alt="Task B3" width="500"> <img src="assets/TaskB3c.png" alt="Task B3" width="500">
 
 Task C3  
-| <img src="assets/TaskC3a.png" alt="Task C3" width="400"> | <img src="assets/TaskC3b.png" alt="Task C3" width="400"> | <img src="assets/TaskC3c.png" alt="Task C3" width="400"> |  
+<img src="assets/TaskC3a.png" alt="Task C3" width="500"> <img src="assets/TaskC3b.png" alt="Task C3" width="500"> <img src="assets/TaskC3c.png" alt="Task C3" width="500"> 
 
 
 ## Testing Reports  
 #### Unit testing  
  
-<img src="assets/testReport.png" alt="Unit testing" width="500">  
+<img src="assets/testReport.png" alt="Unit testing" width="800">  
 
 #### Coverage test  
 
-<img src="assets/jacocoCoverage.png" alt="Coverage testing" width="500">  
+<img src="assets/jacocoCoverage.png" alt="Coverage testing" width="800">  
 
 ## Supplementary Video  
 https://drive.google.com/file/d/1fZQy24GhBx98omUwLN2bWApBD6Q5u5M8/view  
