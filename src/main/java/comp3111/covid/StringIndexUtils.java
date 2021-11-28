@@ -17,6 +17,7 @@ public class StringIndexUtils {
     );
 
     /**
+     * Return index for continent
      * @param continent
      * @return index in continents map
      */

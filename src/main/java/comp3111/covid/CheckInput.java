@@ -33,11 +33,11 @@ public class CheckInput {
 		validationResult.add(errorMsg);
 		return validationResult;
 	}
-	/** Method 2:
-	 * input: LocalDate 
-	 * output: string[] - first is notification of using default values 
-	 * 					  second is date to use 
-	 * This method is for the table task where only "No input" is handled by giving today's date as default.
+	/**
+	 * Checks if the user inputs a valid date
+	 * @param iDate date input from user
+	 * @param iDataset filename of dataset
+	 * @return String array for error message and valid date
 	 */
 	public static String[] checkValidDate(LocalDate iDate, String iDataset) {
 		List<LocalDate> validPeriod = DataAnalysis.getValidPeriod(iDataset);
@@ -55,9 +55,12 @@ public class CheckInput {
 		validationResult[0] = errorMsg;
 		return validationResult;
 	}
-	/** Method 3: 
-	 * input: LocalDate iStartDate, LocalDate iEndDate, String iDataset 
-	 * output: return List - error message, start date, end date 
+	/**
+	 * Checks if the user inputs a valid period
+	 * @param iStartDate start date input from user
+	 * @param iEndDate end date input from user
+	 * @param iDataset filename of dataset
+	 * @return List to store error message and valid period
 	 */
 	public static List<String> checkValidPeriod(LocalDate iStartDate, LocalDate iEndDate, String iDataset) {
 		String errorMsg = "";
