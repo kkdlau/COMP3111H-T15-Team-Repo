@@ -29,6 +29,12 @@ class ReportTask {
     /**
      * Generate a data series for scatter plot in report B
      *
+     * @param iDataset			the path to the dataset
+     * @param iISO 				the country ISO code
+     * @param x_axis			the name of x_axis
+     * @param y_axis			the name of y_axis
+     * @param result			the regression analysis result will be stored here
+     * @param y_data_cumulation	the number of record cumulated
      * @return Series<Float, Float>
      */
     public static Series<Float, Float> generateChartB(String iDataset, String iISO, String x_axis, String y_axis, double[] result, int y_data_cumulation) {
@@ -120,7 +126,10 @@ class ReportTask {
     /**
      * Generate a string to describe the correlation
      *
-     * @return String
+     * @param result	regression analysis result
+     * @param x_data	the name of x_data
+     * @param y_data	the name of y_data
+     * @return String for regression analysis
      */
     private static String correlationAnalysisB(double[] result, String x_data, String y_data) {
         double correlation = (double) Math.round(result[0] * 100) / 100;
@@ -147,7 +156,8 @@ class ReportTask {
     /**
      * Generate a conclusion of chart 1 in report B
      *
-     * @return String
+     * @param result regression analysis result
+     * @return String for the reportB chart 1
      */
     public static String correlationAnalysisB1(double[] result) {
         double correlation = (double) Math.round(result[0] * 100) / 100;
@@ -168,7 +178,8 @@ class ReportTask {
     /**
      * Generate a conclusion of chart 2 in report B
      *
-     * @return String
+     * @param result regression analysis result
+     * @return String for the reportB chart 2
      */
     public static String correlationAnalysisB2(double[] result) {
         double correlation = (double) Math.round(result[0] * 100) / 100;
@@ -190,7 +201,9 @@ class ReportTask {
     /**
      * Generate a conclusion of chart 3 in report B
      *
-     * @return ObservableList
+     * @param result 		regression analysis result
+     * @param dayChecked	the number of day that the death cases observed
+     * @return String for the reportB chart 1
      */
     public static String correlationAnalysisB3(double[] result, int dayChecked) {
         double correlation = (double) Math.round(result[0] * 100) / 100;
