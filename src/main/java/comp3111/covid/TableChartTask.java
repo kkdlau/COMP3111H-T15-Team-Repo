@@ -21,6 +21,7 @@ class TableChartTask {
     static DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("uuuu-M-d");
 
     /**
+     * Generate data for table in Task 1
      * @param iDataset    Filename of dataset
      * @param iISOStrings Target countries
      * @param iStrDate    Target date
@@ -88,6 +89,7 @@ class TableChartTask {
     }
 
     /**
+     * Generate data for chart in Task 2 
      * @param iDataset    Filename of dataset
      * @param iISOStrings Target countries
      * @param iPeriod     Target date range

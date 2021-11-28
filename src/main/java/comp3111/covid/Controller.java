@@ -55,6 +55,10 @@ class DeepCopyUtils {
     }
 }
 
+/**
+ * A class for the controller 
+ *
+ */
 public class Controller implements Initializable {
 
     ToggleGroup ratioButtonGroups = new ToggleGroup();
@@ -217,7 +221,7 @@ public class Controller implements Initializable {
     }
 
     /**
-     * Initialize the cotroller.
+     * Initialize the controller
      */
     public void initialize() {
         // default data for data pickers
@@ -651,6 +655,8 @@ public class Controller implements Initializable {
     }
 
     /**
+     * Generates a LineChart for Task 2
+     * 
      * @param data User input for all controls
      */
     void generateChart(final UIDataModel data) {
@@ -882,7 +888,10 @@ public class Controller implements Initializable {
         ResultB3.setText(ReportTask.correlationAnalysisB3(regression_result, dayChecked));
         taskB3correlation.setText("Correlation = " + regression_result[0] + "\nNumber of data = " + Math.round(regression_result[1]) + "\nSlope = " + regression_result[2]);
     }
-
+    /**
+     * UI Output - Line Chart and Table to show vaccine inequity
+     * @param data user input for all controls
+     */
     void generateChartC1(final UIDataModel data) {
         // no need to check input, just use the dataset
         chartReportC1.getData().clear();
@@ -905,6 +914,7 @@ public class Controller implements Initializable {
     }
 
     /**
+     * UI Output - Scatter Chart for vaccination rate and Human Development Index (HDI)
      * @param data User input for all controls
      */
     void generateChartC2(final UIDataModel data) {
@@ -924,6 +934,7 @@ public class Controller implements Initializable {
     }
 
     /**
+     * UI Output - Generate Line Chart for effect of vaccination rate on ICU and hospitalization rate
      * @param data User input for all controls
      */
     void generateChartC3(final UIDataModel data) {
