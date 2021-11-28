@@ -730,6 +730,7 @@ public class Controller implements Initializable {
 
     /**
      * Error check - to check the number of country selected is one or not
+     * @return boolean value that error exist or not
      */
     boolean errorCheckOneCountry() {
         Object[] ISO = dataInstance.getISOList(countryListView.getSelectionModel().getSelectedItems());
@@ -748,7 +749,7 @@ public class Controller implements Initializable {
     /**
      * UI output - Scatter Plot of the death cases and the confirmed rate.
      *
-     * @param data
+     * @param data user inputed for all controls
      */
     void generateChartB1(final UIDataModel data) {
         chartReportB1.getData().clear();
@@ -768,7 +769,7 @@ public class Controller implements Initializable {
     /**
      * UI output - Scatter Plot of the death cases and the vaccination rate that could the citizens be immediately vaccinated during a breakout.
      *
-     * @param data
+     * @param data user inputed for all controls
      */
     void generateChartB2(final UIDataModel data) {
         chartReportB2.getData().clear();
@@ -788,7 +789,7 @@ public class Controller implements Initializable {
     /**
      * UI output - Scatter Plot of the vaccination rate and the death cases to verify the efficiency of vaccines.
      *
-     * @param data
+     * @param data user inputed for all controls
      */
     void generateChartB3(final UIDataModel data) {
         chartReportB3.getData().clear();
