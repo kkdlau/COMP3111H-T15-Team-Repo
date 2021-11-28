@@ -58,13 +58,13 @@ https://kkdlau.github.io/COMP3111H-T15-Team-Repo/
 |<img src="assets/TaskC1.png" alt="Task C1" width="500"> | <img src="assets/TaskC2.png" alt="Task C2" width="500">  | 
 
 #### Report Generating Tasks  
-Task A3  
+##### Task A3  
 <img src="assets/TaskA3a.png" alt="Task A3" width="500"> <img src="assets/TaskA3b.png" alt="Task A3" width="500"> <img src="assets/TaskA3c.png" alt="Task A3" width="500"> 
 
-Task B3  
+##### Task B3  
 <img src="assets/TaskB3a.png" alt="Task B3" width="500"> <img src="assets/TaskB3b.png" alt="Task B3" width="500"> <img src="assets/TaskB3c.png" alt="Task B3" width="500">
 
-Task C3  
+##### Task C3  
 <img src="assets/TaskC3a.png" alt="Task C3" width="500"> <img src="assets/TaskC3b.png" alt="Task C3" width="500"> <img src="assets/TaskC3c.png" alt="Task C3" width="500"> 
 
 
