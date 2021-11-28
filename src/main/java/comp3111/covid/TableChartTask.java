@@ -15,7 +15,6 @@ import edu.duke.*;
 /**
  * Class to generate data for Task 1 and 2
  *
- * @author Magdalene
  */
 class TableChartTask {
     static DateTimeFormatter datasetFormatter = DateTimeFormatter.ofPattern("M/d/uuuu");

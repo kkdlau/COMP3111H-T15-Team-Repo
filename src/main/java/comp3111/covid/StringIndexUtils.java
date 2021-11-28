@@ -5,7 +5,6 @@ import java.util.*;
 /**
  * Utility class to convert strings and indices
  *
- * @author Magdalene
  */
 public class StringIndexUtils {
     private static Map<String, Integer> continents = Map.of(
