@@ -580,6 +580,17 @@ public class Controller implements Initializable {
         shifted.add(DeepCopyUtils.copySeries(unshifted.get(1)));
 
         compareChart.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);
+        switch (dataInstance.focusedData) {
+            case ConfirmedCases:
+                title.setText("Confirmed COVID-19 Cases (per 1M)");
+                break;
+            case ConfirmedDeaths:
+                title.setText("Confirmed COVID-19 Deaths (per 1M)");
+                break;
+            case RateOfVaccination:
+                title.setText("Rate of Vaccination against COVID-19");
+                break;
+        }
         compareChart.setData(shifted);
     }
 
@@ -615,6 +626,17 @@ public class Controller implements Initializable {
         if (checkPeriodInput.get(0).equals(checkPeriodInput.get(1))) chart.setCreateSymbols(true);
         else chart.setCreateSymbols(false);
         ObservableList<XYChart.Series<String, Float>> allData = TableChartTask.generateChart(iDataset, Arrays.asList(ISOStrings), checkPeriodInput, getFocusedData());
+        switch (dataInstance.focusedData) {
+            case ConfirmedCases:
+                title.setText("Cumulative Confirmed COVID-19 Cases (per 1M)");
+                break;
+            case ConfirmedDeaths:
+                title.setText("Cumulative Confirmed COVID-19 Deaths (per 1M)");
+                break;
+            case RateOfVaccination:
+                title.setText("Cumulative Rate of Vaccination against COVID-19");
+                break;
+        }
         chart.setData(allData);
     }
 
