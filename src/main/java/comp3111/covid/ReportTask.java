@@ -16,7 +16,6 @@ import java.time.temporal.ChronoUnit;
 /**
  * A class to generate data for Reports
  *
- * @author Magdalene
  */
 class ReportTask {
 
@@ -223,6 +222,8 @@ class ReportTask {
     }
     
     /**
+     * Generate data for Chart C1 in Report C
+     * 
      * @param iDataset Filename of dataset
      * @return ObservableList Data for LineChart
      */
@@ -291,6 +292,8 @@ class ReportTask {
     }
 
     /**
+     * Generate data for the Table 1 in Report C
+     * 
      * @return ObservableList Data to populate TableView
      */
     public static ObservableList generateTableC1() {
@@ -326,6 +329,7 @@ class ReportTask {
     }
 
     /**
+     * Generate data for Chart 2 in Report C 
      * @param iDataset Filename of dataset
      * @param lastDate Last date with data in dataset
      * @return ObservableList Data for ScatterChart
@@ -378,6 +382,7 @@ class ReportTask {
     }
 
     /**
+     * Generate data for Chart 3 in Report C
      * @param iDataset Filename of dataset
      * @param iISO     ISO chosen by user
      * @param iPeriod  Date range chosen by user

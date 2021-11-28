@@ -15,13 +15,13 @@ import edu.duke.*;
 /**
  * Class to generate data for Task 1 and 2
  *
- * @author Magdalene
  */
 class TableChartTask {
     static DateTimeFormatter datasetFormatter = DateTimeFormatter.ofPattern("M/d/uuuu");
     static DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("uuuu-M-d");
 
     /**
+     * Generate data for table in Task 1
      * @param iDataset    Filename of dataset
      * @param iISOStrings Target countries
      * @param iStrDate    Target date
@@ -89,6 +89,7 @@ class TableChartTask {
     }
 
     /**
+     * Generate data for chart in Task 2 
      * @param iDataset    Filename of dataset
      * @param iISOStrings Target countries
      * @param iPeriod     Target date range
