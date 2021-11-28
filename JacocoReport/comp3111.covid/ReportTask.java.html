@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReportTask.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">ReportTask.java</span></div><h1>ReportTask.java</h1><pre class="source lang-java linenums">package comp3111.covid;
+
+import java.util.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import org.apache.commons.csv.*;
+
+import java.time.temporal.ChronoUnit;
+
+/**
+ * A class to generate data for Reports
+ *
+ * @author Magdalene
+ */
+<span class="nc" id="L21">class ReportTask {</span>
+
+<span class="fc" id="L23">    static DateTimeFormatter datasetFormatter = DateTimeFormatter.ofPattern(&quot;M/d/uuuu&quot;);</span>
+<span class="fc" id="L24">    static DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern(&quot;uuuu-M-d&quot;);</span>
+<span class="fc" id="L25">    static String[] quartiles = {&quot;Quartile 1&quot;, &quot;Quartile 2&quot;, &quot;Quartile 3&quot;, &quot;Quartile 4&quot;};</span>
+<span class="fc" id="L26">    public static Map&lt;String, Set&lt;String&gt;&gt; locByGDP = new HashMap&lt;&gt;();</span>
+
+
+    /**
+     * Generate a data series for scatter plot in report B
+     *
+     * @param iDataset			the path to the dataset
+     * @param iISO 				the country ISO code
+     * @param x_axis			the name of x_axis
+     * @param y_axis			the name of y_axis
+     * @param result			the regression analysis result will be stored here
+     * @param y_data_cumulation	the number of record cumulated
+     * @return Series series of data
+     */
+    public static Series&lt;Float, Float&gt; generateChartB(String iDataset, String iISO, String x_axis, String y_axis, double[] result, int y_data_cumulation) {
+
+<span class="fc" id="L42">        Series&lt;Float, Float&gt; data = new Series&lt;Float, Float&gt;();</span>
+<span class="fc" id="L43">        double sum_x = 0, sum_y = 0, sum_xy = 0, sum_x2 = 0, sum_y2 = 0;</span>
+<span class="fc" id="L44">        int length = 0;</span>
+
+
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (y_data_cumulation == 1) {</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">            for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">                if (rec.get(&quot;iso_code&quot;).equals(iISO)) {</span>
+<span class="fc bfc" id="L50" title="All 4 branches covered.">                    if (!rec.get(x_axis).isEmpty() &amp;&amp; !rec.get(y_axis).isEmpty()) {</span>
+<span class="fc" id="L51">                        float x_data_float = Float.parseFloat(rec.get(x_axis));</span>
+<span class="fc" id="L52">                        float y_data_float = Float.parseFloat(rec.get(y_axis));</span>
+<span class="fc bfc" id="L53" title="All 4 branches covered.">                        if (x_data_float &gt; 0 &amp;&amp; y_data_float &gt; 0) {</span>
+<span class="fc" id="L54">                            data.getData().addAll(new XYChart.Data(x_data_float, y_data_float));</span>
+<span class="fc" id="L55">                            sum_x += x_data_float;</span>
+<span class="fc" id="L56">                            sum_y += y_data_float;</span>
+<span class="fc" id="L57">                            sum_xy += x_data_float * y_data_float;</span>
+<span class="fc" id="L58">                            sum_x2 += x_data_float * x_data_float;</span>
+<span class="fc" id="L59">                            sum_y2 += y_data_float * y_data_float;</span>
+<span class="fc" id="L60">                            length++;</span>
+                        }
+                    }
+                }
+<span class="fc" id="L64">            }</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        } else if (y_data_cumulation &gt; 1) {</span>
+<span class="fc" id="L66">            float[] sum_of_y_data = new float[y_data_cumulation];</span>
+<span class="fc" id="L67">            Arrays.fill(sum_of_y_data, 0);</span>
+<span class="fc" id="L68">            float[] value_of_x_data = new float[y_data_cumulation];</span>
+<span class="fc" id="L69">            Arrays.fill(value_of_x_data, 0);</span>
+<span class="fc" id="L70">            LocalDate startDate = null;</span>
+<span class="fc" id="L71">            LocalDate currentDate = null;</span>
+<span class="fc" id="L72">            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;M/d/uuuu&quot;);</span>
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">                if (rec.get(&quot;iso_code&quot;).equals(iISO)) {</span>
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">                    if (startDate == null) {</span>
+<span class="fc" id="L78">                        startDate = LocalDate.parse(rec.get(&quot;date&quot;), formatter);</span>
+                    }
+<span class="fc" id="L80">                    currentDate = LocalDate.parse(rec.get(&quot;date&quot;), formatter);</span>
+<span class="fc" id="L81">                    int dayDiff = (int) ChronoUnit.DAYS.between(startDate, currentDate);</span>
+
+<span class="fc bfc" id="L83" title="All 2 branches covered.">                    if (dayDiff &gt;= y_data_cumulation) {</span>
+<span class="fc" id="L84">                        int index = dayDiff % y_data_cumulation;</span>
+<span class="fc" id="L85">                        float x_data_float = value_of_x_data[index];</span>
+<span class="fc" id="L86">                        float y_data_float = sum_of_y_data[index];</span>
+<span class="fc" id="L87">                        value_of_x_data[index] = 0;</span>
+<span class="fc" id="L88">                        sum_of_y_data[index] = 0;</span>
+                        LocalDate dateBefore;
+                        LocalDate dateAfter;
+<span class="fc bfc" id="L91" title="All 4 branches covered.">                        if (x_data_float &gt; 0 &amp;&amp; y_data_float &gt; 0) {</span>
+<span class="fc" id="L92">                            data.getData().addAll(new XYChart.Data(x_data_float, y_data_float));</span>
+<span class="fc" id="L93">                            sum_x += x_data_float;</span>
+<span class="fc" id="L94">                            sum_y += y_data_float;</span>
+<span class="fc" id="L95">                            sum_xy += x_data_float * y_data_float;</span>
+<span class="fc" id="L96">                            sum_x2 += x_data_float * x_data_float;</span>
+<span class="fc" id="L97">                            sum_y2 += y_data_float * y_data_float;</span>
+<span class="fc" id="L98">                            length++;</span>
+                        }
+                    }
+
+<span class="fc bfc" id="L102" title="All 2 branches covered.">                    if (!rec.get(y_axis).isEmpty()) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">                        for (int i = 0; i &lt; Math.min(dayDiff, y_data_cumulation); i++) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">                            if (sum_of_y_data[i] == 0) {</span>
+<span class="fc" id="L105">                                sum_of_y_data[i] += Float.parseFloat(rec.get(y_axis));</span>
+                            } else {
+<span class="fc" id="L107">                                sum_of_y_data[i] = (float) (sum_of_y_data[i] * 0.4 + Float.parseFloat(rec.get(y_axis)) * 0.6);</span>
+                            }
+                        }
+                    }
+<span class="fc bfc" id="L111" title="All 2 branches covered.">                    if (!rec.get(x_axis).isEmpty()) {</span>
+<span class="fc" id="L112">                        value_of_x_data[dayDiff % y_data_cumulation] = Float.parseFloat(rec.get(x_axis));</span>
+                    }
+                }
+<span class="fc" id="L115">            }</span>
+        }
+
+<span class="fc" id="L118">        double correlationCoef = (length * sum_xy - sum_x * sum_y) / Math.sqrt((double) (length * sum_x2 - sum_x * sum_x) * (length * sum_y2 - sum_y * sum_y));</span>
+<span class="fc" id="L119">        double slope = (length * sum_xy - sum_x * sum_y) / (length * sum_x2 - sum_x * sum_x);</span>
+<span class="fc" id="L120">        result[0] = correlationCoef;</span>
+<span class="fc" id="L121">        result[1] = length;</span>
+<span class="fc" id="L122">        result[2] = slope;</span>
+<span class="fc" id="L123">        return data;</span>
+    }
+
+    /**
+     * Generate a string to describe the correlation
+     *
+     * @param result	regression analysis result
+     * @param x_data	the name of x_data
+     * @param y_data	the name of y_data
+     * @return String for regression analysis
+     */
+    private static String correlationAnalysisB(double[] result, String x_data, String y_data) {
+<span class="fc" id="L135">        double correlation = (double) Math.round(result[0] * 100) / 100;</span>
+<span class="fc" id="L136">        int length = (int) result[1];</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (length &lt;= 2) {</span>
+<span class="fc" id="L138">            return &quot;There are not sufficient data to make a conclusion.&quot;;</span>
+        }
+<span class="fc" id="L140">        String message = &quot;The correlation between &quot; + x_data + &quot; and &quot; + y_data + &quot; is &quot; + correlation + &quot; that implies &quot;;</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (correlation &gt; 0.6) {</span>
+<span class="fc" id="L142">            message += &quot;a strongly positive&quot;;</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        } else if (correlation &gt; 0.2) {</span>
+<span class="fc" id="L144">            message += &quot;a slightly positive&quot;;</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        } else if (correlation &gt; -0.2) {</span>
+<span class="fc" id="L146">            message += &quot;no&quot;;</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        } else if (correlation &gt; -0.6) {</span>
+<span class="fc" id="L148">            message += &quot;a slightly negative&quot;;</span>
+        } else {
+<span class="fc" id="L150">            message += &quot;a strongly negative&quot;;</span>
+        }
+<span class="fc" id="L152">        message += &quot; relationship between &quot; + x_data + &quot; and &quot; + y_data + &quot;.&quot;;</span>
+<span class="fc" id="L153">        return message;</span>
+    }
+
+    /**
+     * Generate a conclusion of chart 1 in report B
+     *
+     * @param result regression analysis result
+     * @return String for the reportB chart 1
+     */
+    public static String correlationAnalysisB1(double[] result) {
+<span class="fc" id="L163">        double correlation = (double) Math.round(result[0] * 100) / 100;</span>
+<span class="fc" id="L164">        String message = correlationAnalysisB(result, &quot;death cases&quot;, &quot;confirmed cases&quot;);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (message.equals(&quot;There are not sufficient data to make a conclusion.&quot;)) {</span>
+<span class="fc" id="L166">            return message;</span>
+        }
+
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (correlation &gt; 0.2) {</span>
+<span class="fc" id="L170">            message += &quot; Government should implement bounder shutdown and social distancing policies to reduce the death cases.&quot;;</span>
+        } else {
+<span class="fc" id="L172">            message += &quot; Most of the death cases are not related to the infection of covid-19.&quot;;</span>
+<span class="fc" id="L173">            message += &quot; Bounder shutdown and social distancing can not effectively reduce the deaths.&quot;;</span>
+        }
+<span class="fc" id="L175">        return message;</span>
+    }
+
+    /**
+     * Generate a conclusion of chart 2 in report B
+     *
+     * @param result regression analysis result
+     * @return String for the reportB chart 2
+     */
+    public static String correlationAnalysisB2(double[] result) {
+<span class="fc" id="L185">        double correlation = (double) Math.round(result[0] * 100) / 100;</span>
+<span class="fc" id="L186">        String message = correlationAnalysisB(result, &quot;death cases&quot;, &quot;vaccination rate&quot;);</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (message.equals(&quot;There are not sufficient data to make a conclusion.&quot;)) {</span>
+<span class="fc" id="L188">            return message;</span>
+        }
+
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (correlation &gt; 0.2) {</span>
+<span class="fc" id="L192">            message += &quot; The positive correlation implies the public trust the efficiency of vaccine that can prevent death from covid-19.&quot;;</span>
+<span class="fc" id="L193">            message += &quot; It implies the government can provide enough and reliable vaccines during the breakout.&quot;;</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        } else if (correlation &lt; -0.2) {</span>
+<span class="fc" id="L195">            message += &quot; The negative correlation implies the public did not decide to/ cannot be vaccinated when a new death case happens.&quot;;</span>
+<span class="fc" id="L196">            message += &quot; It implies government did not have enough vaccines or had no reliable vaccine to use during the breakout.&quot;;</span>
+        }
+<span class="fc" id="L198">        return message;</span>
+    }
+
+    /**
+     * Generate a conclusion of chart 3 in report B
+     *
+     * @param result 		regression analysis result
+     * @param dayChecked	the number of day that the death cases observed
+     * @return String for the reportB chart 1
+     */
+    public static String correlationAnalysisB3(double[] result, int dayChecked) {
+<span class="fc" id="L209">        double correlation = (double) Math.round(result[0] * 100) / 100;</span>
+<span class="fc" id="L210">        String message = correlationAnalysisB(result, &quot;vaccination rate&quot;, dayChecked + &quot;-days death cases&quot;);</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (message.equals(&quot;There are not sufficient data to make a conclusion.&quot;)) {</span>
+<span class="fc" id="L212">            return message;</span>
+        }
+
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (correlation &gt; 0.2) {</span>
+<span class="fc" id="L216">            message += &quot; The positive relationship implies the vaccine is deadly that increases the number of death cases in &quot; + dayChecked + &quot;-days.&quot;;</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        } else if (correlation &gt; -0.2) {</span>
+<span class="fc" id="L218">            message += &quot; That implies the vaccine cannot effectively prevent a death cases in &quot; + dayChecked + &quot;-days.&quot;;</span>
+        } else {
+<span class="fc" id="L220">            message += &quot; The negative relationship implies the vaccine can effectively prevent a death cases in &quot; + dayChecked + &quot;-days.&quot;;</span>
+        }
+<span class="fc" id="L222">        return message;</span>
+    }
+    
+    /**
+     * @param iDataset Filename of dataset
+     * @return ObservableList Data for LineChart
+     */
+
+    public static ObservableList generateChartC1(String iDataset) {
+<span class="fc" id="L231">        Float[] gdpQuartile = DataAnalysis.getQuartiles(iDataset, &quot;gdp_per_capita&quot;);</span>
+
+<span class="fc" id="L233">        List&lt;Map&lt;LocalDate, Float&gt;&gt; dateVacMap = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        for (int i = 0; i &lt; 4; ++i) {</span>
+<span class="fc" id="L235">            locByGDP.put(quartiles[i], new LinkedHashSet&lt;String&gt;());</span>
+<span class="fc" id="L236">            dateVacMap.add(new TreeMap&lt;&gt;());</span>
+        }
+
+<span class="fc" id="L239">        String prevISO = &quot;&quot;;</span>
+<span class="fc" id="L240">        String ISO = &quot;&quot;, s1 = &quot;&quot;;</span>
+<span class="fc" id="L241">        LocalDate earliest = LocalDate.parse(&quot;12/1/2020&quot;, datasetFormatter);</span>
+<span class="fc" id="L242">        LocalDate date = null;</span>
+<span class="fc" id="L243">        float numDoses = 0.0f;</span>
+<span class="fc" id="L244">        float gdp = 0.0f;</span>
+<span class="fc" id="L245">        int valid = 1;</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {</span>
+<span class="fc" id="L247">            date = LocalDate.parse(rec.get(&quot;date&quot;), datasetFormatter);</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">            if (date.isBefore(earliest)) continue;</span>
+<span class="fc" id="L249">            ISO = rec.get(&quot;iso_code&quot;);</span>
+<span class="pc bpc" id="L250" title="1 of 2 branches missed.">            if (!ISO.equals(prevISO)) { // new ISO record</span>
+<span class="fc" id="L251">                s1 = rec.get(&quot;gdp_per_capita&quot;);</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">                if (s1.isEmpty()) { // no GDP data</span>
+<span class="fc" id="L253">                    valid = 0;</span>
+<span class="fc" id="L254">                    continue;</span>
+                } else {	
+<span class="fc" id="L256">                    numDoses = 0.0f; // reset to zero</span>
+<span class="fc" id="L257">                    gdp = Float.parseFloat(s1);</span>
+<span class="fc" id="L258">                    valid = 1;</span>
+                }
+<span class="nc bnc" id="L260" title="All 2 branches missed.">            } else if (valid == 0) continue;</span>
+<span class="fc" id="L261">            s1 = rec.get(&quot;total_vaccinations_per_hundred&quot;);</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">            if (!s1.isEmpty())</span>
+<span class="fc" id="L263">                numDoses = Float.parseFloat(s1);</span>
+
+<span class="fc bfc" id="L265" title="All 2 branches covered.">            for (int i = 0; i &lt; 4; ++i) {</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">                if (gdp &lt; gdpQuartile[i]) {</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">                    if (dateVacMap.get(i).containsKey(date))</span>
+<span class="fc" id="L268">                        dateVacMap.get(i).put(date, dateVacMap.get(i).get(date) + numDoses);</span>
+                    else
+<span class="fc" id="L270">                        dateVacMap.get(i).put(date, numDoses);</span>
+<span class="fc" id="L271">                    locByGDP.get(quartiles[i]).add(rec.get(&quot;location&quot;));</span>
+<span class="fc" id="L272">                    break;</span>
+                }
+            }
+<span class="fc" id="L275">        }</span>
+        // form the series from the Map
+        ObservableList&lt;XYChart.Series&lt;String, Float&gt;&gt; allData =
+<span class="fc" id="L278">                FXCollections.&lt;XYChart.Series&lt;String, Float&gt;&gt;observableArrayList();</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">        for (int i = 0; i &lt; 4; ++i) {</span>
+<span class="fc" id="L280">            float prev = 0.0f;</span>
+<span class="fc" id="L281">            XYChart.Series&lt;String, Float&gt; data = new XYChart.Series();</span>
+<span class="fc" id="L282">            int numLoc = locByGDP.get(quartiles[i]).size();</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">            for (Map.Entry&lt;LocalDate, Float&gt; mapElement : dateVacMap.get(i).entrySet()) {</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">                prev = (mapElement.getValue() / numLoc &gt; prev) ? mapElement.getValue() / numLoc : prev;</span>
+<span class="fc" id="L285">                data.getData().add(new XYChart.Data(mapElement.getKey().toString(), prev));</span>
+<span class="fc" id="L286">            }</span>
+<span class="fc" id="L287">            data.setName(quartiles[i]);</span>
+<span class="fc" id="L288">            allData.add(data);</span>
+        }
+<span class="fc" id="L290">        return allData;</span>
+    }
+
+    /**
+     * @return ObservableList Data to populate TableView
+     */
+    public static ObservableList generateTableC1() {
+        try {
+<span class="fc" id="L298">            ObservableList&lt;Map&lt;String, String&gt;&gt; tableData = FXCollections.&lt;Map&lt;String, String&gt;&gt;observableArrayList();</span>
+<span class="fc" id="L299">            boolean add = true;</span>
+<span class="fc" id="L300">            int index = 0;</span>
+<span class="fc" id="L301">            Map&lt;String, String[]&gt; temp = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L302" title="All 2 branches covered.">            for (String q : quartiles) {</span>
+<span class="fc" id="L303">                String[] locs = new String[locByGDP.get(q).size()];</span>
+<span class="fc" id="L304">                locByGDP.get(q).toArray(locs);</span>
+<span class="fc" id="L305">                temp.put(q, locs);</span>
+<span class="fc" id="L306">                System.out.println(locs[0]);</span>
+            }
+            // 4 lists of different length
+<span class="fc bfc" id="L309" title="All 2 branches covered.">            while (add) {</span>
+<span class="fc" id="L310">                Map&lt;String, String&gt; datum = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L311">                add = false;</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">                for (String q : quartiles) {</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">                    if (index &lt; locByGDP.get(q).size()) {</span>
+<span class="fc" id="L314">                        datum.put(q, temp.get(q)[index]);</span>
+<span class="fc" id="L315">                        add = true;</span>
+                    }
+                }
+<span class="fc" id="L318">                index += 1;</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">                if (add) tableData.add(datum);</span>
+<span class="fc" id="L320">            }</span>
+<span class="fc" id="L321">            return tableData;</span>
+<span class="nc" id="L322">        } catch (Exception e) {</span>
+<span class="nc" id="L323">            System.out.println(e);</span>
+<span class="nc" id="L324">            return null;</span>
+        }
+    }
+
+    /**
+     * @param iDataset Filename of dataset
+     * @param lastDate Last date with data in dataset
+     * @return ObservableList Data for ScatterChart
+     */
+    public static ObservableList generateChartC2(String iDataset, LocalDate lastDate) {
+        // human_development_index
+        // continent - to know which series to add into - consider enum
+        // people_fully_vaccinated_per_hundred - use the last date in iDataset
+<span class="fc" id="L337">        String[] continents = {&quot;Africa&quot;, &quot;Asia&quot;, &quot;Europe&quot;, &quot;North America&quot;, &quot;South America&quot;, &quot;Oceania&quot;};</span>
+
+<span class="fc" id="L339">        List&lt;XYChart.Series&gt; data = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L341" title="All 2 branches covered.">        for (int i = 0; i &lt; continents.length; ++i) {</span>
+<span class="fc" id="L342">            data.add(new XYChart.Series&lt;&gt;());</span>
+<span class="fc" id="L343">            data.get(i).setName(continents[i]);</span>
+        }
+        // record for one country
+<span class="fc" id="L346">        String prev = &quot;&quot;;</span>
+<span class="fc" id="L347">        float hdi = 0.0f; // human_development_index</span>
+<span class="fc" id="L348">        float vac_rate = 0.0f; // people_fully_vaccinated_per_hundred</span>
+<span class="fc" id="L349">        String continent = &quot;&quot;;</span>
+<span class="fc" id="L350">        String temp = &quot;&quot;;</span>
+<span class="fc" id="L351">        LocalDate readDate = null;</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">        for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {</span>
+<span class="fc" id="L353">            continent = rec.get(&quot;continent&quot;);</span>
+<span class="fc" id="L354">            temp = rec.get(&quot;human_development_index&quot;);</span>
+<span class="fc bfc" id="L355" title="All 4 branches covered.">            if (temp.isEmpty() || continent.isEmpty())</span>
+<span class="fc" id="L356">                continue;</span>
+<span class="fc" id="L357">            hdi = Float.parseFloat(temp);</span>
+<span class="fc" id="L358">            temp = rec.get(&quot;iso_code&quot;);</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">            if (!temp.equals(prev)) {</span>
+<span class="fc" id="L360">                vac_rate = 0.0f; // reset values</span>
+<span class="fc" id="L361">                prev = temp;</span>
+            }
+<span class="fc" id="L363">            temp = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="fc bfc" id="L364" title="All 2 branches covered.">            if (!temp.isEmpty())</span>
+<span class="fc" id="L365">                vac_rate = Float.parseFloat(temp);</span>
+<span class="fc" id="L366">            readDate = LocalDate.parse(rec.get(&quot;date&quot;), datasetFormatter);</span>
+<span class="fc bfc" id="L367" title="All 2 branches covered.">            if (readDate.equals(lastDate)) {</span>
+<span class="fc" id="L368">                int index = StringIndexUtils.ContinentIndex(continent);</span>
+<span class="fc" id="L369">                data.get(index).getData().add(new XYChart.Data(hdi, vac_rate));</span>
+
+            }
+<span class="fc" id="L372">        }</span>
+<span class="fc" id="L373">        ObservableList&lt;XYChart.Series&gt; allData = FXCollections.&lt;XYChart.Series&gt;observableArrayList();</span>
+<span class="fc bfc" id="L374" title="All 2 branches covered.">        for (int i = 0; i &lt; continents.length; ++i) {</span>
+<span class="fc" id="L375">            allData.add(data.get(i));</span>
+        }
+<span class="fc" id="L377">        return allData;</span>
+    }
+
+    /**
+     * @param iDataset Filename of dataset
+     * @param iISO     ISO chosen by user
+     * @param iPeriod  Date range chosen by user
+     * @return ObservableList Data to populate LineChart
+     */
+    public static ObservableList generateChartC3(String iDataset, String iISO, List&lt;String&gt; iPeriod) {
+<span class="fc" id="L387">        LocalDate startDate = LocalDate.parse(iPeriod.get(0), inputFormatter);</span>
+<span class="fc" id="L388">        LocalDate endDate = LocalDate.parse(iPeriod.get(1), inputFormatter);</span>
+        ObservableList&lt;XYChart.Series&lt;String, Float&gt;&gt; allData =
+<span class="fc" id="L390">                FXCollections.&lt;XYChart.Series&lt;String, Float&gt;&gt;observableArrayList();</span>
+
+<span class="fc" id="L392">        XYChart.Series&lt;String, Float&gt; vacData = new XYChart.Series();</span>
+<span class="fc" id="L393">        XYChart.Series&lt;String, Float&gt; icuData = new XYChart.Series();</span>
+<span class="fc" id="L394">        XYChart.Series&lt;String, Float&gt; hospData = new XYChart.Series();</span>
+
+<span class="fc" id="L396">        float vac_rate = 0.0f;</span>
+<span class="fc" id="L397">        float hosp = 0.0f;</span>
+<span class="fc" id="L398">        float icu = 0.0f;</span>
+<span class="fc" id="L399">        boolean found = false;</span>
+        //System.out.println(&quot;TARGET &quot; + iISO);
+<span class="fc bfc" id="L401" title="All 2 branches covered.">        for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {</span>
+<span class="fc bfc" id="L402" title="All 2 branches covered.">            if (rec.get(&quot;iso_code&quot;).equals(iISO)) {</span>
+                //System.out.println(&quot;Found ISO&quot;);
+<span class="fc" id="L404">                LocalDate readDate = LocalDate.parse(rec.get(&quot;date&quot;), datasetFormatter);</span>
+
+<span class="fc" id="L406">                String s1 = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="fc bfc" id="L407" title="All 2 branches covered.">                if (!s1.isEmpty())</span>
+<span class="fc" id="L408">                    vac_rate = Float.parseFloat(s1); // cumulative data</span>
+<span class="fc bfc" id="L409" title="All 4 branches covered.">                if (readDate.isBefore(startDate) || readDate.isAfter(endDate))</span>
+<span class="fc" id="L410">                    continue;</span>
+<span class="fc" id="L411">                String s2 = rec.get(&quot;icu_patients_per_million&quot;);</span>
+<span class="fc" id="L412">                String s3 = rec.get(&quot;hosp_patients_per_million&quot;);</span>
+<span class="fc" id="L413">                System.out.println(&quot;Get data &quot; + s2 + s3);</span>
+<span class="fc bfc" id="L414" title="All 4 branches covered.">                if (s2.isEmpty() || s3.isEmpty())</span>
+<span class="fc" id="L415">                    continue;</span>
+<span class="fc" id="L416">                found = true;</span>
+<span class="fc" id="L417">                icu = Float.parseFloat(s2) / 10;</span>
+<span class="fc" id="L418">                hosp = Float.parseFloat(s3) / 10;</span>
+<span class="fc" id="L419">                vacData.getData().add(new XYChart.Data(readDate.toString(), vac_rate));</span>
+<span class="fc" id="L420">                icuData.getData().add(new XYChart.Data(readDate.toString(), icu));</span>
+<span class="fc" id="L421">                hospData.getData().add(new XYChart.Data(readDate.toString(), hosp));</span>
+<span class="fc" id="L422">                System.out.println(&quot;Found icu and hosp data&quot;);</span>
+            }
+<span class="fc" id="L424">        }</span>
+
+<span class="fc bfc" id="L426" title="All 2 branches covered.">        if (found) {</span>
+<span class="fc" id="L427">            vacData.setName(&quot;Rate of vaccination&quot;);</span>
+<span class="fc" id="L428">            icuData.setName(&quot;# of ICU patients per 100,000&quot;);</span>
+<span class="fc" id="L429">            hospData.setName(&quot;# of hospital patients per 100,000&quot;);</span>
+<span class="fc" id="L430">            allData.addAll(vacData, icuData, hospData);</span>
+<span class="fc" id="L431">            System.out.println(&quot;end of fcn&quot;);</span>
+<span class="fc" id="L432">            return allData;</span>
+<span class="fc" id="L433">        } else return null;</span>
+    }
+}	
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

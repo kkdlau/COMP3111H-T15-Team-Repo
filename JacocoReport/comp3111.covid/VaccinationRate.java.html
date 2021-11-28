@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VaccinationRate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">VaccinationRate.java</span></div><h1>VaccinationRate.java</h1><pre class="source lang-java linenums">package comp3111.covid;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.XYChart;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import org.apache.commons.csv.*;
+import edu.duke.*;
+
+<span class="nc" id="L15">class VaccinationRate {</span>
+<span class="nc" id="L16">	static DateTimeFormatter datasetFormatter = DateTimeFormatter.ofPattern( &quot;M/d/uuuu&quot; ) ;</span>
+<span class="nc" id="L17">	static DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern( &quot;uuuu-M-d&quot; );</span>
+	
+	/** Method 1: Generate Data for Table - Country, Fully Vaccinated, Rate of Vaccination
+	 * Input: List&lt;String&gt; Country, String iDate
+	 * Output: Something that can be put into Table View 
+	 * 
+	 * in csv &quot;people_fully_vaccinated&quot; and &quot;people_fully_vaccinated_per_hundred&quot;
+	 * once find the correct country, need to keep the latest value seen
+	 * because some countries have many empty vaccination records 
+	 * 
+	 * List list = new ArrayList();
+	 * list.add(new TableRow(&quot;Country&quot;, &quot;Fully Vaccinated&quot;, &quot;Rate of Vaccination&quot;));
+	 * ...
+	 * 
+	 * ObservableList data = FXCollections.observableList(list);
+	 * return data 
+	 */
+	public static ObservableList generateVacTable(String iDataset, List&lt;String&gt; iLocations, String iStrDate) {
+		
+<span class="nc" id="L36">		LocalDate iDate = LocalDate.parse(iStrDate, inputFormatter);</span>
+		
+		ObservableList &lt;Map&lt;String, Object&gt;&gt; data = 
+<span class="nc" id="L39">				FXCollections.&lt;Map&lt;String, Object&gt;&gt;observableArrayList();</span>
+		
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		for (String loc : iLocations) {</span>
+<span class="nc" id="L42">			long fullyVaccinated = 0;</span>
+<span class="nc" id="L43">			float rate = 0.0f;</span>
+<span class="nc" id="L44">			int found = 0;</span>
+<span class="nc" id="L45">			Map&lt;String, Object&gt; datum = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L46">			datum.put(&quot;country&quot;, loc);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">			for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">				if (rec.get(&quot;location&quot;).equals(loc)) {</span>
+<span class="nc" id="L49">					found = 1;</span>
+<span class="nc" id="L50">					LocalDate readDate = LocalDate.parse(rec.get(&quot;date&quot;), datasetFormatter);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">					if (readDate.isEqual(iDate)) {</span>
+<span class="nc" id="L52">						String s1 = rec.get(&quot;people_fully_vaccinated&quot;);</span>
+<span class="nc" id="L53">						String s2 = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">						if (!s1.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L55">							fullyVaccinated = Long.parseLong(s1);</span>
+<span class="nc" id="L56">							datum.put(&quot;fully_vaccinated&quot;, fullyVaccinated);</span>
+<span class="nc" id="L57">						} else datum.put(&quot;fully_vaccinated&quot;, &quot;No records&quot;);</span>
+							
+<span class="nc bnc" id="L59" title="All 2 branches missed.">						if (!s2.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L60">							rate = Float.parseFloat(s2);</span>
+<span class="nc" id="L61">							datum.put(&quot;rate_of_vaccination&quot;, rate);</span>
+<span class="nc" id="L62">						} else datum.put(&quot;rate_of_vaccination&quot;, &quot;No records&quot;);</span>
+<span class="nc" id="L63">						data.add(datum);</span>
+<span class="nc" id="L64">						break;</span>
+					}
+					/**
+					if (readDate.isAfter(iDate)) break;
+					String s1 = rec.get(&quot;people_fully_vaccinated&quot;);
+					String s2 = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);
+					if (!s1.equals(&quot;&quot;))
+						fullyVaccinated = Long.parseLong(s1);
+					if (!s2.equals(&quot;&quot;))
+						rate = Float.parseFloat(s2);
+					**/
+<span class="nc" id="L75">				}</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">				else if (found == 1) { // date not in range </span>
+<span class="nc" id="L77">					datum.put(&quot;fully_vaccinated&quot;, &quot;No records&quot;);</span>
+<span class="nc" id="L78">					datum.put(&quot;rate_of_vaccination&quot;, &quot;No records&quot;);</span>
+<span class="nc" id="L79">					data.add(datum);</span>
+<span class="nc" id="L80">					break;</span>
+				}
+<span class="nc" id="L82">			}</span>
+			/**
+			Map&lt;String, Object&gt; datum = new HashMap&lt;&gt;();
+			datum.put(&quot;country&quot;, loc);
+			datum.put(&quot;fully_vaccinated&quot;, fullyVaccinated);
+			datum.put(&quot;rate_of_vaccination&quot;, rate);
+			data.add(datum);
+			**/
+<span class="nc" id="L90">		}</span>
+<span class="nc" id="L91">		return data;</span>
+	}
+	
+	/** Method 2: Generate Data for Chart 
+	 * Input: List&lt;String&gt; iLocations, List&lt;String&gt; iPeriod, String iDataset
+	 * Output: people_fully_vaccinated_per_hundred
+	 */
+	public static ObservableList generateVacChart(List&lt;String&gt; iLocations, List&lt;String&gt; iPeriod, String iDataset) {
+<span class="nc" id="L99">		LocalDate startDate = LocalDate.parse(iPeriod.get(0), inputFormatter);</span>
+<span class="nc" id="L100">		LocalDate endDate = LocalDate.parse(iPeriod.get(1), inputFormatter);</span>
+		ObservableList&lt;XYChart.Series&lt;String, Float&gt;&gt; allData = 
+<span class="nc" id="L102">				FXCollections.&lt;XYChart.Series&lt;String, Float&gt;&gt;observableArrayList();</span>
+		
+<span class="nc bnc" id="L104" title="All 2 branches missed.">		for (String loc : iLocations) {</span>
+<span class="nc" id="L105">			XYChart.Series&lt;String, Float&gt; data = new XYChart.Series();</span>
+<span class="nc" id="L106">			data.setName(loc);</span>
+<span class="nc" id="L107">			float rate = 0.0f; </span>
+<span class="nc" id="L108">			int found = 0;</span>
+<span class="nc" id="L109">			LocalDate readDate = null;</span>
+<span class="nc" id="L110">			LocalDate temp = null;</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">			for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">				if (rec.get(&quot;location&quot;).equals(loc)) {</span>
+<span class="nc" id="L113">					readDate = LocalDate.parse(rec.get(&quot;date&quot;), datasetFormatter);</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">					if (found == 0) {</span>
+<span class="nc" id="L115">						found = 1;</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">						if (startDate.isBefore(readDate)) {</span>
+<span class="nc" id="L117">							temp = startDate;</span>
+<span class="nc" id="L118">							rate = 0.0f; </span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">							while (!temp.isAfter(endDate) &amp;&amp; temp.isBefore(readDate)) {</span>
+<span class="nc" id="L120">								data.getData().add(new XYChart.Data(temp.toString(), rate));</span>
+<span class="nc" id="L121">								temp = temp.plusDays(1);</span>
+							}
+						}
+					}
+<span class="nc" id="L125">					String s1 = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">					if (!s1.isEmpty()) rate = Float.parseFloat(s1);</span>
+<span class="nc bnc" id="L127" title="All 4 branches missed.">					if (!readDate.isBefore(startDate) &amp;&amp; !readDate.isAfter(endDate)) {</span>
+<span class="nc" id="L128">						data.getData().add(new XYChart.Data(readDate.toString(), rate));</span>
+					}
+<span class="nc" id="L130">				} </span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">				else if (found == 1) break;</span>
+<span class="nc" id="L132">			}</span>
+<span class="nc" id="L133">			temp = LocalDate.now();</span>
+<span class="nc bnc" id="L134" title="All 4 branches missed.">			while (!readDate.isAfter(endDate) &amp;&amp; !readDate.isAfter(temp)) { // for dates behind period in dataset </span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">				if (!readDate.isBefore(startDate)) data.getData().add(new XYChart.Data(readDate.toString(), rate));</span>
+<span class="nc" id="L136">				readDate = readDate.plusDays(1);</span>
+			}
+<span class="nc" id="L138">			allData.add(data);</span>
+<span class="nc" id="L139">		}</span>
+<span class="nc" id="L140">		return allData;</span>
+	}
+	
+}	
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

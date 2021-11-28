@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TableChartTask.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">TableChartTask.java</span></div><h1>TableChartTask.java</h1><pre class="source lang-java linenums">package comp3111.covid;
+
+import java.util.*;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.XYChart;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import org.apache.commons.csv.*;
+import edu.duke.*;
+
+/**
+ * Class to generate data for Task 1 and 2
+ *
+ * @author Magdalene
+ */
+<span class="nc" id="L20">class TableChartTask {</span>
+<span class="fc" id="L21">    static DateTimeFormatter datasetFormatter = DateTimeFormatter.ofPattern(&quot;M/d/uuuu&quot;);</span>
+<span class="fc" id="L22">    static DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern(&quot;uuuu-M-d&quot;);</span>
+
+    /**
+     * @param iDataset    Filename of dataset
+     * @param iISOStrings Target countries
+     * @param iStrDate    Target date
+     * @param focusedData Target data of interest
+     * @return ObservableList to populate Table
+     */
+    public static ObservableList generateTable(String iDataset, List&lt;String&gt; iISOStrings, String iStrDate, InterestedData focusedData) {
+<span class="fc" id="L32">        String col1target = &quot;&quot;, col2target = &quot;&quot;;</span>
+<span class="pc bpc" id="L33" title="1 of 4 branches missed.">        switch (focusedData) {</span>
+            case ConfirmedCases:
+<span class="fc" id="L35">                col1target = &quot;total_cases&quot;;</span>
+<span class="fc" id="L36">                col2target = &quot;total_cases_per_million&quot;;</span>
+<span class="fc" id="L37">                break;</span>
+            case ConfirmedDeaths:
+<span class="fc" id="L39">                col1target = &quot;total_deaths&quot;;</span>
+<span class="fc" id="L40">                col2target = &quot;total_deaths_per_million&quot;;</span>
+<span class="fc" id="L41">                break;</span>
+            case RateOfVaccination:
+<span class="fc" id="L43">                col1target = &quot;people_fully_vaccinated&quot;;</span>
+<span class="fc" id="L44">                col2target = &quot;people_fully_vaccinated_per_hundred&quot;;</span>
+                break;
+        }
+<span class="fc" id="L47">        LocalDate iDate = LocalDate.parse(iStrDate, inputFormatter);</span>
+
+        ObservableList&lt;Map&lt;String, Object&gt;&gt; data =
+<span class="fc" id="L50">                FXCollections.&lt;Map&lt;String, Object&gt;&gt;observableArrayList();</span>
+
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for (String iso : iISOStrings) {</span>
+<span class="fc" id="L53">            long col1datum = 0;</span>
+<span class="fc" id="L54">            float col2datum = 0.0f;</span>
+<span class="fc" id="L55">            int found = 0;</span>
+<span class="fc" id="L56">            String loc = &quot;&quot;;</span>
+<span class="fc" id="L57">            Map&lt;String, Object&gt; datum = new HashMap&lt;&gt;();</span>
+            //datum.put(&quot;country&quot;, loc);
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">            for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">                if (rec.get(&quot;iso_code&quot;).equals(iso)) {</span>
+<span class="fc" id="L61">                    loc = rec.get(&quot;location&quot;);</span>
+<span class="fc" id="L62">                    datum.put(&quot;country&quot;, loc);</span>
+<span class="fc" id="L63">                    found = 1;</span>
+<span class="fc" id="L64">                    LocalDate readDate = LocalDate.parse(rec.get(&quot;date&quot;), datasetFormatter);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">                    if (readDate.isEqual(iDate)) {</span>
+<span class="fc" id="L66">                        String s1 = rec.get(col1target);</span>
+<span class="fc" id="L67">                        String s2 = rec.get(col2target);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">                        if (!s1.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L69">                            col1datum = Long.parseLong(s1);</span>
+<span class="fc" id="L70">                            datum.put(&quot;col1data&quot;, col1datum);</span>
+<span class="fc" id="L71">                        } else datum.put(&quot;col1data&quot;, &quot;No records&quot;);</span>
+
+<span class="fc bfc" id="L73" title="All 2 branches covered.">                        if (!s2.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L74">                            col2datum = Float.parseFloat(s2);</span>
+<span class="fc" id="L75">                            datum.put(&quot;col2data&quot;, col2datum);</span>
+<span class="fc" id="L76">                        } else datum.put(&quot;col2data&quot;, &quot;No records&quot;);</span>
+<span class="fc" id="L77">                        data.add(datum);</span>
+<span class="fc" id="L78">                        break;</span>
+                    }
+<span class="fc bfc" id="L80" title="All 2 branches covered.">                } else if (found == 1) { // date not in range</span>
+<span class="fc" id="L81">                    datum.put(&quot;col1data&quot;, &quot;No records&quot;);</span>
+<span class="fc" id="L82">                    datum.put(&quot;col2data&quot;, &quot;No records&quot;);</span>
+<span class="fc" id="L83">                    data.add(datum);</span>
+<span class="fc" id="L84">                    break;</span>
+                }
+<span class="fc" id="L86">            }</span>
+<span class="fc" id="L87">        }</span>
+<span class="fc" id="L88">        return data;</span>
+    }
+
+    /**
+     * @param iDataset    Filename of dataset
+     * @param iISOStrings Target countries
+     * @param iPeriod     Target date range
+     * @param focusedData Target data of interest
+     * @return ObservableList to populate LineChart
+     */
+    public static ObservableList generateChart(String iDataset, List&lt;String&gt; iISOStrings, List&lt;String&gt; iPeriod, InterestedData focusedData) {
+<span class="fc" id="L99">        String dataTarget = &quot;&quot;;</span>
+<span class="pc bpc" id="L100" title="1 of 4 branches missed.">        switch (focusedData) {</span>
+            case ConfirmedCases:
+<span class="fc" id="L102">                dataTarget = &quot;total_cases_per_million&quot;;</span>
+<span class="fc" id="L103">                break;</span>
+            case ConfirmedDeaths:
+<span class="fc" id="L105">                dataTarget = &quot;total_deaths_per_million&quot;;</span>
+<span class="fc" id="L106">                break;</span>
+            case RateOfVaccination:
+<span class="fc" id="L108">                dataTarget = &quot;people_fully_vaccinated_per_hundred&quot;;</span>
+                break;
+        }
+<span class="fc" id="L111">        LocalDate startDate = LocalDate.parse(iPeriod.get(0), inputFormatter);</span>
+<span class="fc" id="L112">        LocalDate endDate = LocalDate.parse(iPeriod.get(1), inputFormatter);</span>
+        ObservableList&lt;XYChart.Series&lt;String, Float&gt;&gt; allData =
+<span class="fc" id="L114">                FXCollections.&lt;XYChart.Series&lt;String, Float&gt;&gt;observableArrayList();</span>
+
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for (String iso : iISOStrings) {</span>
+<span class="fc" id="L117">            XYChart.Series&lt;String, Float&gt; data = new XYChart.Series();</span>
+<span class="fc" id="L118">            String loc = &quot;&quot;;</span>
+<span class="fc" id="L119">            float rate = 0.0f;</span>
+<span class="fc" id="L120">            int found = 0;</span>
+<span class="fc" id="L121">            LocalDate readDate = null;</span>
+<span class="fc" id="L122">            LocalDate temp = null;</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">            for (CSVRecord rec : DataAnalysis.getFileParser(iDataset)) {</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">                if (rec.get(&quot;iso_code&quot;).equals(iso)) {</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">                    if (rec.get(&quot;date&quot;).equals(&quot;&quot;)) continue;</span>
+<span class="fc" id="L126">                    readDate = LocalDate.parse(rec.get(&quot;date&quot;), datasetFormatter);</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                    if (found == 0) {</span>
+<span class="fc" id="L128">                        found = 1;</span>
+<span class="fc" id="L129">                        loc = rec.get(&quot;location&quot;);</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">                        if (startDate.isBefore(readDate)) {</span>
+<span class="fc" id="L131">                            temp = startDate;</span>
+<span class="fc" id="L132">                            rate = 0.0f;</span>
+<span class="pc bpc" id="L133" title="1 of 4 branches missed.">                            while (!temp.isAfter(endDate) &amp;&amp; temp.isBefore(readDate)) {</span>
+<span class="fc" id="L134">                                data.getData().add(new XYChart.Data(temp.toString(), rate));</span>
+<span class="fc" id="L135">                                temp = temp.plusDays(1);</span>
+                            }
+                        }
+                    }
+<span class="fc" id="L139">                    String s1 = rec.get(dataTarget);</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">                    if (!s1.isEmpty()) rate = Float.parseFloat(s1);</span>
+<span class="fc bfc" id="L141" title="All 4 branches covered.">                    if (!readDate.isBefore(startDate) &amp;&amp; !readDate.isAfter(endDate)) {</span>
+<span class="fc" id="L142">                        data.getData().add(new XYChart.Data(readDate.toString(), rate));</span>
+                    }
+<span class="fc bfc" id="L144" title="All 2 branches covered.">                } else if (found == 1) break;</span>
+<span class="fc" id="L145">            }</span>
+<span class="fc" id="L146">            temp = LocalDate.now();</span>
+<span class="pc bpc" id="L147" title="1 of 4 branches missed.">            while (readDate != null &amp;&amp; !readDate.isAfter(endDate)) { // for dates behind period in dataset</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">                if (!readDate.isBefore(startDate)) data.getData().add(new XYChart.Data(readDate.toString(), rate));</span>
+<span class="fc" id="L149">                readDate = readDate.plusDays(1);</span>
+            }
+<span class="fc" id="L151">            data.setName(loc);</span>
+<span class="fc" id="L152">            allData.add(data);</span>
+<span class="fc" id="L153">        }</span>
+<span class="fc" id="L154">        return allData;</span>
+    }
+}	
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
