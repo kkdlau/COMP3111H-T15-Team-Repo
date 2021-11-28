@@ -1,6 +1,7 @@
 package comp3111.covid;
 
 import javafx.application.Application;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
@@ -34,7 +35,7 @@ import javafx.scene.Scene;
 public class MyApplication extends Application {
 
     private static final String UI_FILE = "/ui.fxml";  //file in the folder of src/main/resources/
-	
+	public Controller controller;
 	/** 
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
 	 * 
@@ -44,10 +45,15 @@ public class MyApplication extends Application {
 	public void start(Stage stage) throws Exception {
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource(UI_FILE));
-   		VBox root = (VBox) loader.load();
+   		HBox root = (HBox) loader.load();
+
+   		Controller c = loader.getController();
+   		controller = c;
+
+   		c.setStage(stage);
    		Scene scene =  new Scene(root);
    		stage.setScene(scene);
-      stage.setTitle("can we have A+ for all of us " + "Can you gimme A+ thx! Love you!");
+      	stage.setTitle("COMP3111H - COVID Data Visualization");
    		stage.show();
 	}
 

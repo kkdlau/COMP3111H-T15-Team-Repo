@@ -1,109 +1,300 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.ScatterChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox prefHeight="679.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
-  <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="437.0" prefWidth="719.0">
-      <children>
-            <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="350.0" prefWidth="719.0" tabClosingPolicy="UNAVAILABLE">
+<HBox fx:id="rootUI" prefHeight="686.0" prefWidth="810.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <TabPane fx:id="tabGroup" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="1.79769313E308">
               <tabs>
-                <Tab fx:id="tabTaskZero" text="Task Zero">
+                <Tab fx:id="tabTask12" text="Task 1&amp;2">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="221.0" prefWidth="719.0">
+                    <AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="0.0">
                            <children>
-                              <Label layoutX="114.0" layoutY="68.0" prefHeight="18.0" prefWidth="58.0" text="ISO Code" />
-                              <TextField fx:id="textfieldISO" layoutX="185.0" layoutY="64.0" prefHeight="26.0" prefWidth="43.0" promptText="e.g 1830 (18: yr 18-19; 30: Spring)" text="HKG" />
-                              <Button fx:id="buttonConfirmedDeaths" layoutX="303.0" layoutY="134.0" mnemonicParsing="false" onAction="#doConfirmedDeaths" text="Confirmed Deaths" />
-                              <Label layoutX="114.0" layoutY="36.0" text="Dataset" />
-                              <TextField fx:id="textfieldDataset" layoutX="185.0" layoutY="32.0" prefHeight="26.0" prefWidth="149.0" text="COVID_Dataset_v1.0.csv" />
-                              <Label layoutX="114.0" layoutY="138.0" text="Report" />
-                              <Button fx:id="buttonRateOfVaccination" layoutX="423.0" layoutY="134.0" mnemonicParsing="false" onAction="#doRateOfVaccination" text="Rate of Vaccination" />
-                              <Button fx:id="buttonConfirmedCases" layoutX="185.0" layoutY="134.0" mnemonicParsing="false" onAction="#doConfirmedCases" text="Confirmed Cases" />
+                              <Label layoutX="14.0" layoutY="37.0" prefHeight="17.0" prefWidth="62.0" text="Dataset:" />
+                              <TextField fx:id="textfieldDataset" layoutX="66.0" layoutY="33.0" prefHeight="26.0" prefWidth="165.0" text="COVID_Dataset_v1.0.csv" />
+                              <Label layoutX="16.0" layoutY="65.0" text="Data of Interest:" />
+                              <RadioButton fx:id="dataCaseButton" layoutX="17.0" layoutY="90.0" mnemonicParsing="false" selected="true" text="Confirmed Cases" />
+                              <RadioButton fx:id="dataDeathButton" layoutX="17.0" layoutY="116.0" mnemonicParsing="false" text="Confirmed Deaths" />
+                              <RadioButton fx:id="dataVaccinButton" layoutX="17.0" layoutY="143.0" mnemonicParsing="false" text="Rate of Vaccination" />
+                              <CheckBox fx:id="acumulativeCheckButton" layoutX="17.0" layoutY="199.0" mnemonicParsing="false" text="Cumulative Data" />
+                              <Label layoutX="14.0" layoutY="172.0" text="Data Control:" />
+                              <Button fx:id="generateButton" layoutX="218.0" layoutY="217.0" mnemonicParsing="false" text="Generate" />
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab fx:id="tabReport1" text="Table A">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
+                  <Tab fx:id="a3Tab" text="Report A">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Label layoutX="79.0" layoutY="44.0" />
-                              <TextArea layoutX="14.0" layoutY="12.0" prefHeight="296.0" prefWidth="698.0" text="Task A1: Generate data tables showing the number of confirmed COVID-19 cases by country&#10;&#10;Input&#10;•&#9;Specify the date of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data table with a proper title: &quot;Number of Confirmed COVID-19 Cases as of [Date of Interest]&quot;&#10;•&#9;Present data in 3 columns with proper headings of &quot;Country&quot;, &quot;Total Cases&quot;, and &quot;Total Cases (per 1M)&quot;&#10;•&#9;Present data for the countries of interest in rows&#10;&#10;" wrapText="true" />
+                              <Text layoutX="18.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Analysis shows how the spread of COVID-19 can be postponeed, and evulate the healthcare level of two countries." wrappingWidth="262.3999999999999" />
+                              <Label layoutX="90.0" layoutY="14.0" text="Problem Statement">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </AnchorPane>
-                    </content>
+                     </content>
                   </Tab>
-                <Tab fx:id="tabReport2" text="Table B">
-                  <content>
-                        <AnchorPane>
-                           <children>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="450.0" prefWidth="722.0">
-                                 <children>
-                                    <TextArea layoutX="14.0" layoutY="14.0" prefHeight="315.0" prefWidth="695.0" text="Task B1: Generate data tables showing the number of confirmed COVID-19 deaths by country&#10;&#10;Input&#10;•&#9;Specify the date of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data table with a proper title: &quot;Number of Confirmed COVID-19 Deaths as of [Date of Interest]&quot;&#10;•&#9;Present data in 3 columns with proper headings of &quot;Country&quot;, &quot;Total Deaths&quot;, and &quot;Total Deaths (per 1M)&quot;&#10;•&#9;Present data for the countries of interest in rows&#10;&#10;" wrapText="true" />
-                                 </children>
-                              </AnchorPane>
-                           </children>
-                        </AnchorPane>
-                  </content>
-                </Tab>
-                  <Tab fx:id="tabReport3" text="Table C">
-                    <content>
-                        <AnchorPane>
-                           <children>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="318.0" prefWidth="719.0">
-                                 <children>
-                                    <TextArea layoutX="14.0" layoutY="14.0" prefHeight="292.0" prefWidth="694.0" text="Task C1: Generate data tables showing the rate of vaccination against COVID-19 by country&#10;&#10;Input&#10;•&#9;Specify the date of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data table with a proper title: &quot;Rate of Vaccination against COVID-19 as of [Date of Interest]&quot;&#10;•&#9;Present data in 3 columns with proper headings of &quot;Country&quot;, &quot;Fully Vaccinated&quot;, and &quot;Rate of Vaccination&quot;&#10;•&#9;Present data for the countries of interest in rows&#10;&#10;&#10;" wrapText="true" />
-                                 </children>
-                              </AnchorPane>
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </Tab>
-                  <Tab fx:id="tabApp1" text="Chart A">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="719.0">
-                           <children>
-                              <TextArea layoutX="14.0" layoutY="14.0" prefHeight="294.0" prefWidth="694.0" text="Task A2: Generate data charts showing the cumulative confirmed COVID-19 cases (per 1M) by country&#10;&#10;Input&#10;•&#9;Specify the period of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data chart with a proper title: &quot;Cumulative Confirmed COVID-19 Cases (per 1M)&quot;&#10;•&#9;Label the x-axis and y-axis with proper scales&#10;•&#9;Present data in coloured cumulative curves labelled with corresponding countries&#10;&#10;" wrapText="true" />
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </Tab>
-                  <Tab fx:id="tabApp2" text="Chart B">
+                  <Tab fx:id="b3Tab" text="Report B">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea layoutX="14.0" layoutY="14.0" prefHeight="290.0" prefWidth="694.0" text="Task B2: Generate data charts showing the cumulative confirmed COVID-19 deaths (per 1M) by country&#10;&#10;Input&#10;•&#9;Specify the period of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data chart with a proper title: &quot;Cumulative Confirmed COVID-19 Deaths (per 1M)&quot;&#10;•&#9;Label the x-axis and y-axis with proper scales&#10;•&#9;Present data in coloured cumulative curves labelled with corresponding countries&#10;&#10;" wrapText="true" />
+                              <Text layoutX="18.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This report studies the correlation between death rate and vaccination rate and the correlation between death rate and confirmed rate in a country. By studying the correlation, the necessity of sealing off and vaccination can be proved." wrappingWidth="262.3999999999999" />
+                              <Label layoutX="90.0" layoutY="14.0" text="Problem Statement">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="buttonReportB1" layoutX="194.0" layoutY="198.0" mnemonicParsing="false" text="Generate" />
                            </children>
                         </AnchorPane>
                     </content>
                   </Tab>
-                  <Tab fx:id="tabApp3" text="Chart C">
+                  <Tab fx:id="c3Tab" text="Report C">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea layoutX="18.0" layoutY="7.0" prefHeight="298.0" prefWidth="682.0" text="Task C2: Generate data charts showing the cumulative rate of vaccination against COVID-19 by country&#10;&#10;Input&#10;•&#9;Specify the period of interest&#10;•&#9;Specify the countries of interest&#10;&#10;Output&#10;•&#9;Label the data chart with a proper title: &quot;Cumulative Rate of Vaccination against COVID-19 &quot;&#10;•&#9;Label the x-axis and y-axis with proper scales&#10;•&#9;Present data in coloured cumulative curves labelled with corresponding countries&#10;&#10;" wrapText="true" />
+                              <Text layoutX="18.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This report studies the existence of vaccine inequity that hinders a speedy return to normalcy from COVID-19. Then, the importance of vaccines is observed to gauge the importance of tackling vaccine inequity." wrappingWidth="262.3999999999999" />
+                              <Label layoutX="90.0" layoutY="14.0" text="Problem Statement">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </AnchorPane>
                     </content>
                   </Tab>
               </tabs>
             </TabPane>
-      </children>
-    </AnchorPane>
-      <Label text="Console" />
-      <ScrollPane prefHeight="387.0" prefWidth="719.0">
-         <content>
-            <TextArea fx:id="textAreaConsole" prefHeight="300.0" prefWidth="718.0" />
-         </content>
-      </ScrollPane>
-  </children>
-</VBox>
+            <Label fx:id="countryInstruction" text=" To select more than a country, press CTRL/SHIFT." />
+            <TitledPane fx:id="countryFilter" animated="false" text="Country filter" wrapText="true">
+               <content>
+                  <ListView fx:id="countryListView" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </TitledPane>
+            <TitledPane fx:id="dataRangeTile" animated="false" text="Date Range">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="startDateLabel" layoutX="14.0" layoutY="28.0" text="Start date: " />
+                        <Label fx:id="endDataLabel" layoutX="16.0" layoutY="69.0" text="End date: " />
+                        <DatePicker fx:id="startDatePicker" editable="false" layoutX="95.0" layoutY="24.0" />
+                        <DatePicker fx:id="endDatePicker" editable="false" layoutX="95.0" layoutY="65.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </TitledPane>
+         </children>
+      </VBox>
+      <VBox fx:id="rightUI" prefHeight="687.0" prefWidth="508.0">
+         <children>
+            <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="498.0" textAlignment="CENTER">
+
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <StackPane fx:id="stack" prefHeight="680.0" prefWidth="499.0">
+               <children>
+                  <TableView fx:id="dataTable" prefHeight="200.0" prefWidth="200.0" />
+                  <LineChart fx:id="chart">
+                    <xAxis>
+                      <CategoryAxis fx:id="chartYAxis" animated="false" label="x-axis" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="chartXAxis" animated="false" label="y-axis" side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+                  <ScrollPane fx:id="reportA" hbarPolicy="NEVER" prefHeight="670.0" prefWidth="456.0">
+                     <content>
+                        <AnchorPane prefHeight="1326.0" prefWidth="494.0">
+                           <children>
+                              <Label layoutX="17.0" layoutY="20.0" prefHeight="89.0" prefWidth="466.0" text="Although different countries may have different confirmed cases on the same day, a country can have the same number of confirmed cases after few days later. You can select two countries from below, and use the slider to simulate how many days are needed for country A to reach the situation in country B." wrapText="true" />
+                              <LineChart fx:id="compareChart" animated="false" layoutX="37.0" layoutY="280.0" prefHeight="306.0" prefWidth="414.0">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                              <ListView fx:id="countryAListView" layoutX="17.0" layoutY="136.0" prefHeight="76.0" prefWidth="193.0" />
+                              <ListView fx:id="countryBListView" layoutX="268.0" layoutY="136.0" prefHeight="76.0" prefWidth="200.0" />
+                              <Label layoutX="17.0" layoutY="119.0" text="Country A:" />
+                              <Label layoutX="271.0" layoutY="119.0" text="Country B:" />
+                              <Slider fx:id="countryBSlider" layoutX="14.0" layoutY="262.0" prefHeight="19.0" prefWidth="459.0" />
+                              <Label fx:id="countryBShiftText" layoutX="17.0" layoutY="246.0" text="X-axis shift for countryB(The situation has been postponed for 0 days):" />
+                              <Slider fx:id="countryASlider" layoutX="14.0" layoutY="228.0" prefHeight="19.0" prefWidth="460.0" />
+                              <Label fx:id="countryAShiftText" layoutX="17.0" layoutY="212.0" text="X-axis shift for country A(The situation has been postponed for 0 days):" />
+                              <Button fx:id="chartGenerateButton" layoutX="390.0" layoutY="586.0" mnemonicParsing="false" text="Generate" />
+                              <LineChart fx:id="caseDeathChart" animated="false" layoutX="17.0" layoutY="740.0" prefHeight="306.0" prefWidth="414.0">
+                                 <xAxis>
+                                    <NumberAxis side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis side="LEFT" />
+                                 </yAxis>
+                              </LineChart>
+                              <Label layoutX="18.0" layoutY="620.0" prefHeight="118.0" prefWidth="461.0" text="Furthermore, by comparing confirmed cases(x-axis) against confirmed deaths(y-axis), we can perform linear regression to find the relationship between confirmed deaths and confirmed cases. The slope for the relationship represents the level of healthcare. If one counrty's slope is lower than another country, we can conclude that the country have better health care since it has lower death rate per case." wrapText="true" />
+                              <Button fx:id="caseDeathGenerateButton" layoutX="390.0" layoutY="1054.0" mnemonicParsing="false" text="Generate" />
+                              <Label fx:id="regressionReport" alignment="TOP_LEFT" layoutX="17.0" layoutY="1100.0" prefHeight="226.0" prefWidth="462.0" text="Regression report will be generated after the above chart is genereated." wrapText="true" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+                  <ScrollPane fx:id="reportB" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" visible="false">
+	                  <content>
+                        <AnchorPane prefHeight="1800.0" prefWidth="466.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="38.0" prefWidth="506.0" text="Are vaccination and border shutdown both necessary?">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Text layoutX="14.0" layoutY="54.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To reduce the influence of covid-19, vaccination and border shutdown are adopted in each country. However, the efficiency and safety of vaccines are doubted that may not reduce the risk of infection and may increase the risk of Myocarditis. Besides, a border shutdown may cause an economic depression. Thus, this report is going to analyze the correlation between the death rate and vaccination rate to determine the efficiency of vaccines and the death rate and confirmed rate to determine the cost of border shutdown." textAlignment="JUSTIFY" wrappingWidth="466.9368591308594" />
+                              <Separator layoutY="200.0" prefHeight="6.0" prefWidth="493.0" />
+                              <ScatterChart fx:id="chartReportB1" animated="false" layoutX="28.0" layoutY="200.0" legendSide="RIGHT" prefHeight="353.0" prefWidth="439.0">
+                                 <xAxis>
+                                    <NumberAxis label="new cofirmed case per million" side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis label="new deaths case per million" side="LEFT" />
+                                 </yAxis>
+                              </ScatterChart>
+                              <Label fx:id="taskB1correlation" layoutX="36.0" layoutY="550.0" />
+                              <Label fx:id="ResultB1" layoutX="22.0" layoutY="600.0" prefWidth="450.0" text="Conclusion" wrapText="true" />
+                              <Separator layoutY="690.0" prefHeight="6.0" prefWidth="493.0" />
+                              <ScatterChart fx:id="chartReportB2" animated="false" layoutX="28.0" layoutY="700.0" legendSide="RIGHT" prefHeight="353.0" prefWidth="439.0">
+                                 <xAxis>
+                                    <NumberAxis label="new deaths case per million" side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis label="new vaccinations per million" side="LEFT" />
+                                 </yAxis>
+                              </ScatterChart>
+                              <Label fx:id="taskB2correlation" layoutX="36.0" layoutY="1050.0" />
+                              <Label fx:id="ResultB2" layoutX="22.0" layoutY="1100.0" prefWidth="450.0" text="Conclusion" wrapText="true" />
+                              <Separator layoutY="1215.0" prefHeight="6.0" prefWidth="493.0" />
+                              <Label fx:id="LabelSliderReportB3" layoutX="34.0" layoutY="1225.0" text="14-days death cases are observed after vaccination" />
+                              <Slider fx:id="SliderReportB3" layoutX="34.0" layoutY="1250.0" majorTickUnit="7.0" max="70.0" min="14.0" minorTickCount="0" prefHeight="37.0" prefWidth="429.0" showTickLabels="true" snapToTicks="true" value="14.0" />
+                              <ScatterChart fx:id="chartReportB3" animated="false" layoutX="38.0" layoutY="1300.0" legendSide="RIGHT" prefHeight="353.0" prefWidth="439.0">
+                                 <xAxis>
+                                    <NumberAxis label="new vaccinations per million" side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis label="average deaths case per million" side="LEFT" />
+                                 </yAxis>
+                              </ScatterChart>
+                              <Label fx:id="taskB3correlation" layoutX="46.0" layoutY="1650.0" />
+                              <Label fx:id="ResultB3" layoutX="32.0" layoutY="1700.0" prefWidth="450.0" text="Conclusion" wrapText="true" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+            </ScrollPane>
+                  <ScrollPane fx:id="reportC" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" visible="false">
+               		<content>
+                  	<AnchorPane prefHeight="872.0" prefWidth="466.0">
+                     <children>
+                        <Label alignment="CENTER" layoutY="-10.0" prefHeight="38.0" prefWidth="506.0" text="Vaccine Inequity - is it real?">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Text layoutX="14.0" layoutY="31.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="As COVID-19 swept the world in 2020 and 2021, lives were lost and economies closed. When vaccines were produced in late 2020, we thought that they were the answers to normality. Yet, now at the end of 2021, there still seems to be no end to this ravaging pandemic around the world. It is not that the vaccines are ineffective but that some do not have the chance to get one. Vaccine inequity has caused a huge disparity in vaccine rollouts across the world. " textAlignment="JUSTIFY" wrappingWidth="466.9368591308594" />
+                        <Text layoutX="28.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Click the button on the right to compare vaccine rollouts across countries with different economic situations" textAlignment="JUSTIFY" wrappingWidth="222.13677978515625">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                        <Button fx:id="buttonReportC1" layoutX="288.0" layoutY="156.0" mnemonicParsing="false" text="Compare vaccine rollout" />
+                        <LineChart fx:id="chartReportC1" createSymbols="false" layoutX="4.0" layoutY="210.0" legendSide="RIGHT" prefHeight="366.0" prefWidth="480.0">
+                          <xAxis>
+                            <CategoryAxis animated="false" label="Date" side="BOTTOM" tickLabelGap="10.0" tickMarkVisible="false" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis animated="false" label="Average # Vaccine Doses per 100 People" minorTickVisible="false" side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                        <Text fx:id="chartReportC1Title" layoutX="17.0" layoutY="593.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Figure 1. Number of vaccine doses per 100 people administered over time in countries grouped by the GDP per capita. The number of doses plotted is the average of all countries in the quartile. All types of doses, including boosters, are counted individually. Hence, the number of doses per 100 people may exceed 100. " textAlignment="JUSTIFY" visible="false" wrappingWidth="466.9368591308594" />
+                              <Label fx:id="tableReportC1Label" layoutX="82.0" layoutY="673.0" text="Table 1. List of countries in the different GDP per capita quartiles." />
+                              <TableView fx:id="tableReportC1" layoutX="31.0" layoutY="695.0" prefHeight="149.0" prefWidth="446.0" />
+                        <Text layoutX="14.0" layoutY="872.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A COVID-19 vaccine costs from HKD 15 to HKD 300. Not all countries have a healthcare budget to cover this hefty sum. On average, countries with GDP per capita in the first quartile started their vaccinations three months after countries in the last quartile. When the richer countries were close to one dose per person, the poorer countries had only less than 10 doses for every 100 people. " textAlignment="JUSTIFY" wrappingWidth="462.93685817718506" />
+                              <Text layoutX="14.0" layoutY="971.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Economic status is not the only indicator of a successful vaccination campaign. The Human Development Index (HDI) is a metric that reflects the living standards, knowledge acquisition, and life expectancy of a country’s citizens. " textAlignment="JUSTIFY" wrappingWidth="466.0" />
+                              <ScatterChart fx:id="chartReportC2" layoutX="3.0" layoutY="1069.0" legendSide="RIGHT" prefHeight="378.0" prefWidth="475.0">
+                                <xAxis>
+                                  <NumberAxis animated="false" label="Human Development Index" side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis animated="false" label="Rate of Vaccination" side="LEFT" />
+                                </yAxis>
+                              </ScatterChart>
+                        <LineChart fx:id="chartReportC3" createSymbols="false" layoutX="34.0" layoutY="1730.0" prefHeight="412.0" prefWidth="427.0">
+                          <xAxis>
+                            <CategoryAxis animated="false" label="Date" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis animated="false" label="Statistics" side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                        <Text layoutX="46.0" layoutY="1664.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose ONE country and a period of interest from the left. Then, click the button on the right to view the effect of vaccinations in the country." textAlignment="JUSTIFY" wrappingWidth="244.5368194580078">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                        <Button fx:id="buttonReportC3" layoutX="333.0" layoutY="1662.0" mnemonicParsing="false" text="View effects" />
+                              <Text layoutX="36.0" layoutY="1033.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Click the button on the right to compare vaccination rates with HDI" textAlignment="JUSTIFY" wrappingWidth="200.400146484375">
+                                 <font>
+                                    <Font name="System Italic" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Button fx:id="buttonReportC2" layoutX="253.0" layoutY="1023.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="227.0" text="Compare vaccination rate and HDI" />
+                              <Text fx:id="chartReportC2Title" layoutX="20.0" layoutY="1462.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Figure 2. Scatter plot of vaccination rates against HDI as of &lt;insert last date&gt; labelled by continents. While not all countries with high HDI have high vaccination rates, most countries with low HDI have minimal vaccination rates. " textAlignment="JUSTIFY" visible="false" wrappingWidth="453.199951171875" />
+                              <Label alignment="CENTER" layoutX="-1.0" layoutY="1524.0" prefHeight="38.0" prefWidth="506.0" text="Vaccine Inequity - should we care?">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Text layoutX="16.0" layoutY="1574.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tackling inequity requires concerted global effort and financial resources. Some may argue that it is unnecessary and the virus will run its course. Countries who cannot afford herd immunity through vaccinations can just rely on stricter quarantine and social distancing rules. We compare the effect of vaccinations on hospitalization rates and ICU bed utilization. " textAlignment="JUSTIFY" wrappingWidth="466.9368591308594" />
+                              <Text fx:id="chartReportC3Title" layoutX="23.0" layoutY="2155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Figure 3. Hospitalization, ICU bed utilization &amp; vaccination rate over time." textAlignment="JUSTIFY" visible="false" wrappingWidth="466.9368591308594" />
+                              <Text layoutX="17.0" layoutY="2187.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Many countries do not have records for ICU and hospitalization rate. However, countries with successful vaccination campaigns like Israel and Netherlands show a similar trend of low ICU and hospitalization rate as vaccination increases. (Countries with data include Austria, Belgium, Canada, Denmark, Estonia, Sweden, United Kingdom, and United States)." textAlignment="JUSTIFY" wrappingWidth="466.9368591308594" />
+                              <Text layoutX="16.0" layoutY="2282.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vaccine inequity is a pressing issue that hinders recovery from COVID-19. Not only does it affect the health of individuals exposed to COVID-19, but it also impacts economic recovery and labour markets worldwide. It is an issue that we should consider and take actions to overcome. " textAlignment="JUSTIFY" wrappingWidth="466.9368591308594">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Text>
+                     </children>
+                  </AnchorPane>
+                     </content></ScrollPane>
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
+   </children>
+</HBox>
